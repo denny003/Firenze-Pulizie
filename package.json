@@ -1,0 +1,20 @@
+{
+  "name": "firenze-pulizie",
+  "version": "1.0.0",
+  "description": "Piattaforma digitale per rete coordinata di imprese di pulizia - Firenze e provincia",
+  "type": "module",
+  "scripts": {
+    "dev": "npx netlify dev",
+    "build": "echo 'Build completata con successo!'"
+  },
+  "keywords": [
+    "pulizie",
+    "firenze",
+    "b2b",
+    "condomini",
+    "imprese",
+    "rete-territoriale"
+  ],
+  "author": "Rete Imprese Firenze",
+  "license": "UNLICENSED"
+}

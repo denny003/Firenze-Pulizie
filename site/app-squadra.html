@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>App Squadra Operativa — FIRENZE PULIZIE</title>
+  <meta name="description" content="App mobile per squadre di pulizia: orari, cantieri a Firenze, check-in, checklist digitale e foto stato lavori.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <style>
+    body {
+      background-color: #f1f5f9;
+      color: var(--text-main);
+      padding-bottom: 80px;
+      font-family: var(--font-body);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-header {
+      background: var(--brand-navy-900);
+      color: white;
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .team-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(6, 182, 212, 0.2);
+      border: 1px solid var(--brand-cyan-500);
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--brand-sky-400);
+    }
+    .container-mobile {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .job-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .job-card.active-now {
+      border: 2px solid var(--brand-emerald-500);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
+    }
+    .job-time-badge {
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      background: #e0f2fe;
+      color: #0369a1;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .checklist-container {
+      background: #f8fafc;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin: 16px 0;
+      border: 1px solid var(--border-light);
+    }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--border-light);
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+    .checklist-checkbox {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--brand-emerald-500);
+      cursor: pointer;
+      margin-top: 2px;
+    }
+    .checklist-item.done span {
+      text-decoration: line-through;
+      color: var(--text-light);
+    }
+    .photo-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .photo-thumb {
+      aspect-ratio: 1;
+      border-radius: var(--radius-md);
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      font-size: 1.5rem;
+      border: 1px dashed #cbd5e1;
+    }
+    .photo-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: white;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 50;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+    .nav-tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      gap: 4px;
+    }
+    .nav-tab-btn.active {
+      color: var(--brand-sky-500);
+    }
+    .nav-tab-btn .icon {
+      font-size: 1.25rem;
+    }
+    .btn-action-large {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all var(--transition-fast);
+    }
+    .btn-checkin {
+      background: linear-gradient(135deg, var(--brand-emerald-500), #059669);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    .btn-checkout {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: white;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+    .ztl-warning {
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MOBILE HEADER -->
+  <header class="mobile-header">
+    <div>
+      <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Squadra Operativa</div>
+      <div style="font-weight: 800; font-size: 1.1rem; color: white;">🚚 Squadra Alfa</div>
+    </div>
+    <div style="text-align: right;">
+      <span class="team-badge-pill">Fiat Doblò (FZ 482 AA)</span>
+      <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px;">Caposquadra: Marco T.</div>
+    </div>
+  </header>
+
+  <!-- CONTAINER -->
+  <main class="container-mobile">
+
+    <!-- DATA DEL GIORNO -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div>
+        <h2 style="font-size: 1.25rem; margin: 0; color: var(--brand-navy-900);">Lavori di Oggi</h2>
+        <small class="text-muted" id="currentDateStr">Firenze e Provincia</small>
+      </div>
+      <span class="badge-status status-in-corso" id="jobsCountBadge">2 Cantieri Assegnati</span>
+    </div>
+
+    <!-- CANTIERE 1: ATTIVO ORA -->
+    <div class="job-card active-now" id="cardJob1">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <span class="job-time-badge">⏰ 18:30 - 20:30 (In Corso)</span>
+          <h3 style="margin: 4px 0; font-size: 1.15rem; color: var(--brand-navy-900);">Studio Associato Tornabuoni</h3>
+          <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 8px;">
+            📍 Via de' Tornabuoni 14, Firenze
+          </div>
+        </div>
+        <span class="badge-status status-in-corso" id="statusBadge1">IN CORSO</span>
+      </div>
+
+      <!-- AVVISO ZTL -->
+      <div class="ztl-warning">
+        <span>🚗</span>
+        <span>Zona ZTL Attiva • Permesso furgone registrato dal Comune</span>
+      </div>
+
+      <!-- DATI ACCESSO -->
+      <div style="background: #f8fafc; border-radius: var(--radius-md); padding: 10px 14px; font-size: 0.85rem; margin-bottom: 14px;">
+        <div><strong>Accesso:</strong> Citofono "Rossi & Associati", piano 2 con ascensore.</div>
+        <div><strong>Allarme:</strong> Codice disattivazione: <code>4821#</code> (riattivare prima di uscire).</div>
+      </div>
+
+      <!-- PULSANTE CHECK-IN / CHECK-OUT -->
+      <div id="checkinSection1">
+        <div style="font-size: 0.82rem; color: var(--brand-emerald-600); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          <span>✓</span> Check-in registrato alle <span id="checkinTime1">18:28</span>
+        </div>
+      </div>
+
+      <!-- CHECKLIST OPERATIVA DIGITALE -->
+      <div class="checklist-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="font-size: 0.9rem; color: var(--brand-navy-900);">Checklist Uffici Prestigio</strong>
+          <span style="font-size: 0.8rem; font-weight: 800; color: var(--brand-emerald-600);" id="checklistCounter">3 / 5 Fatti</span>
+        </div>
+
+        <label class="checklist-item done">
+          <input type="checkbox" class="checklist-checkbox" checked onchange="updateChecklist(this)">
+          <span>Igienizzazione scrivanie, schermi e telefoni</span>
+        </label>
+        <label class="checklist-item done">
+          <input type="checkbox" class="checklist-checkbox" checked onchange="updateChecklist(this)">
+          <span>Sanificazione completa dei 3 servizi igienici</span>
+        </label>
+        <label class="checklist-item done">
+          <input type="checkbox" class="checklist-checkbox" checked onchange="updateChecklist(this)">
+          <span>Svuotamento cestini e raccolta differenziata</span>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-checkbox" onchange="updateChecklist(this)">
+          <span>Aspirazione e lavaggio pavimenti in cotto antico</span>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-checkbox" onchange="updateChecklist(this)">
+          <span>Spolvero battiscopa e verifica chiusura finestre</span>
+        </label>
+      </div>
+
+      <!-- SEZIONE FOTO STATO LAVORI -->
+      <div style="margin: 16px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="font-size: 0.9rem; color: var(--brand-navy-900);">Foto Certificazione Fine Cantiere</strong>
+          <span style="font-size: 0.78rem; color: var(--text-light);">Obbligatorio: min 2 foto</span>
+        </div>
+
+        <div class="photo-preview-grid" id="photoGrid">
+          <div class="photo-thumb" id="photoThumb1" style="background: #e2e8f0;">
+            <span style="font-size: 0.72rem; color: var(--text-light); text-align: center; padding: 4px;">Ufficio Prima</span>
+          </div>
+          <div class="photo-thumb" id="photoThumb2" style="background: #e2e8f0;">
+            <span style="font-size: 0.72rem; color: var(--text-light); text-align: center; padding: 4px;">Bagno Sanificato</span>
+          </div>
+          <label class="photo-thumb" style="cursor: pointer; background: #e0f2fe; border-color: var(--brand-sky-400);">
+            <span style="color: var(--brand-sky-500); font-weight: 800; font-size: 1.5rem;">📷</span>
+            <input type="file" accept="image/*" capture="environment" style="display: none;" onchange="handlePhotoUpload(this)">
+          </label>
+        </div>
+      </div>
+
+      <!-- TASTO CHECK-OUT -->
+      <button class="btn-action-large btn-checkout" id="btnCheckout1" onclick="performCheckout()">
+        <span>✓</span> Registra Fine Lavoro (Check-Out)
+      </button>
+    </div>
+
+    <!-- CANTIERE 2: PROGRAMMATO SUCCESSIVO -->
+    <div class="job-card" id="cardJob2" style="opacity: 0.85;">
+      <span class="job-time-badge" style="background: #f1f5f9; color: var(--text-muted);">⏰ 21:00 - 22:30 (In Programma)</span>
+      <h3 style="margin: 4px 0; font-size: 1.15rem; color: var(--brand-navy-900);">Condominio Viale Belfiore</h3>
+      <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 8px;">
+        📍 Viale Belfiore 28, Porta al Prato, Firenze
+      </div>
+      <div style="font-size: 0.82rem; color: var(--text-light);">
+        2 rampe scale, androne principale, vetrate ingresso e ascensore.
+      </div>
+      <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border-light); font-size: 0.82rem; color: var(--text-muted);">
+        Attendi il completamento del primo lavoro per avviare il check-in.
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM BAR FISSA -->
+  <nav class="bottom-nav">
+    <button class="nav-tab-btn active">
+      <span class="icon">📋</span>
+      <span>Cantieri</span>
+    </button>
+    <button class="nav-tab-btn" onclick="alert('Mappa dei cantieri con navigatore GPS verso Via Tornabuoni 14.')">
+      <span class="icon">🗺️</span>
+      <span>Mappa GPS</span>
+    </button>
+    <button class="nav-tab-btn" onclick="openProblemModal()">
+      <span class="icon">⚠️</span>
+      <span>Segnala Guasto</span>
+    </button>
+    <a href="login.html" class="nav-tab-btn" style="text-decoration: none;">
+      <span class="icon">🚪</span>
+      <span>Esci</span>
+    </a>
+  </nav>
+
+  <!-- SCRIPT LOGICA MOBILE -->
+  <script>
+    document.getElementById('currentDateStr').textContent = new Date().toLocaleDateString('it-IT', { 
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
+    });
+
+    function updateChecklist(input) {
+      const parent = input.closest('.checklist-item');
+      if (input.checked) {
+        parent.classList.add('done');
+      } else {
+        parent.classList.remove('done');
+      }
+
+      const all = document.querySelectorAll('.checklist-checkbox').length;
+      const done = document.querySelectorAll('.checklist-checkbox:checked').length;
+      document.getElementById('checklistCounter').textContent = `${done} / ${all} Fatti`;
+    }
+
+    function handlePhotoUpload(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const thumb1 = document.getElementById('photoThumb1');
+          thumb1.innerHTML = `<img src="${e.target.result}" alt="Foto Cantiere">`;
+          alert('Foto cantiere acquisita e salvata per la certificazione del lavoro!');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function performCheckout() {
+      const unchecked = document.querySelectorAll('.checklist-checkbox:not(:checked)').length;
+      if (unchecked > 0) {
+        const proceed = confirm(`Attenzione: ci sono ancora ${unchecked} compiti non spuntati nella checklist. Vuoi concludere comunque il cantiere?`);
+        if (!proceed) return;
+      }
+
+      const now = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('statusBadge1').textContent = 'COMPLETATO';
+      document.getElementById('statusBadge1').className = 'badge-status status-completata';
+      document.getElementById('btnCheckout1').style.display = 'none';
+
+      const successBox = document.createElement('div');
+      successBox.style.cssText = 'background: #dcfce7; color: #15803d; padding: 14px; border-radius: 10px; font-weight: 700; text-align: center; margin-top: 12px;';
+      successBox.innerHTML = `🎉 Check-Out registrato alle ${now}!<br><small style="font-weight: 500;">Report inviato automaticamente all'amministrazione dell'impresa e al cliente.</small>`;
+      document.getElementById('cardJob1').appendChild(successBox);
+
+      // Abilita il secondo lavoro
+      document.getElementById('cardJob2').style.opacity = '1';
+      document.getElementById('cardJob2').classList.add('active-now');
+    }
+
+    function openProblemModal() {
+      const desc = prompt('Descrivi il problema riscontrato in cantiere (es. perdita rubinetto, finestra rotta, codice allarme non funzionante):');
+      if (desc) {
+        alert('Segnalazione inviata con priorità ALTA all\'ufficio operativo Clean Service!');
+      }
+    }
+  </script>
+
+</body>
+</html>
