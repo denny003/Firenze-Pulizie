@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cruscotto Impresa Partner — FIRENZE PULIZIE</title>
+  <meta name="description" content="Area riservata per l'impresa di pulizia partner: gestione richieste ricevute dalla rete, pianificazione cantieri, assegnazione squadre e controllo lavori.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <style>
+    .company-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid var(--brand-cyan-500);
+      color: var(--brand-navy-900);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .badge-lead-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+    .lead-status-nuovo { background: #fee2e2; color: #991b1b; }
+    .lead-status-sopralluogo { background: #fef3c7; color: #92400e; }
+    .lead-status-offerta { background: #e0f2fe; color: #0369a1; }
+    .lead-status-attivo { background: #dcfce7; color: #15803d; }
+    .team-card {
+      background: white;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all var(--transition-fast);
+    }
+    .team-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--brand-sky-400);
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR IMPRESA -->
+  <aside class="dash-sidebar">
+    <div class="dash-sidebar-header">
+      <a href="index.html" class="dash-brand">
+        <div class="dash-brand-icon">✨</div>
+        <div>FIRENZE <span style="color: var(--brand-sky-400);">PULIZIE</span></div>
+      </a>
+    </div>
+
+    <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03);">
+      <div style="font-size: 0.72rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 4px;">Impresa Partner</div>
+      <div style="font-weight: 800; font-size: 0.95rem; color: white;" id="sidebarCompanyName">Clean Service Firenze Srl</div>
+      <div style="font-size: 0.78rem; color: #38bdf8; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+        <span>⭐ Rating 4.9/5</span> • <span style="color: #4ade80;">✓ Accreditata</span>
+      </div>
+    </div>
+
+    <nav class="dash-sidebar-nav">
+      <div class="dash-nav-section-title">Attività Aziendale</div>
+      <button type="button" class="dash-nav-item active" data-tab="tab-overview">
+        <span class="icon">📊</span> Panoramica
+      </button>
+      <button type="button" class="dash-nav-item" data-tab="tab-leads">
+        <span class="icon">📥</span> Preventivi dalla Rete
+        <span class="badge-count" id="badgePendingLeads">2</span>
+      </button>
+      <button type="button" class="dash-nav-item" data-tab="tab-jobs">
+        <span class="icon">🧹</span> Cantieri & Calendario
+        <span class="badge-count" style="background: var(--brand-emerald-500); color: white;" id="badgeActiveJobs">5</span>
+      </button>
+      <button type="button" class="dash-nav-item" data-tab="tab-teams">
+        <span class="icon">🚚</span> Squadre & Operatori
+      </button>
+
+      <div class="dash-nav-section-title">Strumenti Operativi</div>
+      <a href="app-squadra.html" target="_blank" class="dash-nav-item">
+        <span class="icon">📱</span> Vista Mobile Squadra
+      </a>
+      <button type="button" class="dash-nav-item" data-tab="tab-zones">
+        <span class="icon">📍</span> Le Mie Zone Assegnate
+      </button>
+    </nav>
+
+    <div class="dash-sidebar-footer">
+      <div class="user-snippet">
+        <div class="user-avatar" style="background: #0284c7; color: white;">CS</div>
+        <div class="user-meta">
+          <div class="user-name">Clean Service FI</div>
+          <div class="user-role">P.IVA IT06548920481</div>
+        </div>
+        <a href="login.html" title="Disconnetti" style="color: #94a3b8; text-decoration: none; font-size: 1.1rem; margin-left: auto;">🚪</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="dash-main">
+
+    <!-- TOPBAR -->
+    <header class="dash-topbar">
+      <div class="dash-topbar-left">
+        <h1 class="dash-page-title" id="pageTitle">Area Riservata Impresa Partner</h1>
+      </div>
+      <div class="dash-topbar-right">
+        <span class="company-header-badge">
+          <span>📍 Zone: Novoli, Centro ZTL, Rifredi</span>
+        </span>
+        <button class="btn btn-primary btn-sm" onclick="openNewJobModal()">
+          + Nuovo Cantiere
+        </button>
+      </div>
+    </header>
+
+    <!-- BODY -->
+    <div class="dash-body">
+
+      <!-- KPI METRICS -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-head">
+            <span class="kpi-label">Preventivi Rete Assegnati</span>
+            <div class="kpi-icon sky">📥</div>
+          </div>
+          <div class="kpi-value" id="kpiLeadsCount">2</div>
+          <div class="kpi-sub" style="color: var(--brand-amber-500); font-weight: 700;">
+            ⚠️ 1 da contattare entro oggi
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-head">
+            <span class="kpi-label">Cantieri Attivi</span>
+            <div class="kpi-icon emerald">🏢</div>
+          </div>
+          <div class="kpi-value" id="kpiJobsCount">5</div>
+          <div class="kpi-sub" style="color: var(--brand-emerald-600); font-weight: 700;">
+            ✓ 3 interventi programmati oggi
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-head">
+            <span class="kpi-label">Squadre sul Campo</span>
+            <div class="kpi-icon violet">🚚</div>
+          </div>
+          <div class="kpi-value">4</div>
+          <div class="kpi-sub">
+            <span>8 operatori attivi con furgone</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-head">
+            <span class="kpi-label">Puntualità & Feedback</span>
+            <div class="kpi-icon amber">⭐</div>
+          </div>
+          <div class="kpi-value">4.9 / 5</div>
+          <div class="kpi-sub" style="color: var(--brand-emerald-600); font-weight: 700;">
+            ✓ 98.4% checklist conformi
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 1: PANORAMICA AZIENDALE -->
+      <section id="section-overview" class="tab-content-panel active">
+
+        <!-- CARD PREVENTIVI DA PRENDERE IN CARICO -->
+        <div class="content-card">
+          <div class="content-card-header">
+            <div class="card-title-group">
+              <h2>Preventivi Assegnati dalla Centrale di Rete</h2>
+              <p>Richieste di clienti a Firenze inoltrate alla tua impresa per vicinanza geografica</p>
+            </div>
+            <span class="badge-status status-valutazione" id="badgeQuickPending">2 Nuovi Incarichi</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Codice Lead</th>
+                  <th>Cliente & Recapito</th>
+                  <th>Settore</th>
+                  <th>Indirizzo & Quartiere</th>
+                  <th>Dettaglio Lavoro</th>
+                  <th>Stato Avanzamento</th>
+                  <th style="text-align: right;">Azioni Rapide</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyPartnerLeadsOverview">
+                <!-- Popolato da JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CARD CANTIERI DI OGGI -->
+        <div class="content-card">
+          <div class="content-card-header">
+            <div class="card-title-group">
+              <h2>Interventi Programmati Oggi a Firenze</h2>
+              <p>Tracciamento avanzamento delle tue squadre operative</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="switchTab('tab-jobs')">Vedi Tutti i Cantieri</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Cantiere / Cliente</th>
+                  <th>Quartiere & Orario</th>
+                  <th>Squadra Incaricata</th>
+                  <th>Check-In Effettuato</th>
+                  <th>Checklist & Foto</th>
+                  <th>Stato Intervento</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyTodayJobs">
+                <!-- Popolato da JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 2: TUTTI I PREVENTIVI RICEVUTI -->
+      <section id="section-leads" class="tab-content-panel" style="display: none;">
+        <div class="content-card">
+          <div class="content-card-header">
+            <div class="card-title-group">
+              <h2>Gestione Commerciale Preventivi e Offerte</h2>
+              <p>Segui la trattativa dal sopralluogo alla firma del contratto di pulizia</p>
+            </div>
+            <div class="toolbar-actions">
+              <div class="search-input-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchLeadsInput" placeholder="Cerca cliente, indirizzo, codice..." oninput="renderAllPartnerLeads()">
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Codice</th>
+                  <th>Cliente</th>
+                  <th>Settore</th>
+                  <th>Indirizzo Cantiere</th>
+                  <th>Frequenza / Mq</th>
+                  <th>Offerta Economica</th>
+                  <th>Stato Trattativa</th>
+                  <th style="text-align: right;">Gestisci</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyAllPartnerLeads">
+                <!-- Popolato da JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: CANTIERI E CALENDARIO -->
+      <section id="section-jobs" class="tab-content-panel" style="display: none;">
+        <div class="content-card">
+          <div class="content-card-header">
+            <div class="card-title-group">
+              <h2>Registro Cantieri & Contratti Attivi</h2>
+              <p>Pianificazione ricorrente, checklist contrattuali e squadre assegnate</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openNewJobModal()">+ Aggiungi Cantiere</button>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Codice Cantiere</th>
+                  <th>Cliente / Edificio</th>
+                  <th>Indirizzo & Quartiere</th>
+                  <th>Frequenza Settimanale</th>
+                  <th>Squadra Fissa</th>
+                  <th>Checklist Tipo</th>
+                  <th>Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyAllJobs">
+                <!-- Popolato da JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: SQUADRE OPERATIVE -->
+      <section id="section-teams" class="tab-content-panel" style="display: none;">
+        <div class="content-card">
+          <div class="content-card-header">
+            <div class="card-title-group">
+              <h2>Squadre Operative Aziendali</h2>
+              <p>Gestione mezzi, capisquadra e credenziali per l'App Mobile</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openNewTeamModal()">+ Nuova Squadra</button>
+          </div>
+          <div style="padding: 24px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;" id="teamsGrid">
+              <!-- Cards squadre popolate da JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: ZONE ASSEGNATE -->
+      <section id="section-zones" class="tab-content-panel" style="display: none;">
+        <div class="content-card">
+          <div class="content-card-header">
+            <div class="card-title-group">
+              <h2>Aree di Competenza Territoriale della Rete</h2>
+              <p>Quartieri di Firenze in cui la tua impresa riceve automaticamente le richieste di prossimità</p>
+            </div>
+          </div>
+          <div style="padding: 24px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+              <div class="card p-24" style="border: 2px solid var(--brand-sky-500); background: rgba(56, 189, 248, 0.05); border-radius: var(--radius-md);">
+                <div style="font-size: 1.5rem; margin-bottom: 8px;">📍</div>
+                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Novoli & San Donato</h3>
+                <p class="text-muted" style="font-size: 0.85rem;">CAP 50127 • Polo universitario, uffici, centri direzionali</p>
+                <span class="badge-status status-attiva" style="margin-top: 8px;">Sede Principale</span>
+              </div>
+              <div class="card p-24" style="border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+                <div style="font-size: 1.5rem; margin-bottom: 8px;">🏛️</div>
+                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Centro Storico (ZTL)</h3>
+                <p class="text-muted" style="font-size: 0.85rem;">CAP 50122 • Permessi ZTL attivi per furgoni Alfa e Beta</p>
+                <span class="badge-status status-attiva" style="margin-top: 8px;">Copertura Attiva</span>
+              </div>
+              <div class="card p-24" style="border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+                <div style="font-size: 1.5rem; margin-bottom: 8px;">🏥</div>
+                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Rifredi & Careggi</h3>
+                <p class="text-muted" style="font-size: 0.85rem;">CAP 50134 • Ambulatori, studi privati, condomini</p>
+                <span class="badge-status status-attiva" style="margin-top: 8px;">Copertura Attiva</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- MODALE GESTIONE PREVENTIVO (SOPRALLUOGO & OFFERTA) -->
+<div class="modal-backdrop" id="modalManageLead">
+  <div class="modal-card">
+    <div class="modal-card-header">
+      <h3 id="modalLeadTitle">Gestione Preventivo Rete</h3>
+      <button class="btn-close-modal" onclick="closeModal('modalManageLead')">&times;</button>
+    </div>
+    <div class="modal-card-body">
+      <div id="modalLeadSummary" style="background: var(--bg-main); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.88rem;"></div>
+
+      <form id="formManageLead">
+        <input type="hidden" id="manageLeadId">
+        
+        <div class="form-group">
+          <label class="form-label">Stato Avanzamento Incarico</label>
+          <select id="selectLeadStatus" class="form-control" onchange="toggleLeadFormFields()">
+            <option value="SOPRALLUOGO_FISSATO">📅 Fissa Data Sopralluogo</option>
+            <option value="PREVENTIVO_INVIATO">💶 Invia Offerta Economica</option>
+            <option value="ACCETTATO">✅ Offerta Accettata (Avvia Contratto)</option>
+          </select>
+        </div>
+
+        <div id="blockSopralluogo" class="form-group">
+          <label class="form-label">Data e Ora Sopralluogo concordata</label>
+          <input type="datetime-local" id="inputSopralluogoDate" class="form-control">
+        </div>
+
+        <div id="blockOfferta" class="form-group" style="display: none;">
+          <label class="form-label">Importo Offerta (€ + IVA)</label>
+          <div style="display: flex; gap: 12px;">
+            <input type="number" id="inputOffertaAmount" class="form-control" placeholder="es. 450">
+            <select id="inputOffertaFreq" class="form-control" style="width: 160px;">
+              <option value="MESE">Al Mese</option>
+              <option value="UNA_TANTUM">Una Tantum</option>
+              <option value="INTERVENTO">A Intervento</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Note Interne Impresa</label>
+          <textarea id="inputLeadNotes" class="form-control" rows="2" placeholder="es. Contattato cliente telefonicamente, richiede sopralluogo giovedì alle 15:00..."></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="modal-card-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modalManageLead')">Annulla</button>
+      <button class="btn btn-primary" onclick="saveLeadProgress()">Salva e Aggiorna</button>
+    </div>
+  </div>
+</div>
+
+<!-- JAVASCRIPT GESTIONE IMPRESA -->
+<script>
+  const PARTNER_STATE = {
+    leads: [
+      {
+        id: 'L01',
+        code: 'LEAD-2026-FI-4821',
+        name: 'Studio Legale Rossi & Partners',
+        contact: 'Avv. Rossi (333 4567890)',
+        email: 'info@rossilex.it',
+        sector: 'COMMERCIALE',
+        zone: 'Centro Storico (ZTL)',
+        address: 'Via de\' Tornabuoni 14',
+        details: '240 mq, 3 bagni, pavimenti cotto antico. Pulizia 3 volte a settimana serale.',
+        status: 'NUOVO_INCARICO',
+        amount: null,
+        sopralluogo: null,
+        notes: 'Richiesta ZTL attiva per i mezzi.'
+      },
+      {
+        id: 'L02',
+        code: 'LEAD-2026-FI-4822',
+        name: 'Condominio Parco San Donato',
+        contact: 'Dott.ssa Bianchi (339 1234567)',
+        email: 'studiobianchi.amm@gmail.com',
+        sector: 'CONDOMINIO',
+        zone: 'Novoli / San Donato',
+        address: 'Via di Novoli 42',
+        details: '2 scale, 6 piani, ascensori e vetrate. Bisettimanale.',
+        status: 'SOPRALLUOGO_FISSATO',
+        amount: null,
+        sopralluogo: '2026-10-09 10:30',
+        notes: 'Sopralluogo confermato con portinaio.'
+      },
+      {
+        id: 'L03',
+        code: 'LEAD-2026-FI-4780',
+        name: 'Studio Dentistico Novoli',
+        contact: 'Dr. Valenti (055 432109)',
+        email: 'studio@valenti-dentista.it',
+        sector: 'COMMERCIALE',
+        zone: 'Novoli',
+        address: 'Viale Redi 80',
+        details: '140 mq, sale operative, pavimenti linoleum sanitario.',
+        status: 'PREVENTIVO_INVIATO',
+        amount: '€ 520 / mese',
+        sopralluogo: '2026-10-04',
+        notes: 'Offerta inviata per 5 passaggi settimanali.'
+      }
+    ],
+
+    todayJobs: [
+      {
+        client: 'Tech Hub Coworking Novoli',
+        zone: 'Novoli / Baracca',
+        time: '07:00 - 09:00',
+        team: 'Squadra Alfa (Marco T., Luca M.)',
+        checkin: '06:55 (Rilevato)',
+        checklist: '10 / 10 (Completato)',
+        status: 'COMPLETATO'
+      },
+      {
+        client: 'Condominio Viale Belfiore',
+        zone: 'Centro Storico / Porta al Prato',
+        time: '10:30 - 12:00',
+        team: 'Squadra Beta (Andrea B., Sara G.)',
+        checkin: '10:28 (In corso)',
+        checklist: '6 / 8 Spuntati',
+        status: 'IN_CORSO'
+      },
+      {
+        client: 'Studio Associato Tornabuoni',
+        zone: 'Centro Storico (ZTL)',
+        time: '18:30 - 20:30',
+        team: 'Squadra Alfa (Marco T., Luca M.)',
+        checkin: 'Pianificato stasera',
+        checklist: 'Checklist Uffici Serale',
+        status: 'PROGRAMMATO'
+      }
+    ],
+
+    allJobs: [
+      { code: 'JOB-FI-01', client: 'Tech Hub Coworking Novoli', address: 'Via Baracca 102', freq: 'Lun - Ven (Giornaliero)', team: 'Squadra Alfa', checklist: 'Uffici Direzionali' },
+      { code: 'JOB-FI-02', client: 'Condominio Viale Belfiore', address: 'Viale Belfiore 28', freq: 'Mar - Gio - Sab', team: 'Squadra Beta', checklist: 'Condominio Standard' },
+      { code: 'JOB-FI-03', client: 'Studio Associato Tornabuoni', address: 'Via Tornabuoni 8', freq: 'Lun - Mer - Ven', team: 'Squadra Alfa', checklist: 'Uffici Prestigio' },
+      { code: 'JOB-FI-04', client: 'Residenza Careggi', address: 'Via Alderotti 15', freq: 'Mercoledì', team: 'Squadra Gamma', checklist: 'Scale & Vetrate' },
+      { code: 'JOB-FI-05', client: 'Polo Medico Novoli', address: 'Via San Donato 33', freq: 'Tutti i giorni', team: 'Squadra Delta', checklist: 'Sanificazione Ambienti' }
+    ],
+
+    teams: [
+      { name: 'Squadra Alfa', van: 'Fiat Doblo Cargo (FZ 482 AA)', leader: 'Marco Taddei', member: 'Luca Mancini', pin: 'PIN-101', activeJob: 'Studio Associato Tornabuoni' },
+      { name: 'Squadra Beta', van: 'Renault Kangoo (GB 910 XY)', leader: 'Andrea Banchi', member: 'Sara Galli', pin: 'PIN-102', activeJob: 'Condominio Viale Belfiore' },
+      { name: 'Squadra Gamma', van: 'Ford Transit Custom (FD 331 KL)', leader: 'Roberto Corsi', member: 'Simone Nardi', pin: 'PIN-103', activeJob: 'Residenza Careggi' },
+      { name: 'Squadra Delta', van: 'Peugeot Partner (GE 778 BB)', leader: 'Matteo Innocenti', member: 'Davide Gori', pin: 'PIN-104', activeJob: 'Polo Medico Novoli' }
+    ]
+  };
+
+  function initPartnerDashboard() {
+    renderKPIs();
+    renderOverviewLeads();
+    renderTodayJobs();
+    renderAllPartnerLeads();
+    renderAllJobs();
+    renderTeams();
+    setupNav();
+  }
+
+  function setupNav() {
+    const navItems = document.querySelectorAll('.dash-nav-item[data-tab]');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        navItems.forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+
+        const tab = item.dataset.tab;
+        document.querySelectorAll('.tab-content-panel').forEach(p => p.style.display = 'none');
+
+        if (tab === 'tab-overview') {
+          document.getElementById('section-overview').style.display = 'block';
+          document.getElementById('pageTitle').textContent = 'Panoramica Impresa Partner';
+        } else if (tab === 'tab-leads') {
+          document.getElementById('section-leads').style.display = 'block';
+          document.getElementById('pageTitle').textContent = 'Preventivi & Trattative Rete';
+        } else if (tab === 'tab-jobs') {
+          document.getElementById('section-jobs').style.display = 'block';
+          document.getElementById('pageTitle').textContent = 'Registro Cantieri & Contratti';
+        } else if (tab === 'tab-teams') {
+          document.getElementById('section-teams').style.display = 'block';
+          document.getElementById('pageTitle').textContent = 'Squadre Operative & Furgoni';
+        } else if (tab === 'tab-zones') {
+          document.getElementById('section-zones').style.display = 'block';
+          document.getElementById('pageTitle').textContent = 'Le Mie Zone di Prossimità';
+        }
+      });
+    });
+  }
+
+  function switchTab(tabId) {
+    const btn = document.querySelector(`.dash-nav-item[data-tab="${tabId}"]`);
+    if (btn) btn.click();
+  }
+
+  function renderKPIs() {
+    const pendingLeads = PARTNER_STATE.leads.filter(l => l.status === 'NUOVO_INCARICO').length;
+    document.getElementById('kpiLeadsCount').textContent = PARTNER_STATE.leads.length;
+    document.getElementById('badgePendingLeads').textContent = pendingLeads;
+    document.getElementById('kpiJobsCount').textContent = PARTNER_STATE.allJobs.length;
+    document.getElementById('badgeActiveJobs').textContent = PARTNER_STATE.allJobs.length;
+  }
+
+  function renderOverviewLeads() {
+    const tbody = document.getElementById('tbodyPartnerLeadsOverview');
+    tbody.innerHTML = PARTNER_STATE.leads.map(l => {
+      let badgeClass = 'lead-status-nuovo';
+      let badgeLabel = 'Nuovo Incarico';
+      if (l.status === 'SOPRALLUOGO_FISSATO') { badgeClass = 'lead-status-sopralluogo'; badgeLabel = 'Sopralluogo Fissato'; }
+      if (l.status === 'PREVENTIVO_INVIATO') { badgeClass = 'lead-status-offerta'; badgeLabel = 'Offerta Inviata'; }
+
+      return `
+        <tr>
+          <td><strong style="font-family: monospace;">${l.code}</strong></td>
+          <td><strong>${l.name}</strong><br><small class="text-muted">${l.contact}</small></td>
+          <td><span class="badge-sector sector-comm">${l.sector}</span></td>
+          <td>📍 <strong>${l.zone}</strong><br><small class="text-muted">${l.address}</small></td>
+          <td style="max-width: 240px; font-size: 0.82rem;">${l.details}</td>
+          <td><span class="badge-lead-status ${badgeClass}">${badgeLabel}</span></td>
+          <td style="text-align: right;">
+            <button class="btn btn-primary btn-sm" onclick="openManageLeadModal('${l.id}')">
+              ⚙️ Gestisci
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderTodayJobs() {
+    const tbody = document.getElementById('tbodyTodayJobs');
+    tbody.innerHTML = PARTNER_STATE.todayJobs.map(j => {
+      const statusBadge = j.status === 'COMPLETATO' 
+        ? '<span class="badge-status status-completata">✓ Concluso</span>'
+        : (j.status === 'IN_CORSO' ? '<span class="badge-status status-in-corso">⏳ In Corso</span>' : '<span class="badge-status status-valutazione">Pianificato</span>');
+      return `
+        <tr>
+          <td><strong>${j.client}</strong></td>
+          <td>📍 ${j.zone}<br><small class="text-muted">Orario: ${j.time}</small></td>
+          <td><strong style="color: var(--brand-navy-900);">${j.team}</strong></td>
+          <td><span style="font-family: monospace; font-weight: 700;">${j.checkin}</span></td>
+          <td><strong style="color: var(--brand-emerald-600);">${j.checklist}</strong></td>
+          <td>${statusBadge}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderAllPartnerLeads() {
+    const tbody = document.getElementById('tbodyAllPartnerLeads');
+    const query = (document.getElementById('searchLeadsInput')?.value || '').toLowerCase();
+
+    const filtered = PARTNER_STATE.leads.filter(l => {
+      return l.name.toLowerCase().includes(query) || l.code.toLowerCase().includes(query) || l.address.toLowerCase().includes(query);
+    });
+
+    tbody.innerHTML = filtered.map(l => {
+      let badgeClass = 'lead-status-nuovo';
+      let badgeLabel = 'Nuovo Incarico';
+      if (l.status === 'SOPRALLUOGO_FISSATO') { badgeClass = 'lead-status-sopralluogo'; badgeLabel = 'Sopralluogo Fissato'; }
+      if (l.status === 'PREVENTIVO_INVIATO') { badgeClass = 'lead-status-offerta'; badgeLabel = 'Offerta Inviata'; }
+
+      return `
+        <tr>
+          <td><strong style="font-family: monospace;">${l.code}</strong></td>
+          <td><strong>${l.name}</strong><br><small class="text-muted">${l.contact}</small></td>
+          <td><span class="badge-sector sector-comm">${l.sector}</span></td>
+          <td>📍 ${l.address} (${l.zone})</td>
+          <td><small>${l.details.slice(0, 40)}...</small></td>
+          <td><strong>${l.amount || 'Da Quotare'}</strong></td>
+          <td><span class="badge-lead-status ${badgeClass}">${badgeLabel}</span></td>
+          <td style="text-align: right;">
+            <button class="btn btn-secondary btn-sm" onclick="openManageLeadModal('${l.id}')">Dettagli & Offerta</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderAllJobs() {
+    const tbody = document.getElementById('tbodyAllJobs');
+    tbody.innerHTML = PARTNER_STATE.allJobs.map(j => `
+      <tr>
+        <td><strong style="font-family: monospace;">${j.code}</strong></td>
+        <td><strong>${j.client}</strong></td>
+        <td>📍 ${j.address}</td>
+        <td><span class="badge-sector sector-condo">${j.freq}</span></td>
+        <td><strong>${j.team}</strong></td>
+        <td><small class="text-muted">${j.checklist}</small></td>
+        <td><button class="btn btn-secondary btn-sm" onclick="alert('Scheda cantiere ${j.client}')">Scheda</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function renderTeams() {
+    const container = document.getElementById('teamsGrid');
+    container.innerHTML = PARTNER_STATE.teams.map(t => `
+      <div class="team-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; font-size: 1.15rem; color: var(--brand-navy-900);">🚚 ${t.name}</h3>
+          <span style="font-size: 0.78rem; font-family: monospace; background: #e0f2fe; padding: 2px 8px; border-radius: var(--radius-sm); font-weight: 700; color: #0284c7;">
+            ${t.pin}
+          </span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">
+          <div>Veicolo: <strong>${t.van}</strong></div>
+          <div>Caposquadra: <strong>${t.leader}</strong></div>
+          <div>Operatore: <strong>${t.member}</strong></div>
+        </div>
+        <div style="padding-top: 10px; border-top: 1px dashed var(--border-light); font-size: 0.82rem;">
+          <div style="color: var(--text-light);">Cantiere Odierno:</div>
+          <strong style="color: var(--brand-emerald-600);">📍 ${t.activeJob}</strong>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+          <a href="app-squadra.html" target="_blank" class="btn btn-secondary btn-sm" style="flex: 1; text-align: center; text-decoration: none;">Accedi come Squadra</a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // MODALE GESTIONE PREVENTIVO
+  function openManageLeadModal(leadId) {
+    const lead = PARTNER_STATE.leads.find(l => l.id === leadId);
+    if (!lead) return;
+
+    document.getElementById('manageLeadId').value = lead.id;
+    document.getElementById('modalLeadTitle').textContent = `Incarico: ${lead.code}`;
+    document.getElementById('modalLeadSummary').innerHTML = `
+      <div><strong>Cliente:</strong> ${lead.name} • <strong>Tel:</strong> ${lead.contact}</div>
+      <div><strong>Indirizzo:</strong> 📍 ${lead.address} (${lead.zone})</div>
+      <div style="margin-top: 6px;"><strong>Richiesta:</strong> ${lead.details}</div>
+    `;
+
+    document.getElementById('selectLeadStatus').value = lead.status === 'NUOVO_INCARICO' ? 'SOPRALLUOGO_FISSATO' : lead.status;
+    document.getElementById('inputLeadNotes').value = lead.notes || '';
+    toggleLeadFormFields();
+    document.getElementById('modalManageLead').classList.add('active');
+  }
+
+  function toggleLeadFormFields() {
+    const status = document.getElementById('selectLeadStatus').value;
+    document.getElementById('blockSopralluogo').style.display = status === 'SOPRALLUOGO_FISSATO' ? 'block' : 'none';
+    document.getElementById('blockOfferta').style.display = status === 'PREVENTIVO_INVIATO' ? 'block' : 'none';
+  }
+
+  function saveLeadProgress() {
+    const leadId = document.getElementById('manageLeadId').value;
+    const lead = PARTNER_STATE.leads.find(l => l.id === leadId);
+    if (!lead) return;
+
+    const newStatus = document.getElementById('selectLeadStatus').value;
+    lead.status = newStatus;
+    lead.notes = document.getElementById('inputLeadNotes').value;
+
+    if (newStatus === 'PREVENTIVO_INVIATO') {
+      const amount = document.getElementById('inputOffertaAmount').value;
+      const freq = document.getElementById('inputOffertaFreq').value;
+      if (amount) lead.amount = `€ ${amount} / ${freq.toLowerCase()}`;
+    }
+
+    closeModal('modalManageLead');
+    alert(`Stato del preventivo ${lead.code} aggiornato con successo a: ${newStatus}!`);
+
+    renderKPIs();
+    renderOverviewLeads();
+    renderAllPartnerLeads();
+  }
+
+  function openNewJobModal() {
+    alert('Funzione per associare un nuovo cantiere ricorrente a una squadra aziendale.');
+  }
+
+  function openNewTeamModal() {
+    const teamName = prompt('Nome della nuova squadra operativa:', 'Squadra Epsilon');
+    if (teamName) {
+      PARTNER_STATE.teams.push({
+        name: teamName,
+        van: 'Furgone da assegnare',
+        leader: 'Nuovo Operatore',
+        member: 'Da nominare',
+        pin: `PIN-${Math.floor(100 + Math.random()*900)}`,
+        activeJob: 'In attesa di assegnazione'
+      });
+      renderTeams();
+      alert(`Nuova squadra "${teamName}" creata con successo!`);
+    }
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+  }
+
+  document.addEventListener('DOMContentLoaded', initPartnerDashboard);
+</script>
+
+</body>
+</html>

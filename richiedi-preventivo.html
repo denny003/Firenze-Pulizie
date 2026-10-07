@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Richiedi un Preventivo Gratuito — FIRENZE PULIZIE</title>
+  <meta name="description" content="Richiedi un preventivo o un sopralluogo per pulizie commerciali, condominiali o private a Firenze. La squadra più vicina alla tua zona ti contatterà rapidamente.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/public.css">
+  <style>
+    .quote-wrap {
+      max-width: 760px;
+      margin: 40px auto 60px;
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      box-shadow: var(--shadow-lg);
+    }
+    .category-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .pill-radio {
+      display: none;
+    }
+    .pill-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 12px;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-align: center;
+      transition: all var(--transition-fast);
+      background: var(--bg-main);
+    }
+    .pill-label .icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .pill-radio:checked + .pill-label {
+      border-color: var(--brand-sky-500);
+      background: rgba(56, 189, 248, 0.08);
+      color: var(--brand-navy-900);
+      box-shadow: var(--shadow-sm);
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .feedback-msg {
+      display: none;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    .feedback-msg.success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .feedback-msg.error {
+      background: #fff1f2;
+      color: #9f1239;
+      border: 1px solid #fecdd3;
+    }
+    @media (max-width: 640px) {
+      .quote-wrap { padding: 24px 18px; margin: 20px auto; }
+      .category-pills { grid-template-columns: 1fr; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">✨</div>
+        <div>FIRENZE <span class="city-tag">PULIZIE</span></div>
+      </a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="pulizie-commerciali.html" class="nav-link">Commerciale</a></li>
+          <li><a href="pulizie-condomini.html" class="nav-link">Condomini</a></li>
+          <li><a href="pulizie-private.html" class="nav-link">Privati</a></li>
+          <li><a href="index.html#territorio" class="nav-link">Zone</a></li>
+          <li><a href="partner.html" class="nav-link">Partner</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-secondary btn-sm">Area Riservata</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- FORM CONTAINER -->
+  <main class="container">
+    <div class="quote-wrap">
+      <div style="text-align:center; margin-bottom: 30px;">
+        <span class="section-eyebrow">Richiesta Guidata Senza Impegno</span>
+        <h1 style="font-size:2rem; color:var(--brand-navy-900); margin-bottom:10px;">Raccontaci di cosa hai bisogno</h1>
+        <p class="text-muted" style="font-size:0.95rem;">
+          La richiesta viene registrata immediatamente nel nostro sistema territoriale. Ti metteremo in contatto con la squadra più qualificata e vicina alla tua zona di Firenze.
+        </p>
+      </div>
+
+      <div id="leadFeedback" class="feedback-msg"></div>
+
+      <form id="leadRequestForm">
+        <!-- 1. Macro-categoria -->
+        <label class="form-label" style="margin-bottom:10px;">1. Seleziona la tipologia di servizio *</label>
+        <div class="category-pills">
+          <div>
+            <input type="radio" name="category" value="COMMERCIAL" id="catComm" class="pill-radio" checked>
+            <label for="catComm" class="pill-label">
+              <span class="icon">🏢</span>
+              <span>Commerciale / B2B</span>
+              <small style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">Uffici, Negozi, B&B</small>
+            </label>
+          </div>
+          <div>
+            <input type="radio" name="category" value="CONDOMINIUM" id="catCondo" class="pill-radio">
+            <label for="catCondo" class="pill-label">
+              <span class="icon">🏠</span>
+              <span>Condominio</span>
+              <small style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">Scale, Androni, Garage</small>
+            </label>
+          </div>
+          <div>
+            <input type="radio" name="category" value="PRIVATE" id="catPriv" class="pill-radio">
+            <label for="catPriv" class="pill-label">
+              <span class="icon">🏡</span>
+              <span>Privato / Casa</span>
+              <small style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">Appartamenti, Ville</small>
+            </label>
+          </div>
+        </div>
+
+        <!-- 2. Servizio specifico & Frequenza -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="leadService">2. Servizio specifico *</label>
+            <select id="leadService" name="serviceName" class="form-select" required>
+              <option value="">-- Seleziona servizio --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="leadFrequency">Frequenza desiderata *</label>
+            <select id="leadFrequency" name="frequency" class="form-select" required>
+              <option value="SETTIMANALE">Settimanale (consigliato)</option>
+              <option value="BISETTIMANALE">Due volte a settimana</option>
+              <option value="MENSILE">Mensile</option>
+              <option value="UNA_TANTUM">Intervento Singolo / Una Tantum</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3. Localizzazione a Firenze -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="leadZone">3. Quartiere / Zona di Firenze *</label>
+            <select id="leadZone" name="zoneId" class="form-select js-zone-select" required>
+              <option value="">-- Seleziona zona di Firenze --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="leadAddress">Indirizzo / Via (facoltativo)</label>
+            <input type="text" id="leadAddress" name="address" class="form-input" placeholder="Es. Via de' Tornabuoni, Via Novoli, ecc.">
+          </div>
+        </div>
+
+        <!-- 4. Dimensioni immobile & Note -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="leadSize">Superficie indicativa (mq)</label>
+            <input type="number" id="leadSize" name="propertySizeSqm" class="form-input" placeholder="Es. 80, 150, 400...">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="leadEntityName">Ragione Sociale o Condominio (se applicabile)</label>
+            <input type="text" id="leadEntityName" name="companyOrCondoName" class="form-input" placeholder="Es. Studio Rossi Srl, Condominio Belfiore...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="leadNotes">Dettagli o esigenze particolari</label>
+          <textarea id="leadNotes" name="notes" class="form-textarea" placeholder="Descrivi eventuali orari preferiti, presenza di animali, necessità di lavaggio vetrate alte o sanificazione specifica..."></textarea>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border-light); margin:24px 0;">
+
+        <!-- 5. Dati di contatto -->
+        <div style="margin-bottom:18px;">
+          <strong style="color:var(--brand-navy-900); font-size:1.05rem;">4. I tuoi recapiti per ricevere il riscontro</strong>
+          <p class="text-muted" style="font-size:0.85rem;">Utilizzeremo questi dati unicamente per ricontattarti in merito alla tua richiesta, nel pieno rispetto del GDPR.</p>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="leadName">Nome *</label>
+            <input type="text" id="leadName" name="firstName" class="form-input" required placeholder="Mario">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="leadSurname">Cognome *</label>
+            <input type="text" id="leadSurname" name="lastName" class="form-input" required placeholder="Rossi">
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="leadPhone">Telefono / Cellulare *</label>
+            <input type="tel" id="leadPhone" name="phone" class="form-input" required placeholder="333 1234567">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="leadEmail">Email *</label>
+            <input type="email" id="leadEmail" name="email" class="form-input" required placeholder="mario.rossi@email.it">
+          </div>
+        </div>
+
+        <div style="margin-top:24px; text-align:center;">
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%; max-width:420px;" id="btnSubmitLead">
+            🚀 Invia Richiesta alla Squadra di Zona
+          </button>
+          <div style="font-size:0.78rem; color:var(--text-light); margin-top:10px;">
+            🔒 Nessun vincolo o registrazione forzata · Riscontro rapido garantito
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container text-center">
+      <p style="font-size:0.88rem; color:#94a3b8;">© 2026 FIRENZE PULIZIE — Piattaforma Territoriale. <a href="index.html" style="color:#ffffff;">Torna alla Home</a></p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/public-lead.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diventa Impresa Partner a Firenze — FIRENZE PULIZIE</title>
+  <meta name="description" content="Entra nella rete coordinata delle imprese di pulizia di Firenze e provincia. Nuove opportunità continuative, ottimizzazione delle squadre e strumenti digitali dedicati.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/public.css">
+  <style>
+    .partner-card-wrap {
+      max-width: 820px;
+      margin: 40px auto 70px;
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: 42px;
+      box-shadow: var(--shadow-lg);
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .feedback-msg {
+      display: none;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      font-size: 0.92rem;
+    }
+    .feedback-msg.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .feedback-msg.error { background: #fff1f2; color: #9f1239; border: 1px solid #fecdd3; }
+    @media (max-width: 640px) {
+      .partner-card-wrap { padding: 24px 18px; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">✨</div>
+        <div>FIRENZE <span class="city-tag">PULIZIE</span></div>
+      </a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="pulizie-commerciali.html" class="nav-link">Commerciale</a></li>
+          <li><a href="pulizie-condomini.html" class="nav-link">Condomini</a></li>
+          <li><a href="pulizie-private.html" class="nav-link">Privati</a></li>
+          <li><a href="index.html#territorio" class="nav-link">Zone</a></li>
+          <li><a href="partner.html" class="nav-link active">Partner</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-secondary btn-sm">Area Riservata</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO PARTNER -->
+  <section class="hero-section text-center" style="padding: 70px 0 80px;">
+    <div class="container">
+      <div class="hero-badge-wrap">
+        <span>🤝 Programma Imprese Partner Qualificate</span>
+      </div>
+      <h1 class="hero-title">
+        Fai crescere la tua impresa di pulizie.<br>
+        <span class="highlight">Unisciti alla rete coordinata</span> di Firenze.
+      </h1>
+      <p class="hero-subtitle">
+        Collabora con altre imprese serie del territorio. Riduciamo i tempi morti di spostamento, ti assegniamo lavori continuativi nelle tue zone operative e ti forniamo strumenti digitali all'avanguardia per le tue squadre.
+      </p>
+    </div>
+  </section>
+
+  <!-- VANTAGGI PARTNER -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Perché Collaborare</span>
+        <h2 class="section-title">I vantaggi per la tua impresa</h2>
+        <p class="text-muted">Un modello cooperativo moderno che valorizza le imprese regolari e ben organizzate.</p>
+      </div>
+
+      <div class="sectors-grid">
+        <div class="sector-card">
+          <div class="sector-icon-box" style="background:#e0f2fe; color:#0284c7;">📈</div>
+          <h3 class="sector-card-title">Nuove Opportunità Continuative</h3>
+          <p class="sector-card-desc">Ricevi richieste commerciali, contratti condominiali e privati già filtrati e qualificati, senza dover sostenere costi pubblicitari individuali.</p>
+        </div>
+        <div class="sector-card">
+          <div class="sector-icon-box" style="background:#ecfdf5; color:#059669;">📍</div>
+          <h3 class="sector-card-title">Ottimizzazione di Prossimità</h3>
+          <p class="sector-card-desc">Lavori concentrati nelle zone di Firenze in cui già operi: meno chilometri nel traffico, meno carburante e maggiore produttività oraria delle squadre.</p>
+        </div>
+        <div class="sector-card">
+          <div class="sector-icon-box" style="background:#fef3c7; color:#d97706;">📱</div>
+          <h3 class="sector-card-title">App Mobile per le Squadre</h3>
+          <p class="sector-card-desc">Forniamo gratuitamente ai tuoi operatori l'applicazione mobile per checklist digitali, tracciamento orari, foto cantiere e firma del cliente.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM CANDIDATURA -->
+  <section class="section" style="background:var(--bg-subtle); border-top:1px solid var(--border-light);">
+    <div class="container">
+      <div class="partner-card-wrap">
+        <div style="text-align:center; margin-bottom: 28px;">
+          <span class="section-eyebrow">Candidatura Ufficiale</span>
+          <h2 style="font-size:1.85rem; color:var(--brand-navy-900); margin-bottom:8px;">Richiedi di entrare nella Rete</h2>
+          <p class="text-muted" style="font-size:0.92rem;">
+            La registrazione non comporta un'abilitazione automatica. Ogni impresa viene verificata dal nostro team per garantire standard elevati a tutti i clienti della rete.
+          </p>
+        </div>
+
+        <div id="partnerFeedback" class="feedback-msg"></div>
+
+        <form id="partnerApplyForm">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="partBusinessName">Ragione Sociale Impresa *</label>
+              <input type="text" id="partBusinessName" name="businessName" class="form-input" required placeholder="Es. Pulizie Fiorentine Srl">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="partVat">Partita IVA *</label>
+              <input type="text" id="partVat" name="vatNumber" class="form-input" required placeholder="Es. 01234567890">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="partContactPerson">Referente / Titolare *</label>
+              <input type="text" id="partContactPerson" name="contactPerson" class="form-input" required placeholder="Nome e Cognome">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="partPhone">Telefono Diretto *</label>
+              <input type="tel" id="partPhone" name="phone" class="form-input" required placeholder="Es. 055 1234567 / 333...">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="partEmail">Email Istituzionale *</label>
+              <input type="email" id="partEmail" name="email" class="form-input" required placeholder="info@tuaazienda.it">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="partPec">PEC (se disponibile)</label>
+              <input type="email" id="partPec" name="pec" class="form-input" placeholder="tuaazienda@pec.it">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="partOperators">Numero Operatori / Dipendenti *</label>
+              <input type="number" id="partOperators" name="operatorCount" min="1" value="3" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="partTeams">Numero Squadre Attive *</label>
+              <input type="number" id="partTeams" name="teamCount" min="1" value="2" class="form-input" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="partZones">Zone Principali Operative a Firenze</label>
+            <input type="text" id="partZones" name="primaryZones" class="form-input" placeholder="Es. Novoli, Rifredi, Centro Storico, Scandicci...">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="partDesc">Presentazione dell'impresa & Specializzazioni</label>
+            <textarea id="partDesc" name="description" class="form-textarea" placeholder="Descrivi da quanti anni operate a Firenze, tipologie di macchinari posseduti, eventuali certificazioni di qualità o polizze assicurative..."></textarea>
+          </div>
+
+          <div style="text-align:center; margin-top:28px;">
+            <button type="submit" class="btn btn-primary btn-lg" style="width:100%; max-width:400px;" id="btnSubmitPartner">
+              Invia Candidatura Impresa Partner
+            </button>
+            <div style="font-size:0.8rem; color:var(--text-light); margin-top:10px;">
+              ⏱️ Valutazione documentale entro 48 ore lavorative
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container text-center">
+      <p style="font-size:0.88rem; color:#94a3b8;">© 2026 FIRENZE PULIZIE — Portale Partner. <a href="index.html" style="color:#ffffff;">Torna alla Home</a></p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('partnerApplyForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
+      const feedback = document.getElementById('partnerFeedback');
+      
+      const payload = Object.fromEntries(new FormData(form).entries());
+      btn.disabled = true;
+      btn.textContent = 'Invio candidatura in corso...';
+
+      try {
+        const res = await fetch('/api/companies/apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Errore durante la registrazione');
+
+        form.reset();
+        feedback.className = 'feedback-msg success';
+        feedback.innerHTML = `<strong>✅ Candidatura Ricevuta con Successo!</strong><br>La tua richiesta è in stato <em>IN_VERIFICA</em>. Il referente della rete ti contatterà per completare la verifica dei requisiti e attivare le tue squadre.`;
+        feedback.style.display = 'block';
+        btn.textContent = '✓ Inviato con Successo';
+      } catch (err) {
+        feedback.className = 'feedback-msg error';
+        feedback.textContent = `Impossibile completare la candidatura: ${err.message}.`;
+        feedback.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Invia Candidatura Impresa Partner';
+      }
+    });
+  </script>
+</body>
+</html>
