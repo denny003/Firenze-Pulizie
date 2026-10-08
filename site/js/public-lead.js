@@ -134,22 +134,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      const feedbackBottom = document.getElementById('leadFeedbackBottom');
+
       if (success) {
         leadForm.reset();
+        const successHtml = `
+          <strong>✅ Richiesta Salvata su Supabase! (Codice: ${returnedId})</strong><br>
+          La squadra di prossimità per la tua zona di Firenze ha ricevuto la notifica e ti ricontatterà al più presto per confermare dettagli o concordare un sopralluogo gratuito.
+        `;
         if (feedback) {
           feedback.className = 'feedback-msg success';
-          feedback.innerHTML = `
-            <strong>✅ Richiesta Salvata su Supabase! (Codice: ${returnedId})</strong><br>
-            La squadra di prossimità per la tua zona di Firenze ha ricevuto la notifica e ti ricontatterà al più presto.
-          `;
+          feedback.innerHTML = successHtml;
           feedback.style.display = 'block';
         }
+        if (feedbackBottom) {
+          feedbackBottom.className = 'feedback-msg success';
+          feedbackBottom.innerHTML = successHtml;
+          feedbackBottom.style.display = 'block';
+          feedbackBottom.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         btn.innerHTML = '<span>✓ Inviato con Successo!</span>';
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }, 5000);
       } else {
+        const errorHtml = 'Impossibile inviare. Riprova tra poco o contattaci direttamente.';
         if (feedback) {
           feedback.className = 'feedback-msg error';
-          feedback.textContent = 'Impossibile inviare. Riprova tra poco.';
+          feedback.textContent = errorHtml;
           feedback.style.display = 'block';
+        }
+        if (feedbackBottom) {
+          feedbackBottom.className = 'feedback-msg error';
+          feedbackBottom.textContent = errorHtml;
+          feedbackBottom.style.display = 'block';
+          feedbackBottom.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         btn.disabled = false;
         btn.innerHTML = originalText;

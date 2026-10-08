@@ -86,12 +86,17 @@ export const handler = async (event) => {
     if (route === '/leads/public' && method === 'POST') {
       const payload = JSON.parse(event.body || '{}');
 
-      if (!payload.full_name || !payload.email || !payload.phone) {
+      const fullName = (payload.full_name || `${payload.firstName || ''} ${payload.lastName || ''}`.trim() || payload.name || '').trim();
+      const email = payload.email;
+      const phone = payload.phone;
+
+      if (!fullName || !email || !phone) {
         return {
           statusCode: 400,
           headers: CORS_HEADERS,
           body: JSON.stringify({
             success: false,
+            error: 'Nome, email e recapito telefonico sono campi obbligatori.',
             message: 'Nome, email e recapito telefonico sono campi obbligatori.'
           })
         };
@@ -101,20 +106,21 @@ export const handler = async (event) => {
       const leadCode = `LEAD-2026-FI-${randomSuffix}`;
       const leadId = `lead_${Date.now()}`;
 
+      const sqm = payload.square_meters || payload.sqm;
       const leadRecord = {
         id: leadId,
         lead_code: leadCode,
-        sector: payload.sector || 'COMMERCIALE',
-        customer_type: payload.customer_type || 'AZIENDA',
-        full_name: payload.full_name,
-        company_name: payload.company_name || null,
-        email: payload.email,
-        phone: payload.phone,
-        geographic_area_id: payload.zone_id || 'geo-fi-centro',
+        sector: payload.sector || payload.category || 'COMMERCIALE',
+        customer_type: payload.customer_type || payload.customerType || 'AZIENDA',
+        full_name: fullName,
+        company_name: payload.company_name || payload.companyName || null,
+        email: email,
+        phone: phone,
+        geographic_area_id: payload.geographic_area_id || payload.zone_id || payload.zoneId || 'geo-fi-centro',
         address: payload.address || 'Firenze',
-        square_meters: payload.square_meters ? parseInt(payload.square_meters, 10) : null,
+        square_meters: sqm ? parseInt(sqm, 10) : null,
         frequency: payload.frequency || 'UNA_TANTUM',
-        notes: payload.notes || '',
+        notes: payload.notes || payload.service || '',
         status: 'NUOVA'
       };
 
@@ -162,12 +168,19 @@ export const handler = async (event) => {
     if (route === '/companies/apply' && method === 'POST') {
       const payload = JSON.parse(event.body || '{}');
 
-      if (!payload.company_name || !payload.vat_number || !payload.email || !payload.phone) {
+      const companyName = payload.company_name || payload.businessName || payload.business_name;
+      const vatNumber = payload.vat_number || payload.vatNumber;
+      const contactPerson = payload.contact_person || payload.contactPerson || payload.legal_representative || 'Referente';
+      const email = payload.email;
+      const phone = payload.phone;
+
+      if (!companyName || !vatNumber || !email || !phone) {
         return {
           statusCode: 400,
           headers: CORS_HEADERS,
           body: JSON.stringify({
             success: false,
+            error: 'Ragione Sociale, Partita IVA, Email e Telefono sono campi obbligatori.',
             message: 'Ragione Sociale, Partita IVA, Email e Telefono sono campi obbligatori.'
           })
         };
@@ -176,13 +189,14 @@ export const handler = async (event) => {
       const companyId = `comp_${Date.now()}`;
       const companyRecord = {
         id: companyId,
-        business_name: payload.company_name,
-        commercial_name: payload.company_name,
-        vat_number: payload.vat_number,
-        contact_person: payload.contact_person || payload.legal_representative || 'Referente',
-        phone: payload.phone,
-        email: payload.email,
-        legal_address: payload.address || 'Firenze',
+        business_name: companyName,
+        commercial_name: companyName,
+        vat_number: vatNumber,
+        contact_person: contactPerson,
+        phone: phone,
+        email: email,
+        pec: payload.pec || null,
+        legal_address: payload.address || payload.legal_address || 'Firenze',
         status: 'IN_ATTESA',
         rating_avg: 5.00
       };

@@ -176,7 +176,9 @@
             <textarea id="partDesc" name="description" class="form-textarea" placeholder="Descrivi da quanti anni operate a Firenze, tipologie di macchinari posseduti, eventuali certificazioni di qualità o polizze assicurative..."></textarea>
           </div>
 
-          <div style="text-align:center; margin-top:28px;">
+          <div id="partnerFeedbackBottom" class="feedback-msg" style="margin-top:20px;"></div>
+
+          <div style="text-align:center; margin-top:20px;">
             <button type="submit" class="btn btn-primary btn-lg" style="width:100%; max-width:400px;" id="btnSubmitPartner">
               Invia Candidatura Impresa Partner
             </button>
@@ -197,16 +199,45 @@
   </footer>
 
   <script>
+    const SUPABASE_CONFIG = {
+      url: 'https://tvgvcphkqdhtjwfjysyv.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3ZjcGhrcWRodGp3Zmp5c3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MDY2MDksImV4cCI6MjEwNjk4MjYwOX0.7yhLjkaV3XKcRsZquABvhSY9TEgp3IbC5vHYBBXJUb0'
+    };
+
     document.getElementById('partnerApplyForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
       const btn = form.querySelector('button[type="submit"]');
-      const feedback = document.getElementById('partnerFeedback');
+      const feedbackTop = document.getElementById('partnerFeedback');
+      const feedbackBottom = document.getElementById('partnerFeedbackBottom');
       
-      const payload = Object.fromEntries(new FormData(form).entries());
+      const rawPayload = Object.fromEntries(new FormData(form).entries());
+      
+      // Mappatura completa e tollerante dei campi
+      const payload = {
+        company_name: rawPayload.businessName || rawPayload.company_name,
+        business_name: rawPayload.businessName || rawPayload.company_name,
+        vat_number: rawPayload.vatNumber || rawPayload.vat_number,
+        contact_person: rawPayload.contactPerson || rawPayload.contact_person,
+        phone: rawPayload.phone,
+        email: rawPayload.email,
+        pec: rawPayload.pec || null,
+        operator_count: parseInt(rawPayload.operatorCount, 10) || 1,
+        team_count: parseInt(rawPayload.teamCount, 10) || 1,
+        primary_zones: rawPayload.primaryZones || '',
+        description: rawPayload.description || '',
+        status: 'IN_ATTESA'
+      };
+
       btn.disabled = true;
       btn.textContent = 'Invio candidatura in corso...';
+      feedbackTop.style.display = 'none';
+      feedbackBottom.style.display = 'none';
 
+      let success = false;
+      let errorMsg = '';
+
+      // Tentativo 1: API Serverless Netlify
       try {
         const res = await fetch('/api/companies/apply', {
           method: 'POST',
@@ -214,19 +245,76 @@
           body: JSON.stringify(payload)
         });
         const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Errore durante la registrazione');
+        if (res.ok && (data.success !== false)) {
+          success = true;
+        } else {
+          throw new Error(data.message || data.error || 'Errore risposta API');
+        }
+      } catch (apiErr) {
+        // Tentativo 2: Scrittura diretta su Supabase PostgreSQL via REST
+        try {
+          const companyRecord = {
+            id: `comp_${Date.now()}`,
+            business_name: payload.company_name,
+            commercial_name: payload.company_name,
+            vat_number: payload.vat_number,
+            contact_person: payload.contact_person,
+            phone: payload.phone,
+            email: payload.email,
+            pec: payload.pec,
+            legal_address: 'Firenze',
+            status: 'IN_ATTESA',
+            rating_avg: 5.00
+          };
 
+          const sRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/companies`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_CONFIG.anonKey,
+              'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation'
+            },
+            body: JSON.stringify(companyRecord)
+          });
+
+          if (sRes.ok) {
+            success = true;
+          } else {
+            const errData = await sRes.json().catch(() => ({}));
+            errorMsg = errData.message || 'Errore database';
+          }
+        } catch (sErr) {
+          errorMsg = sErr.message;
+        }
+      }
+
+      if (success) {
         form.reset();
-        feedback.className = 'feedback-msg success';
-        feedback.innerHTML = `<strong>✅ Candidatura Ricevuta con Successo!</strong><br>La tua richiesta è in stato <em>IN_VERIFICA</em>. Il referente della rete ti contatterà per completare la verifica dei requisiti e attivare le tue squadre.`;
-        feedback.style.display = 'block';
-        btn.textContent = '✓ Inviato con Successo';
-      } catch (err) {
-        feedback.className = 'feedback-msg error';
-        feedback.textContent = `Impossibile completare la candidatura: ${err.message}.`;
-        feedback.style.display = 'block';
+        const successHtml = `<strong>✅ Candidatura Ricevuta con Successo!</strong><br>La richiesta dell'impresa <strong>${payload.company_name}</strong> è stata salvata su Supabase in stato <em>IN_ATTESA</em>. Il team di audit della rete verificherà la documentazione e ti contatterà per l'abilitazione.`;
+        
+        feedbackTop.className = 'feedback-msg success';
+        feedbackTop.innerHTML = successHtml;
+        feedbackTop.style.display = 'block';
+
+        feedbackBottom.className = 'feedback-msg success';
+        feedbackBottom.innerHTML = successHtml;
+        feedbackBottom.style.display = 'block';
+
+        feedbackBottom.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        btn.textContent = '✓ Candidatura Inviata!';
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = 'Invia Candidatura Impresa Partner';
+        }, 5000);
+      } else {
+        const failHtml = `Impossibile completare la candidatura: ${errorMsg || 'Controlla che la Partita IVA non sia già registrata o riprova tra poco.'}`;
+        feedbackBottom.className = 'feedback-msg error';
+        feedbackBottom.textContent = failHtml;
+        feedbackBottom.style.display = 'block';
+        feedbackBottom.scrollIntoView({ behavior: 'smooth', block: 'center' });
         btn.disabled = false;
-        btn.textContent = 'Invia Candidatura Impresa Partner';
+        btn.textContent = 'Riprova Invia Candidatura';
       }
     });
   </script>
