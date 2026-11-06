@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Area Riservata — FIRENZE PULIZIE</title>
-  <meta name="description" content="Accesso sicuro per Imprese Partner, Squadre Operative e Amministrazione della Rete Firenze Pulizie.">
+  <title>Accesso Unificato — FIRENZE PULIZIE</title>
+  <meta name="description" content="Portale di autenticazione intelligente con riconoscimento automatico del profilo operativo per la Rete Firenze Pulizie.">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/public.css">
@@ -22,77 +22,112 @@
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-xl);
       border: 1px solid var(--border-light);
-      max-width: 480px;
+      max-width: 490px;
       width: 100%;
       padding: 40px;
       position: relative;
-    }
-    .role-switcher {
-      display: flex;
-      background: #f1f5f9;
-      padding: 4px;
-      border-radius: var(--radius-md);
-      margin-bottom: 24px;
-      gap: 4px;
-    }
-    .role-btn {
-      flex: 1;
-      padding: 8px 12px;
-      border: none;
-      background: transparent;
-      border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      text-align: center;
-    }
-    .role-btn.active {
-      background: white;
-      color: var(--brand-navy-900);
-      box-shadow: var(--shadow-sm);
     }
     .login-header {
       text-align: center;
       margin-bottom: 28px;
     }
     .login-icon {
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, var(--brand-sky-500), var(--brand-cyan-500));
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--brand-navy-900), var(--brand-sky-500));
       color: white;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      font-size: 1.5rem;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+      font-size: 1.6rem;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
+      transition: all 0.25s ease;
     }
-    .badge-role {
-      display: inline-block;
+    .security-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 0.75rem;
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: var(--radius-full);
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-top: 6px;
+      background: #f1f5f9;
+      color: var(--brand-navy-900);
+      border: 1px solid var(--border-light);
+      margin-top: 8px;
     }
-    .badge-admin { background: #fee2e2; color: #991b1b; }
-    .badge-partner { background: #e0f2fe; color: #0369a1; }
-    .badge-squadra { background: #dcfce7; color: #15803d; }
-    .demo-info {
-      background: #f8fafc;
-      border: 1px dashed var(--border-light);
+    .active-session-banner {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
       border-radius: var(--radius-md);
-      padding: 12px 14px;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-top: 24px;
+      padding: 14px;
+      margin-bottom: 20px;
+      font-size: 0.86rem;
+      color: #166534;
+      display: none;
     }
-    .demo-info strong { color: var(--text-main); }
+    .demo-drawer {
+      margin-top: 26px;
+      border-top: 1px solid var(--border-light);
+      padding-top: 18px;
+    }
+    .demo-toggle-btn {
+      width: 100%;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s;
+    }
+    .demo-toggle-btn:hover {
+      background: #f1f5f9;
+      color: var(--brand-navy-900);
+    }
+    .demo-profiles-grid {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .demo-profiles-grid.open {
+      display: flex;
+    }
+    .demo-profile-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-light);
+      background: white;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s;
+      font-size: 0.82rem;
+    }
+    .demo-profile-btn:hover {
+      border-color: var(--brand-sky-400);
+      background: #f0f9ff;
+    }
+    .role-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+    }
+    .tag-admin { background: #fee2e2; color: #991b1b; }
+    .tag-partner { background: #e0f2fe; color: #0369a1; }
+    .tag-squadra { background: #dcfce7; color: #15803d; }
   </style>
 </head>
 <body>
@@ -122,31 +157,36 @@
     <div class="login-card">
       <div class="login-header">
         <div class="login-icon" id="roleIcon">🔐</div>
-        <h2 id="loginTitle" style="margin-bottom: 4px;">Accesso Piattaforma</h2>
-        <p class="text-muted" id="loginDesc" style="font-size: 0.9rem;">Seleziona il tuo profilo operativo</p>
-        <span class="badge-role badge-partner" id="roleBadge">Impresa Partner</span>
+        <h2 id="loginTitle" style="margin-bottom: 6px;">Portale Accesso Unificato</h2>
+        <p class="text-muted" id="loginDesc" style="font-size: 0.9rem; line-height: 1.4;">
+          Inserisci le tue credenziali: il sistema riconosce automaticamente il tuo livello di autorizzazione e ti indirizza alla tua area esclusiva.
+        </p>
+        <div class="security-pill" id="securityPill">
+          <span>🛡️</span>
+          <span id="securityPillText">Isolamento Ruoli Attivo (RBAC)</span>
+        </div>
       </div>
 
-      <!-- ROLE SELECTOR -->
-      <div class="role-switcher">
-        <button type="button" class="role-btn active" data-role="PARTNER" id="tabPartner">🏢 Impresa</button>
-        <button type="button" class="role-btn" data-role="SQUADRA" id="tabSquadra">📱 Squadra</button>
-        <button type="button" class="role-btn" data-role="ADMIN" id="tabAdmin">🛡️ Rete</button>
+      <!-- EVENTUALE SESSIONE GIÀ ATTIVA -->
+      <div class="active-session-banner" id="activeSessionBanner">
+        <div style="font-weight: 700; margin-bottom: 6px;" id="activeSessionTitle">Sessione già attiva</div>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <a href="#" id="btnContinueSession" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">Vai alla tua Area ➔</a>
+          <button type="button" id="btnLogoutCurrent" class="btn btn-secondary btn-sm">Cambia Utente</button>
+        </div>
       </div>
 
-      <!-- LOGIN FORM -->
+      <!-- LOGIN FORM UNIFICATO (SENZA TAB ESPOSTI) -->
       <form id="loginForm" autocomplete="on">
-        <input type="hidden" id="selectedRole" value="PARTNER">
-        
         <div class="form-group">
-          <label class="form-label" for="loginEmail">Email o Username</label>
-          <input type="text" id="loginEmail" class="form-control" placeholder="es. partner@firenzepulizie.it" required autofocus>
+          <label class="form-label" for="loginEmail">Email Aziendale o Codice PIN Squadra</label>
+          <input type="text" id="loginEmail" class="form-control" placeholder="es. nome@azienda.it oppure PIN-101" required autofocus>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="loginPassword" style="display: flex; justify-content: space-between;">
-            <span>Password</span>
-            <a href="#" id="linkForgot" style="font-size: 0.8rem; color: var(--brand-sky-500); text-decoration: none;">Hai dimenticato la password?</a>
+            <span>Password di Accesso</span>
+            <a href="#" onclick="alert('Contatta l\'amministrazione della tua impresa o il supporto centrale info@firenzepulizie.it per il reset credenziali.'); return false;" style="font-size: 0.8rem; color: var(--brand-sky-500); text-decoration: none;">Password smarrita?</a>
           </label>
           <input type="password" id="loginPassword" class="form-control" placeholder="••••••••••••" required>
         </div>
@@ -154,28 +194,78 @@
         <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
           <label style="display: flex; align-items: center; gap: 8px; font-size: 0.88rem; cursor: pointer;">
             <input type="checkbox" id="rememberMe" checked>
-            <span>Rimani collegato</span>
+            <span>Mantieni sessione protetta su questo dispositivo</span>
           </label>
         </div>
 
-        <div id="loginAlert" style="display: none; padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 0.88rem;"></div>
+        <div id="loginAlert" style="display: none; padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 0.86rem; font-weight: 600;"></div>
 
         <button type="submit" class="btn btn-primary btn-block btn-lg" id="btnLoginSubmit">
-          Accedi all'Area Riservata
+          Accedi alla tua Area Operativa
         </button>
       </form>
 
-      <!-- DEMO CREDENTIALS HELPER -->
-      <div class="demo-info" id="demoCredentials">
-        <div>💡 <strong>Profili di prova per il collaudo:</strong></div>
-        <div style="margin-top: 4px;">• <strong>Amministrazione:</strong> admin@firenzepulizie.it / Admin2026!</div>
-        <div>• <strong>Impresa Partner:</strong> partner@cleanservice.it / Partner2026!</div>
-        <div>• <strong>Squadra Mobile:</strong> squadra01@rete.it / Squadra2026!</div>
+      <!-- CONSOLE DI COLLAUDO RAPIDO (COLLASSABILE PER TESTARE I DIVERSI PROFILI) -->
+      <div class="demo-drawer">
+        <button type="button" class="demo-toggle-btn" id="btnToggleDemo">
+          <span>🧪 Simula Accesso per Ruolo (Collaudo Rapido)</span>
+          <span id="demoChevron">▼</span>
+        </button>
+        <div class="demo-profiles-grid open" id="demoProfilesGrid">
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">
+            Clicca su un profilo per compilare le credenziali e verificare le <strong>Landing Page diversificate</strong> e l'isolamento dei dati:
+          </div>
+
+          <!-- 1. IMPRESA PARTNER A -->
+          <button type="button" class="demo-profile-btn" onclick="quickLogin('partner@cleanservice.it', 'Partner2026!')">
+            <div>
+              <strong>🏢 Clean Service Firenze Srl</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Vede solo i propri Lead, Cantieri, Report Foto, Lamentele e Fatture</div>
+            </div>
+            <span class="role-tag tag-partner">Impresa #1</span>
+          </button>
+
+          <!-- 2. IMPRESA PARTNER B -->
+          <button type="button" class="demo-profile-btn" onclick="quickLogin('info@toscanapulizie.it', 'Toscana2026!')">
+            <div>
+              <strong>🏢 Toscana Pulizie & Sanificazioni</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Altra impresa: vede solo Campo di Marte / Gavinana e i propri lavori</div>
+            </div>
+            <span class="role-tag tag-partner">Impresa #2</span>
+          </button>
+
+          <!-- 3. SQUADRA OPERATIVA ALFA -->
+          <button type="button" class="demo-profile-btn" onclick="quickLogin('PIN-101', 'Squadra2026!')">
+            <div>
+              <strong>📱 Squadra Alfa (Marco T. & Luca M.)</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Istruzioni cantiere, Checklist, Foto Prima/Dopo e invio Report</div>
+            </div>
+            <span class="role-tag tag-squadra">Team PIN-101</span>
+          </button>
+
+          <!-- 4. SQUADRA OPERATIVA BETA -->
+          <button type="button" class="demo-profile-btn" onclick="quickLogin('PIN-102', 'Squadra2026!')">
+            <div>
+              <strong>📱 Squadra Beta (Andrea B. & Sara G.)</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Vede esclusivamente i cantieri assegnati alla Squadra Beta</div>
+            </div>
+            <span class="role-tag tag-squadra">Team PIN-102</span>
+          </button>
+
+          <!-- 5. AMMINISTRATORE TOTALE PORTALE -->
+          <button type="button" class="demo-profile-btn" onclick="quickLogin('admin@firenzepulizie.it', 'Admin2026!')">
+            <div>
+              <strong>🛡️ Amministratore Totale del Portale</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Regia globale rete Firenze, smistamento Lead e accreditamento DURC</div>
+            </div>
+            <span class="role-tag tag-admin">Super Admin</span>
+          </button>
+        </div>
       </div>
 
-      <div style="text-align: center; margin-top: 24px; font-size: 0.88rem; color: var(--text-muted);">
-        La tua impresa non fa ancora parte della rete? <br>
-        <a href="partner.html" style="color: var(--brand-sky-500); font-weight: 600;">Invia candidatura come Partner</a>
+      <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted);">
+        La tua impresa di pulizie vuole entrare nella rete di Firenze? <br>
+        <a href="partner.html" style="color: var(--brand-sky-500); font-weight: 700;">Invia candidatura di accreditamento</a>
       </div>
     </div>
   </div>
@@ -183,141 +273,135 @@
   <!-- FOOTER -->
   <footer class="site-footer">
     <div class="container text-center" style="font-size: 0.85rem; color: var(--text-muted);">
-      <p>© 2026 FIRENZE PULIZIE — Portale di Rete Coordinata. Tutti i diritti riservati.</p>
+      <p>© 2026 FIRENZE PULIZIE — Portale di Rete Coordinata con Controllo Accessi per Ruolo.</p>
     </div>
   </footer>
 
-  <script>
-    const roleBtns = document.querySelectorAll('.role-btn');
-    const selectedRoleInput = document.getElementById('selectedRole');
-    const roleBadge = document.getElementById('roleBadge');
-    const roleIcon = document.getElementById('roleIcon');
-    const loginTitle = document.getElementById('loginTitle');
-    const loginDesc = document.getElementById('loginDesc');
+  <script type="module">
+    import { authenticateCredentials, getCurrentSession, logoutUser } from './js/auth-guard.js';
+
     const loginForm = document.getElementById('loginForm');
     const loginAlert = document.getElementById('loginAlert');
     const btnLoginSubmit = document.getElementById('btnLoginSubmit');
+    const loginEmailInput = document.getElementById('loginEmail');
+    const loginPasswordInput = document.getElementById('loginPassword');
+    const securityPillText = document.getElementById('securityPillText');
+    const roleIcon = document.getElementById('roleIcon');
 
-    const roleConfig = {
-      PARTNER: {
-        badge: 'Impresa Partner',
-        badgeClass: 'badge-partner',
-        icon: '🏢',
-        title: 'Area Imprese Partner',
-        desc: 'Gestisci preventivi assegnati, cantieri e fatture',
-        placeholder: 'es. service@puliziefirenze.it'
-      },
-      SQUADRA: {
-        badge: 'Squadra Mobile',
-        badgeClass: 'badge-squadra',
-        icon: '📱',
-        title: 'Area Squadre Operative',
-        desc: 'Check-in cantieri, checklist digitale e foto stato lavori',
-        placeholder: 'es. squadra01@rete.it'
-      },
-      ADMIN: {
-        badge: 'Amministrazione Rete',
-        badgeClass: 'badge-admin',
-        icon: '🛡️',
-        title: 'Centrale Amministrativa',
-        desc: 'Coordinamento globale, abilitazione imprese e monitoraggio SLA',
-        placeholder: 'es. admin@firenzepulizie.it'
-      }
-    };
+    // Controlla se l'utente è stato reindirizzato perché non autenticato
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('reason') === 'unauthenticated') {
+      showAlert('Accesso riservato: effettua prima l\'autenticazione per accedere all\'area protetta.', 'error');
+    }
 
-    roleBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        roleBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const role = btn.dataset.role;
-        selectedRoleInput.value = role;
-        
-        const config = roleConfig[role];
-        roleBadge.textContent = config.badge;
-        roleBadge.className = 'badge-role ' + config.badgeClass;
-        roleIcon.textContent = config.icon;
-        loginTitle.textContent = config.title;
-        loginDesc.textContent = config.desc;
-        document.getElementById('loginEmail').placeholder = config.placeholder;
+    // Controlla se esiste già una sessione valida
+    const existingSession = getCurrentSession();
+    if (existingSession && existingSession.landingUrl) {
+      const banner = document.getElementById('activeSessionBanner');
+      banner.style.display = 'block';
+      document.getElementById('activeSessionTitle').innerHTML = `🔓 Sei attualmente collegato come: <strong>${existingSession.name}</strong> (${existingSession.badgeLabel})`;
+      document.getElementById('btnContinueSession').href = existingSession.landingUrl;
+      document.getElementById('btnLogoutCurrent').addEventListener('click', () => {
+        logoutUser();
       });
+    }
+
+    // Feedback visivo intelligente mentre si digita l'identificativo (senza svelare altri ruoli)
+    loginEmailInput.addEventListener('input', () => {
+      const val = loginEmailInput.value.trim().toLowerCase();
+      if (val.startsWith('pin-') || val.startsWith('squadra')) {
+        roleIcon.textContent = '📱';
+        securityPillText.textContent = 'Rilevato formato Squadra Operativa Mobile';
+      } else if (val.includes('admin')) {
+        roleIcon.textContent = '🛡️';
+        securityPillText.textContent = 'Rilevato formato Direzione Centrale Rete';
+      } else if (val.includes('@')) {
+        roleIcon.textContent = '🏢';
+        securityPillText.textContent = 'Rilevato formato Impresa Partner';
+      } else {
+        roleIcon.textContent = '🔐';
+        securityPillText.textContent = 'Isolamento Ruoli Attivo (RBAC)';
+      }
     });
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // Toggle cassetto demo
+    document.getElementById('btnToggleDemo').addEventListener('click', () => {
+      const grid = document.getElementById('demoProfilesGrid');
+      const isOpen = grid.classList.toggle('open');
+      document.getElementById('demoChevron').textContent = isOpen ? '▲' : '▼';
+    });
+
+    function showAlert(msg, type = 'error') {
+      loginAlert.style.display = 'block';
+      if (type === 'success') {
+        loginAlert.style.background = '#dcfce7';
+        loginAlert.style.color = '#15803d';
+        loginAlert.style.border = '1px solid #86efac';
+      } else {
+        loginAlert.style.background = '#fee2e2';
+        loginAlert.style.color = '#991b1b';
+        loginAlert.style.border = '1px solid #fca5a5';
+      }
+      loginAlert.innerHTML = msg;
+    }
+
+    async function performLogin(identifier, password) {
       loginAlert.style.display = 'none';
       btnLoginSubmit.disabled = true;
-      btnLoginSubmit.textContent = 'Verifica in corso...';
+      btnLoginSubmit.textContent = 'Identificazione profilo in corso...';
 
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const role = selectedRoleInput.value;
+      // Autenticazione unificata client + verifica API
+      const localAuth = authenticateCredentials(identifier, password);
 
+      if (localAuth.success) {
+        const user = localAuth.user;
+        showAlert(
+          `✓ Profilo riconosciuto: <strong>${user.badgeLabel}</strong> (${user.name}).<br>Apertura della tua landing page dedicata...`,
+          'success'
+        );
+        setTimeout(() => {
+          window.location.href = user.landingUrl;
+        }, 650);
+        return;
+      }
+
+      // Tentativo via API serverless per profili dinamici aggiuntivi
       try {
         const res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, role })
+          body: JSON.stringify({ email: identifier, password })
         });
         const data = await res.json();
-
-        if (res.ok && data.success) {
-          loginAlert.style.display = 'block';
-          loginAlert.style.background = '#dcfce7';
-          loginAlert.style.color = '#15803d';
-          loginAlert.style.border = '1px solid #86efac';
-          loginAlert.textContent = `Accesso consentito! Benvenuto, ${data.user.name || email}. Reindirizzamento...`;
+        if (res.ok && data.success && data.user) {
+          localStorage.setItem('fp_auth_session_v1', JSON.stringify(data.user));
+          showAlert(`✓ Accesso autorizzato per <strong>${data.user.name}</strong>. Reindirizzamento...`, 'success');
           setTimeout(() => {
-            if (role === 'ADMIN' || data.user.role === 'ADMIN_RETE') {
-              window.location.href = 'dashboard-admin.html';
-            } else if (role === 'PARTNER') {
-              window.location.href = 'dashboard-impresa.html';
-            } else {
-              window.location.href = 'app-squadra.html';
-            }
-          }, 800);
-        } else {
-          loginAlert.style.display = 'block';
-          loginAlert.style.background = '#fee2e2';
-          loginAlert.style.color = '#991b1b';
-          loginAlert.style.border = '1px solid #fca5a5';
-          loginAlert.textContent = data.message || 'Credenziali non valide o profilo in attesa di approvazione.';
-          btnLoginSubmit.disabled = false;
-          btnLoginSubmit.textContent = 'Accedi all\'Area Riservata';
+            window.location.href = data.user.landingUrl || 'dashboard-impresa.html';
+          }, 650);
+          return;
         }
-      } catch (err) {
-        // Fallback demo locale se la function non è ancora attiva in cloud
-        if (email === 'admin@firenzepulizie.it' && password === 'Admin2026!') {
-          loginAlert.style.display = 'block';
-          loginAlert.style.background = '#dcfce7';
-          loginAlert.style.color = '#15803d';
-          loginAlert.style.border = '1px solid #86efac';
-          loginAlert.textContent = 'Credenziali Admin riconosciute. Reindirizzamento alla Centrale Amministrativa...';
-          setTimeout(() => { window.location.href = 'dashboard-admin.html'; }, 600);
-        } else if ((email === 'partner@cleanservice.it' || email === 'service@puliziefirenze.it') && password === 'Partner2026!') {
-          loginAlert.style.display = 'block';
-          loginAlert.style.background = '#dcfce7';
-          loginAlert.style.color = '#15803d';
-          loginAlert.style.border = '1px solid #86efac';
-          loginAlert.textContent = 'Credenziali Impresa Partner riconosciute. Reindirizzamento all\'Area Impresa...';
-          setTimeout(() => { window.location.href = 'dashboard-impresa.html'; }, 600);
-        } else if (email === 'squadra01@rete.it' && password === 'Squadra2026!') {
-          loginAlert.style.display = 'block';
-          loginAlert.style.background = '#dcfce7';
-          loginAlert.style.color = '#15803d';
-          loginAlert.style.border = '1px solid #86efac';
-          loginAlert.textContent = 'Credenziali Squadra Mobile riconosciute. Reindirizzamento all\'App Mobile...';
-          setTimeout(() => { window.location.href = 'app-squadra.html'; }, 600);
-        } else {
-          loginAlert.style.display = 'block';
-          loginAlert.style.background = '#fee2e2';
-          loginAlert.style.color = '#991b1b';
-          loginAlert.style.border = '1px solid #fca5a5';
-          loginAlert.textContent = 'Credenziali non valide. Usa i profili di prova indicati sotto.';
-        }
-        btnLoginSubmit.disabled = false;
-        btnLoginSubmit.textContent = 'Accedi all\'Area Riservata';
+      } catch (e) {
+        // Fallback già gestito da authenticateCredentials
       }
+
+      showAlert('Credenziali non valide o profilo non autorizzato. Usa uno dei profili di collaudo qui sotto.', 'error');
+      btnLoginSubmit.disabled = false;
+      btnLoginSubmit.textContent = 'Accedi alla tua Area Operativa';
+    }
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      performLogin(loginEmailInput.value, loginPasswordInput.value);
     });
+
+    // Espone funzione per i pulsanti rapidi di collaudo
+    window.quickLogin = (id, pass) => {
+      loginEmailInput.value = id;
+      loginPasswordInput.value = pass;
+      loginEmailInput.dispatchEvent(new Event('input'));
+      performLogin(id, pass);
+    };
   </script>
 </body>
 </html>

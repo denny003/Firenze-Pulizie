@@ -239,48 +239,125 @@ export const handler = async (event) => {
       };
     }
 
-    // 5. AUTENTICAZIONE RUOLI (LOGIN)
+    // 5. AUTENTICAZIONE UNIFICATA INTELLIGENTE (RICONOSCIMENTO AUTOMATICO RUOLO)
     if (route === '/auth/login' && method === 'POST') {
       const payload = JSON.parse(event.body || '{}');
-      const { email, password } = payload;
+      const identifier = (payload.email || payload.identifier || '').trim().toLowerCase();
+      const password = (payload.password || '').trim();
 
-      if (!email || !password) {
+      if (!identifier || !password) {
         return {
           statusCode: 400,
           headers: CORS_HEADERS,
-          body: JSON.stringify({ success: false, message: 'Email e password richieste.' })
+          body: JSON.stringify({ success: false, message: 'Inserisci Email/Codice PIN e Password.' })
         };
       }
 
-      if (email === 'admin@firenzepulizie.it' && password === 'Admin2026!') {
+      const PROFILES = [
+        {
+          match: ['admin@firenzepulizie.it', 'admin'],
+          pass: 'Admin2026!',
+          user: {
+            id: 'usr_admin_01',
+            email: 'admin@firenzepulizie.it',
+            role: 'ADMIN_RETE',
+            name: 'Direzione Centrale Rete',
+            avatar: 'AD',
+            landingUrl: 'dashboard-admin.html',
+            badgeLabel: 'Amministratore Totale Portale'
+          }
+        },
+        {
+          match: ['partner@cleanservice.it', 'service@puliziefirenze.it', 'cleanservice'],
+          pass: 'Partner2026!',
+          user: {
+            id: 'usr_partner_c01',
+            email: 'partner@cleanservice.it',
+            role: 'PARTNER',
+            companyId: 'C01',
+            companyName: 'Clean Service Firenze Srl',
+            piva: 'IT06548920481',
+            zones: ['FI-NOVOLI', 'FI-CENTRO', 'FI-RIFREDI'],
+            zonesLabel: 'Novoli, Centro Storico (ZTL), Rifredi',
+            rating: 4.9,
+            name: 'Marco Taddei (Titolare)',
+            avatar: 'CS',
+            landingUrl: 'dashboard-impresa.html',
+            badgeLabel: 'Impresa Partner Accreditata'
+          }
+        },
+        {
+          match: ['info@toscanapulizie.it', 'toscanapulizie'],
+          pass: 'Toscana2026!',
+          user: {
+            id: 'usr_partner_c02',
+            email: 'info@toscanapulizie.it',
+            role: 'PARTNER',
+            companyId: 'C02',
+            companyName: 'Toscana Pulizie & Sanificazioni Srl',
+            piva: 'IT05891230485',
+            zones: ['FI-CAMPO-MARTE', 'FI-GAVINANA', 'FI-CENTRO'],
+            zonesLabel: 'Campo di Marte, Gavinana, Centro',
+            rating: 4.8,
+            name: 'Giulia Ferri (Direzione)',
+            avatar: 'TP',
+            landingUrl: 'dashboard-impresa.html',
+            badgeLabel: 'Impresa Partner Accreditata'
+          }
+        },
+        {
+          match: ['squadra01@rete.it', 'pin-101'],
+          pass: 'Squadra2026!',
+          user: {
+            id: 'usr_squadra_alfa',
+            email: 'squadra01@rete.it',
+            pin: 'PIN-101',
+            role: 'SQUADRA',
+            companyId: 'C01',
+            companyName: 'Clean Service Firenze Srl',
+            teamId: 'T-ALFA',
+            teamName: 'Squadra Alfa',
+            van: 'Fiat Doblò Cargo (FZ 482 AA)',
+            leader: 'Marco T.',
+            members: 'Marco T., Luca M.',
+            name: 'Squadra Alfa (Marco T. & Luca M.)',
+            avatar: 'SA',
+            landingUrl: 'app-squadra.html',
+            badgeLabel: 'Team Operativo sul Campo'
+          }
+        },
+        {
+          match: ['squadra02@rete.it', 'pin-102'],
+          pass: 'Squadra2026!',
+          user: {
+            id: 'usr_squadra_beta',
+            email: 'squadra02@rete.it',
+            pin: 'PIN-102',
+            role: 'SQUADRA',
+            companyId: 'C01',
+            companyName: 'Clean Service Firenze Srl',
+            teamId: 'T-BETA',
+            teamName: 'Squadra Beta',
+            van: 'Renault Kangoo (GB 910 XY)',
+            leader: 'Andrea B.',
+            members: 'Andrea B., Sara G.',
+            name: 'Squadra Beta (Andrea B. & Sara G.)',
+            avatar: 'SB',
+            landingUrl: 'app-squadra.html',
+            badgeLabel: 'Team Operativo sul Campo'
+          }
+        }
+      ];
+
+      const found = PROFILES.find(p => p.match.includes(identifier) && p.pass === password);
+
+      if (found) {
         return {
           statusCode: 200,
           headers: CORS_HEADERS,
           body: JSON.stringify({
             success: true,
-            user: { id: 'usr_admin', name: 'Amministratore Rete Firenze', email, role: 'ADMIN_RETE' }
-          })
-        };
-      }
-
-      if ((email === 'partner@cleanservice.it' || email === 'service@puliziefirenze.it') && password === 'Partner2026!') {
-        return {
-          statusCode: 200,
-          headers: CORS_HEADERS,
-          body: JSON.stringify({
-            success: true,
-            user: { id: 'usr_partner', name: 'Clean Service Firenze Srl', email, role: 'PARTNER' }
-          })
-        };
-      }
-
-      if (email === 'squadra01@rete.it' && password === 'Squadra2026!') {
-        return {
-          statusCode: 200,
-          headers: CORS_HEADERS,
-          body: JSON.stringify({
-            success: true,
-            user: { id: 'usr_squadra', name: 'Squadra Alfa (Marco T.)', email, role: 'SQUADRA' }
+            user: found.user
           })
         };
       }

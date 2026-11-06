@@ -55,10 +55,10 @@
       <div class="user-snippet">
         <div class="user-avatar">AD</div>
         <div class="user-meta">
-          <div class="user-name">Amministrazione Rete</div>
-          <div class="user-role">admin@firenzepulizie.it</div>
+          <div class="user-name" id="adminSidebarName">Amministrazione Rete</div>
+          <div class="user-role" id="adminSidebarEmail">admin@firenzepulizie.it</div>
         </div>
-        <a href="login.html" title="Disconnetti" style="color: #94a3b8; text-decoration: none; font-size: 1.1rem; margin-left: auto;">🚪</a>
+        <button type="button" id="btnLogoutAdmin" title="Disconnetti" style="background: none; border: none; cursor: pointer; color: #f87171; font-size: 1.15rem; margin-left: auto;">🚪</button>
       </div>
     </div>
   </aside>
@@ -347,7 +347,17 @@
 </div>
 
 <!-- JAVASCRIPT GESTIONE STATO E INTERAZIONI -->
-<script>
+<script type="module">
+  import { enforceRoleGuard, logoutUser, getSharedPlatformData } from './js/auth-guard.js';
+
+  // BLOCCO RIGOROSO ACCESSO: Solo l'Amministratore Totale può accedere a questo cruscotto
+  const session = enforceRoleGuard(['ADMIN_RETE']);
+  if (!session) throw new Error('Accesso riservato all\'Amministratore Totale del Portale');
+
+  document.getElementById('adminSidebarName').textContent = session.name || 'Amministrazione Rete';
+  document.getElementById('adminSidebarEmail').textContent = session.email || 'admin@firenzepulizie.it';
+  document.getElementById('btnLogoutAdmin').addEventListener('click', () => logoutUser());
+
   // DATI STATO LOCALE PIATTAFORMA
   const STATE = {
     leads: [
@@ -643,10 +653,23 @@
     renderPendingTable();
   }
 
-  // RENDERING CANTIERI LIVE
+  // RENDERING CANTIERI LIVE (SINCRONIZZATO CON LE SQUADRE E LE IMPRESE)
   function renderJobsLive() {
     const tbody = document.getElementById('tbodyJobsLive');
-    tbody.innerHTML = STATE.jobsLive.map(j => {
+    const shared = getSharedPlatformData();
+    const liveList = (shared && shared.jobs && shared.jobs.length > 0)
+      ? shared.jobs.map(j => ({
+          client: j.client,
+          zone: j.zone,
+          company: j.companyName,
+          team: j.teamName,
+          checkin: j.checkinTime || 'Pianificato',
+          checklist: `${j.checklist.filter(c => c.done).length} / ${j.checklist.length} Spuntati • 📸 ${(j.photos || []).length} Foto`,
+          status: j.status === 'COMPLETATO' ? 'COMPLETATA' : 'IN_CORSO'
+        }))
+      : STATE.jobsLive;
+
+    tbody.innerHTML = liveList.map(j => {
       const statusBadge = j.status === 'COMPLETATA' 
         ? '<span class="badge-status status-completata">✓ Completata</span>'
         : '<span class="badge-status status-in-corso">⏳ In Corso</span>';
@@ -884,11 +907,18 @@
     window.location.href = 'richiedi-preventivo.html';
   }
 
+  // Espone funzioni globali per gli attributi onclick nell'HTML
+  window.filterPendingTable = filterPendingTable;
+  window.filterAllLeadsTable = filterAllLeadsTable;
+  window.openAssignModal = openAssignModal;
+  window.confirmAssignment = confirmAssignment;
+  window.approveCompany = approveCompany;
+  window.closeModal = closeModal;
+  window.openNewLeadModal = openNewLeadModal;
+
   // AVVIO
-  document.addEventListener('DOMContentLoaded', () => {
-    initDashboard();
-    loadSupabaseLiveLeads();
-  });
+  initDashboard();
+  loadSupabaseLiveLeads();
 </script>
 
 </body>
