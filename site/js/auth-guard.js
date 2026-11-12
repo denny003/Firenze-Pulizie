@@ -11,7 +11,7 @@ const SHARED_DATA_KEY = 'fp_shared_platform_data_v1';
 export const DEMO_USERS = [
   {
     id: 'usr_admin_01',
-    email: 'admin@firenzepulizie.it',
+    email: 'admin@puliziefiorentine.it',
     username: 'admin',
     password: 'Admin2026!',
     role: 'ADMIN_RETE',
@@ -299,6 +299,10 @@ const INITIAL_SHARED_DATA = {
   ]
 };
 
+/**
+ * Autentica un utente riconoscendo automaticamente il suo ruolo dalle credenziali
+ * (Email, Username o Codice PIN Squadra)
+ */
 export function authenticateCredentials(identifier, password) {
   const cleanId = (identifier || '').trim().toLowerCase();
   const cleanPass = (password || '').trim();
@@ -331,6 +335,9 @@ export function authenticateCredentials(identifier, password) {
   };
 }
 
+/**
+ * Restituisce la sessione corrente attiva
+ */
 export function getCurrentSession() {
   try {
     const raw = localStorage.getItem(SESSION_KEY);
@@ -340,11 +347,20 @@ export function getCurrentSession() {
   }
 }
 
+/**
+ * Esegue il logout cancellando la sessione e reindirizzando al login
+ */
 export function logoutUser() {
   localStorage.removeItem(SESSION_KEY);
   window.location.href = 'login.html';
 }
 
+/**
+ * Protegge una pagina verificando che l'utente sia autenticato e possieda
+ * uno dei ruoli consentiti per quella specifica landing/dashboard.
+ * Se un utente con ruolo diverso tenta di aprire la pagina, viene bloccato
+ * e reindirizzato esclusivamente alla propria area di competenza.
+ */
 export function enforceRoleGuard(allowedRoles = []) {
   const session = getCurrentSession();
 
@@ -354,6 +370,7 @@ export function enforceRoleGuard(allowedRoles = []) {
   }
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(session.role)) {
+    // Impedisce a chiunque di vedere pagine di altri ruoli
     const target = session.landingUrl || 'login.html';
     window.location.replace(`${target}?denied_from=${encodeURIComponent(window.location.pathname)}`);
     return null;
@@ -362,6 +379,9 @@ export function enforceRoleGuard(allowedRoles = []) {
   return session;
 }
 
+/**
+ * Legge e inizializza i dati condivisi (Cantieri, Report Fotografici, Lamentele, Fatture)
+ */
 export function getSharedPlatformData() {
   try {
     const raw = localStorage.getItem(SHARED_DATA_KEY);
@@ -375,6 +395,9 @@ export function getSharedPlatformData() {
   }
 }
 
+/**
+ * Salva i dati condivisi aggiornati
+ */
 export function saveSharedPlatformData(data) {
   try {
     localStorage.setItem(SHARED_DATA_KEY, JSON.stringify(data));
@@ -383,6 +406,9 @@ export function saveSharedPlatformData(data) {
   }
 }
 
+/**
+ * Ripristina i dati demo allo stato iniziale
+ */
 export function resetSharedPlatformData() {
   localStorage.setItem(SHARED_DATA_KEY, JSON.stringify(INITIAL_SHARED_DATA));
   return JSON.parse(JSON.stringify(INITIAL_SHARED_DATA));

@@ -1,5 +1,5 @@
--- ==============================================================================
--- FIRENZE PULIZIE - SCHEMA DEL DATABASE (PostgreSQL / SQL Standard)
+﻿-- ==============================================================================
+-- FIRENZE PULIZIE - SCHEMA DEL DATABASE (Relazionale / SQL Standard)
 -- Piattaforma per Rete Coordinata di Imprese di Pulizia
 -- ==============================================================================
 
@@ -258,7 +258,7 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- INDICI STRATEGICI PER PERFORMANCE E PROSSIMITÀ TERRITORIALE
+-- INDICI STRATEGICI PER PERFORMANCE E PROSSIMITÃ€ TERRITORIALE
 CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
 CREATE INDEX IF NOT EXISTS idx_leads_area ON leads(area_id);
 CREATE INDEX IF NOT EXISTS idx_jobs_date ON jobs(scheduled_date);
@@ -266,3 +266,5 @@ CREATE INDEX IF NOT EXISTS idx_jobs_company ON jobs(company_id);
 CREATE INDEX IF NOT EXISTS idx_jobs_team ON jobs(team_id);
 CREATE INDEX IF NOT EXISTS idx_geo_municipality ON geographic_areas(municipality);
 CREATE INDEX IF NOT EXISTS idx_geo_zone ON geographic_areas(zone_name);
+
+

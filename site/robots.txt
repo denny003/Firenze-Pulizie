@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /pulizie-commerciali.html
+Allow: /pulizie-condomini.html
+Allow: /pulizie-private.html
+Allow: /richiedi-preventivo.html
+Allow: /partner.html
+Allow: /privacy.html
+
+# Escludi aree riservate e backoffice operativo dai motori di ricerca
+Disallow: /dashboard-admin.html
+Disallow: /dashboard-impresa.html
+Disallow: /app-squadra.html
+Disallow: /admin
+Disallow: /impresa
+Disallow: /squadra
+Disallow: /api/
+
+Sitemap: https://puliziefiorentine.it/sitemap.xml

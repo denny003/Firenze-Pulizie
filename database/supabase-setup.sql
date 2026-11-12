@@ -1,6 +1,6 @@
--- ==============================================================================
--- FIRENZE PULIZIE - SUPABASE INITIAL SETUP SCRIPT
--- Esegui questo script in Supabase: Dashboard -> SQL Editor -> New Query -> Run
+﻿-- ==============================================================================
+-- FIRENZE PULIZIE - DATABASE INITIAL SETUP SCRIPT
+-- Esegui questo script in DATABASE: Dashboard -> SQL Editor -> New Query -> Run
 -- ==============================================================================
 
 -- 1. UTENTI E AUTENTICAZIONE
@@ -272,3 +272,4 @@ CREATE POLICY "Public Insert Leads" ON leads FOR INSERT WITH CHECK (true);
 CREATE POLICY "Public Read Leads" ON leads FOR SELECT USING (true);
 CREATE POLICY "Public Read Companies" ON companies FOR SELECT USING (true);
 CREATE POLICY "Public Insert Companies" ON companies FOR INSERT WITH CHECK (true);
+

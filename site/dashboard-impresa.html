@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portale Impresa Partner — FIRENZE PULIZIE</title>
+  <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Landing page esclusiva per l'impresa di pulizia: ricezione lead, monitoraggio giornata lavorativa, istruzioni alle squadre, report fotografici, gestione lamentele e fatturazione.">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
@@ -179,6 +180,7 @@
     <!-- BODY -->
     <div class="dash-body">
 
+      <!-- AVVISO SE REDIRECT DA PAGINA NON CONSENTITA -->
       <div id="deniedBanner" style="display: none; background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; padding: 12px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; margin-bottom: 18px;">
         ⛔ Accesso bloccato: il tuo profilo Impresa Partner può visualizzare esclusivamente i dati della tua azienda e non ha accesso alla Centrale Admin o all'interfaccia di un singolo operatore.
       </div>
@@ -233,6 +235,7 @@
       <!-- TAB 1: GIORNATA DI LAVORO & NUOVI LEAD -->
       <section id="section-overview" class="tab-content-panel active">
 
+        <!-- CARD 1: COSA STA SUCCEDENDO NELLA GIORNATA DI LAVORO -->
         <div class="content-card">
           <div class="content-card-header">
             <div class="card-title-group">
@@ -262,6 +265,7 @@
           </div>
         </div>
 
+        <!-- CARD 2: NUOVI LEAD RICEVUTI DALLA RETE -->
         <div class="content-card">
           <div class="content-card-header">
             <div class="card-title-group">
@@ -299,7 +303,9 @@
               <p>Esamina i report fotografici inviati dai tuoi team di lavoro, risolvi eventuali contestazioni dei clienti con prove certificate e procedi all'emissione della fattura.</p>
             </div>
           </div>
-          <div style="padding: 20px;" id="reportsListContainer"></div>
+          <div style="padding: 20px;" id="reportsListContainer">
+            <!-- Popolato dinamicamente da JS -->
+          </div>
         </div>
       </section>
 
@@ -392,7 +398,7 @@
   </main>
 </div>
 
-<!-- MODALE 1: ISTRUISCI LA SQUADRA -->
+<!-- MODALE 1: ISTRUISCI LA SQUADRA (DIRETTIVE E CHECKLIST) -->
 <div class="modal-backdrop" id="modalInstructTeam">
   <div class="modal-card">
     <div class="modal-card-header">
@@ -425,7 +431,7 @@
   </div>
 </div>
 
-<!-- MODALE 2: GESTIONE LAMENTELA -->
+<!-- MODALE 2: GESTIONE LAMENTELA / CONTESTAZIONE CON REPORT FOTOGRAFICO -->
 <div class="modal-backdrop" id="modalComplaint">
   <div class="modal-card">
     <div class="modal-card-header">
@@ -493,6 +499,7 @@
 <script type="module">
   import { enforceRoleGuard, logoutUser, getSharedPlatformData, saveSharedPlatformData } from './js/auth-guard.js';
 
+  // 1. CONTROLLO RIGOROSO ACCESSO: Solo ruolo PARTNER
   const session = enforceRoleGuard(['PARTNER']);
   if (!session) throw new Error('Accesso non autorizzato');
 
@@ -501,6 +508,7 @@
     document.getElementById('deniedBanner').style.display = 'block';
   }
 
+  // Personalizza UI per l'impresa specifica loggata (C01 o C02)
   document.getElementById('sidebarCompanyName').textContent = session.companyName;
   document.getElementById('sidebarPiva').textContent = `P.IVA ${session.piva || 'IT06548920481'} • ⭐ ${session.rating || 4.9}`;
   document.getElementById('sidebarAvatar').textContent = session.avatar || 'IM';
@@ -511,6 +519,7 @@
     logoutUser();
   });
 
+  // Dati specifici per Impresa (Isolamento Multi-Impresa)
   const COMPANY_LEADS_DB = {
     C01: [
       {
@@ -582,6 +591,7 @@
     const readyToBill = myJobs.filter(j => j.reportGenerated && j.complaintStatus !== 'SEGNALATA' && j.invoiceStatus !== 'FATTURATO');
     const readySum = readyToBill.reduce((acc, j) => acc + (j.agreedAmount || 0), 0);
 
+    // KPIs
     document.getElementById('kpiLeadsCount').textContent = myLeads.length;
     document.getElementById('badgePendingLeads').textContent = myLeads.length;
     document.getElementById('kpiJobsToday').textContent = myJobs.length;
@@ -602,6 +612,7 @@
     renderZonesSection();
   }
 
+  // 1. TABELLA GIORNATA DI LAVORO
   function renderTodayJobsTable(myJobs) {
     const tbody = document.getElementById('tbodyTodayJobs');
     tbody.innerHTML = myJobs.map(j => {
@@ -650,6 +661,7 @@
     }).join('');
   }
 
+  // 2. SEZIONE REPORT FOTOGRAFICI, LAMENTELE E FATTURAZIONE
   function renderReportsSection(myJobs) {
     const container = document.getElementById('reportsListContainer');
     container.innerHTML = myJobs.map(j => {
@@ -751,6 +763,7 @@
     }).join('');
   }
 
+  // 3. TABELLE LEAD POTENZIALI CLIENTI
   function renderLeadsTables() {
     const html = myLeads.map(l => {
       let badgeClass = 'lead-status-nuovo';
@@ -778,6 +791,7 @@
     document.getElementById('tbodyAllPartnerLeads').innerHTML = html;
   }
 
+  // 4. TABELLA ISTRUZIONI CANTIERI
   function renderInstructionsTable(myJobs) {
     document.getElementById('tbodyAllJobs').innerHTML = myJobs.map(j => `
       <tr>
@@ -794,6 +808,7 @@
     `).join('');
   }
 
+  // 5. GRIGLIA SQUADRE DELL'IMPRESA
   function renderTeamsGrid(myJobs) {
     document.getElementById('teamsGrid').innerHTML = myTeams.map(t => {
       const assigned = myJobs.filter(j => j.teamId === t.id);
@@ -820,6 +835,7 @@
     }).join('');
   }
 
+  // 6. ZONE DELL'IMPRESA
   function renderZonesSection() {
     document.getElementById('companyZonesContainer').innerHTML = `
       <div class="card p-24" style="border: 2px solid var(--brand-sky-500); background: rgba(56, 189, 248, 0.05); border-radius: var(--radius-md);">
@@ -830,6 +846,7 @@
     `;
   }
 
+  // AZIONI MODALI: ISTRUZIONI SQUADRA
   window.openInstructModal = (jobId) => {
     const data = getSharedPlatformData();
     const job = data.jobs.find(j => j.id === jobId);
@@ -858,6 +875,7 @@
     alert(`✅ Istruzioni aggiornate per ${job.teamName}! Quando la squadra apre la propria App Mobile vedrà immediatamente le nuove direttive.`);
   };
 
+  // AZIONI MODALI: GESTIONE LAMENTELE CON PROVA FOTOGRAFICA
   window.openComplaintModal = (jobId) => {
     const data = getSharedPlatformData();
     const job = data.jobs.find(j => j.id === jobId);
@@ -898,6 +916,7 @@
     renderAll();
   };
 
+  // AZIONE: EMETTI FATTURA
   window.issueInvoice = (jobId) => {
     const data = getSharedPlatformData();
     const job = data.jobs.find(j => j.id === jobId);
@@ -912,6 +931,7 @@
     alert(`💶 Fattura ${invNum} di € ${job.agreedAmount.toFixed(2)} (+ IVA) emessa con successo per "${job.client}"!\nAllegato automaticamente il Report di Fine Lavoro certificato dalla ${job.teamName}.`);
   };
 
+  // AZIONI MODALI: LEAD
   window.openLeadModal = (leadId) => {
     const lead = myLeads.find(l => l.id === leadId);
     if (!lead) return;
@@ -934,6 +954,7 @@
     renderAll();
   };
 
+  // NAVIGAZIONE TABS
   const navItems = document.querySelectorAll('.dash-nav-item[data-tab]');
   navItems.forEach(item => {
     item.addEventListener('click', () => {

@@ -11,7 +11,7 @@ const SHARED_DATA_KEY = 'fp_shared_platform_data_v1';
 export const DEMO_USERS = [
   {
     id: 'usr_admin_01',
-    email: 'admin@firenzepulizie.it',
+    email: 'admin@puliziefiorentine.it',
     username: 'admin',
     password: 'Admin2026!',
     role: 'ADMIN_RETE',

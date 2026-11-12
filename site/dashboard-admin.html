@@ -1,11 +1,11 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Centrale Amministrativa Rete — FIRENZE PULIZIE</title>
-  <meta name="description" content="Cruscotto centrale di coordinamento della Rete Firenze Pulizie: gestione richieste, assegnazione di prossimità, accreditamento imprese e controllo SLA.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Centrale Amministrativa Rete — PULIZIE FIORENTINE (Roby&amp;Lia)</title>
+  <meta name="description" content="Cruscotto centrale di coordinamento di Pulizie Fiorentine (Roby&Lia): gestione richieste, assegnazione di prossimità, estrattore Registro Imprese e CRM Outbound B2B.">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/dashboard.css">
@@ -19,7 +19,7 @@
     <div class="dash-sidebar-header">
       <a href="index.html" class="dash-brand">
         <div class="dash-brand-icon">✨</div>
-        <div>FIRENZE <span style="color: var(--brand-sky-400);">PULIZIE</span></div>
+        <div>PULIZIE <span style="color: #f97316;">FIORENTINE</span></div>
       </a>
     </div>
 
@@ -40,6 +40,12 @@
         <span class="icon">🧹</span> Cantieri Live Oggi
       </button>
 
+      <div class="dash-nav-section-title">Marketing & Sviluppo B2B</div>
+      <button type="button" class="dash-nav-item" data-tab="tab-scraper">
+        <span class="icon">🏛️</span> Estrattore Registro Imprese
+        <span class="badge-count" style="background: var(--brand-emerald-600); color: white;" id="badgeScrapedCount">1</span>
+      </button>
+
       <div class="dash-nav-section-title">Configurazione Territorio</div>
       <button type="button" class="dash-nav-item" data-tab="tab-zones">
         <span class="icon">📍</span> Zone & Quartieri Firenze
@@ -57,7 +63,7 @@
         <div class="user-avatar">AD</div>
         <div class="user-meta">
           <div class="user-name" id="adminSidebarName">Amministrazione Rete</div>
-          <div class="user-role" id="adminSidebarEmail">admin@firenzepulizie.it</div>
+          <div class="user-role" id="adminSidebarEmail">admin@puliziefiorentine.it</div>
         </div>
         <button type="button" id="btnLogoutAdmin" title="Disconnetti" style="background: none; border: none; cursor: pointer; color: #f87171; font-size: 1.15rem; margin-left: auto;">🚪</button>
       </div>
@@ -77,6 +83,9 @@
           <span class="pulse-dot"></span>
           <span>Rete Attiva • 13 Zone Monitorate</span>
         </div>
+        <button class="btn btn-secondary btn-sm" onclick="switchToTab('tab-scraper')" style="border-color: var(--brand-sky-400); color: var(--brand-navy-900);">
+          🏛️ Estrattore Aziende / Condomini
+        </button>
         <button class="btn btn-primary btn-sm" id="btnQuickLead" onclick="openNewLeadModal()">
           + Nuovo Preventivo
         </button>
@@ -121,14 +130,14 @@
           </div>
         </div>
 
-        <div class="kpi-card">
+        <div class="kpi-card" style="cursor: pointer;" onclick="switchToTab('tab-scraper')">
           <div class="kpi-head">
-            <span class="kpi-label">Tempo Medio Assegnazione</span>
-            <div class="kpi-icon amber">⚡</div>
+            <span class="kpi-label">Liste B2B / Registro Imprese</span>
+            <div class="kpi-icon amber">🏛️</div>
           </div>
-          <div class="kpi-value">18 min</div>
-          <div class="kpi-sub">
-            <span>SLA obiettivo: &lt; 45 minuti</span>
+          <div class="kpi-value" id="kpiScrapedTotal">6</div>
+          <div class="kpi-sub" style="color: var(--brand-sky-600); font-weight: 700;">
+            ⚡ Clicca per importare HTML o CSV
           </div>
         </div>
       </section>
@@ -169,8 +178,9 @@
                   <th>Settore</th>
                   <th>Quartiere / Indirizzo</th>
                   <th>Dettaglio Lavoro</th>
+                  <th>Offerta da Fare</th>
                   <th>Stato</th>
-                  <th style="text-align: right;">Azione Assegnazione</th>
+                  <th style="text-align: right;">Azioni Offerta &amp; Smistamento</th>
                 </tr>
               </thead>
               <tbody id="tbodyPendingLeads">
@@ -240,13 +250,13 @@
                 <tr>
                   <th>Codice</th>
                   <th>Data Richiesta</th>
-                  <th>Cliente</th>
+                  <th>Cliente &amp; Recapiti</th>
                   <th>Settore</th>
                   <th>Quartiere</th>
-                  <th>Metratura / Tipo</th>
+                  <th>Offerta da Fare / Preventivo</th>
                   <th>Impresa Incaricata</th>
                   <th>Stato</th>
-                  <th>Azioni</th>
+                  <th style="text-align: right;">Azioni</th>
                 </tr>
               </thead>
               <tbody id="tbodyAllLeads">
@@ -315,6 +325,119 @@
         </div>
       </section>
 
+      <!-- TAB 5: ESTRATTORE REGISTRO IMPRESE & CRM OUTBOUND B2B -->
+      <section id="section-scraper" class="tab-content-panel" style="display: none;">
+        
+        <!-- GUIDA OPERATIVA + BOX INCOLLA CODICE HTML / CSV -->
+        <div class="content-card" style="border-top: 4px solid var(--brand-sky-500);">
+          <div class="content-card-header">
+            <div class="card-title-group">
+              <h2>🏛️ Estrattore Automatico Registro Imprese & Importatore Lead B2B</h2>
+              <p>Incolla il codice sorgente HTML delle pagine di <strong>registroimprese.it</strong> (anche da 75 risultati per pagina) oppure un elenco CSV/Excel per estrarre tutte le aziende in automatico.</p>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="exportScrapedToCSV()">
+                📥 Esporta Lista Excel / CSV
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="openAddManualProspectModal()">
+                + Aggiungi Azienda Manuale
+              </button>
+            </div>
+          </div>
+
+          <div style="padding: 20px 24px;">
+            <!-- ISTRUZIONI RAPIDE -->
+            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; font-size: 0.85rem; color: #0c4a6e;">
+              <strong style="display: block; margin-bottom: 6px; font-size: 0.92rem;">💡 Come estrarre 75 aziende alla volta da RegistroImprese.it in 10 secondi:</strong>
+              <ol style="margin: 0; padding-left: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px;">
+                <li>Su <code>registroimprese.it</code> cerca es. <strong>AMMINISTRAZIONE CONDOMINI</strong> o <strong>IMMOBILIARE</strong> su <strong>FIRENZE</strong>.</li>
+                <li>In fondo alla lista clicca su <strong>"Vedi tutti i risultati correlati"</strong> e imposta il menu in alto su <strong>75 Items per Page</strong>.</li>
+                <li>Fai clic destro sulla pagina &rarr; <strong>Visualizza sorgente pagina (Ctrl+U)</strong>, seleziona tutto (Ctrl+A), copia (Ctrl+C) e incolla qui sotto!</li>
+              </ol>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 18px; align-items: start;">
+              <div>
+                <label for="rawHtmlInput" style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; color: var(--brand-navy-900);">
+                  Incolla qui il codice HTML di Registro Imprese (oppure testo CSV / Elenco Aziende):
+                </label>
+                <textarea id="rawHtmlInput" rows="6" style="width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-family: monospace; font-size: 0.8rem; background: #f8fafc; resize: vertical;" placeholder="Incolla qui il codice <!DOCTYPE html>... di registroimprese.it oppure righe CSV (Denominazione;Comune;Attività;Email/PEC;Telefono)..."></textarea>
+              </div>
+
+              <div style="background: var(--bg-main); padding: 16px; border-radius: 10px; border: 1px solid var(--border-light);">
+                <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; color: var(--brand-navy-900);">
+                  📂 Oppure carica file salvato (.html, .csv, .txt):
+                </label>
+                <input type="file" id="fileUploadInput" accept=".html,.htm,.csv,.txt" style="font-size: 0.8rem; margin-bottom: 12px; width: 100%;" onchange="handleFileUpload(event)">
+                
+                <label for="defaultTargetCategory" style="display: block; font-weight: 700; font-size: 0.8rem; margin-bottom: 4px; color: var(--text-muted);">
+                  Target Commerciale Predefinito:
+                </label>
+                <select id="defaultTargetCategory" class="select-filter" style="width: 100%; margin-bottom: 12px;">
+                  <option value="AMMINISTRATORE_CONDOMINIO">🏢 Amministratore di Condominio (ATECO 68.32)</option>
+                  <option value="AZIENDA_UFFICI">💼 Uffici / Società / Studi Professionali</option>
+                  <option value="RICETTIVO_CAV">🏨 Case Vacanze / Hotel / B&amp;B</option>
+                  <option value="COMMERCIALE_NEGOZI">🛍️ Negozi / Showroom / Cliniche</option>
+                </select>
+
+                <button type="button" class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="parseAndImportInput()">
+                  ⚡ Estrai Aziende dal Codice
+                </button>
+              </div>
+            </div>
+
+            <!-- FEEDBACK ESTRAZIONE -->
+            <div id="scraperFeedbackBox" style="display: none; margin-top: 14px; padding: 12px 16px; border-radius: 8px; font-size: 0.86rem; font-weight: 600;"></div>
+          </div>
+        </div>
+
+        <!-- TABELLA CRM OUTBOUND DELLE AZIENDE ESTRATTE -->
+        <div class="content-card">
+          <div class="content-card-header">
+            <div class="card-title-group">
+              <h2>📋 Database Aziende & Amministratori Estratti (<span id="scrapedTableCounter">0</span> aziende)</h2>
+              <p>Gestisci lo stato di contatto commerciale, genera la proposta B2B/PEC con un clic o converti l'azienda in richiesta di preventivo</p>
+            </div>
+            <div class="toolbar-actions">
+              <div class="search-input-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchScrapedInput" placeholder="Cerca nome azienda, attività, comune..." oninput="renderScrapedTable()">
+              </div>
+              <select id="filterScrapedStatus" class="select-filter" onchange="renderScrapedTable()">
+                <option value="ALL">Tutti gli Stati Contatto</option>
+                <option value="DA_CONTATTARE">🎯 Da Contattare</option>
+                <option value="CONTATTATO_PEC">📨 Proposta / PEC Inviata</option>
+                <option value="IN_TRATTATIVA">🤝 In Trattativa / Follow-up</option>
+                <option value="CONVERTITO">✅ Convertito in Preventivo</option>
+              </select>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="clearScrapedDatabase()" style="color: #dc2626;">
+                🗑️ Svuota Lista
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Denominazione / Ragione Sociale</th>
+                  <th>Sede &amp; Comune</th>
+                  <th>Forma Giuridica</th>
+                  <th>Attività / Codice ATECO</th>
+                  <th>Recapiti (PEC / Email / Tel)</th>
+                  <th>Stato Outbound</th>
+                  <th style="text-align: right;">Azioni Marketing &amp; CRM</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyScrapedCompanies">
+                <!-- Popolato da JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
     </div>
   </main>
 </div>
@@ -347,6 +470,160 @@
   </div>
 </div>
 
+<!-- MODAL GENERATORE PROPOSTA COMMERCIALE / PEC B2B -->
+<div class="modal-backdrop" id="modalPitchGenerator">
+  <div class="modal-card" style="max-width: 680px;">
+    <div class="modal-card-header">
+      <h3 id="pitchModalTitle">✉️ Proposta Commerciale B2B / PEC Personalizzata</h3>
+      <button class="btn-close-modal" onclick="closeModal('modalPitchGenerator')">&times;</button>
+    </div>
+    <div class="modal-card-body">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+        <div>
+          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Destinatario (PEC o Email):</label>
+          <input type="text" id="pitchRecipientEmail" style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 6px; font-size: 0.85rem;" placeholder="Inserisci email o PEC dell'azienda...">
+        </div>
+        <div>
+          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Modello Offerta Marketing:</label>
+          <select id="pitchTemplateType" class="select-filter" style="width: 100%;" onchange="updatePitchPreview()">
+            <option value="CONDOMINIO">🏢 Convenzione Amministratori di Condominio (-15% Multi-Stabile)</option>
+            <option value="UFFICI">💼 Uffici &amp; Studi Professionali (Zero Costi Trasferta + Report Foto)</option>
+            <option value="CAV">🏨 Case Vacanze &amp; Ricettivo Firenze (Turnover Certificato)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Oggetto Email / PEC:</label>
+        <input type="text" id="pitchSubject" style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 6px; font-size: 0.86rem; font-weight: 600;">
+      </div>
+
+      <div>
+        <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Testo Messaggio (Pronto da copiare o inviare):</label>
+        <textarea id="pitchBody" rows="11" style="width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 0.84rem; line-height: 1.5; font-family: inherit;"></textarea>
+      </div>
+    </div>
+    <div class="modal-card-footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+      <button type="button" class="btn btn-secondary" onclick="copyPitchToClipboard()">
+        📋 Copia Testo negli Appunti
+      </button>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modalPitchGenerator')">Chiudi</button>
+        <button type="button" class="btn btn-primary" onclick="sendPitchMailto()">
+          🚀 Apri nel Programma Email / PEC
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AGGIUNTA MANUALE O MODIFICA AZIENDA ESTRATTA -->
+<div class="modal-backdrop" id="modalManualProspect">
+  <div class="modal-card" style="max-width: 540px;">
+    <div class="modal-card-header">
+      <h3 id="manualProspectTitle">Aggiungi / Modifica Azienda Target</h3>
+      <button class="btn-close-modal" onclick="closeModal('modalManualProspect')">&times;</button>
+    </div>
+    <div class="modal-card-body">
+      <input type="hidden" id="editProspectId">
+      <div style="display: grid; gap: 12px;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Denominazione / Studio *</label>
+          <input type="text" id="mpName" style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 6px;" placeholder="Es. Studio Amministrazioni Bianchi Srl">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Comune / Zona</label>
+            <input type="text" id="mpCity" style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 6px;" value="Firenze (FI)">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Forma Giuridica</label>
+            <input type="text" id="mpLegalForm" style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 6px;" placeholder="Es. S.R.L. / Impresa Individuale">
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Descrizione Attività / Codice ATECO</label>
+          <input type="text" id="mpActivity" style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 6px;" placeholder="Es. 68.32 - Amministrazione di condomini">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">PEC / Email</label>
+            <input type="text" id="mpEmail" style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 6px;" placeholder="studio@pec.it">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Telefono / Note Indirizzo</label>
+            <input type="text" id="mpPhone" style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 6px;" placeholder="055 ... / Via ...">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-card-footer">
+      <button type="button" class="btn btn-secondary" onclick="closeModal('modalManualProspect')">Annulla</button>
+      <button type="button" class="btn btn-primary" onclick="saveManualProspect()">Salva Azienda in Lista</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VISIONA LEAD & FORMULA OFFERTA COMMERCIALE AL CLIENTE -->
+<div class="modal-backdrop" id="modalInspectOffer">
+  <div class="modal-card" style="max-width: 680px;">
+    <div class="modal-card-header">
+      <h3 id="offerModalTitle">📋 Dossier Richiesta &amp; Offerta Commerciale</h3>
+      <button class="btn-close-modal" onclick="closeModal('modalInspectOffer')">&times;</button>
+    </div>
+    <div class="modal-card-body">
+      <div id="offerLeadSummary" style="background: var(--bg-main); padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 16px; font-size: 0.86rem;">
+        <!-- Riepilogo lead -->
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--brand-navy-900); display: block; margin-bottom: 4px;">
+            💰 Offerta Economica da Proporre al Cliente:
+          </label>
+          <input type="text" id="offerPriceInput" style="width: 100%; padding: 9px 12px; border: 2px solid var(--brand-emerald-500); border-radius: 6px; font-weight: 700; font-size: 0.92rem; color: #065f46; background: #ecfdf5;" oninput="refreshOfferMessagePreview()">
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--brand-navy-900); display: block; margin-bottom: 4px;">
+            Stato Offerta Commerciale:
+          </label>
+          <select id="offerStatusSelect" class="select-filter" style="width: 100%; padding: 9px 12px;">
+            <option value="DA_INVIARE">⏳ Offerta da Inviare al Cliente</option>
+            <option value="OFFERTA_INVIATA">📨 Offerta Inviata (In attesa conferma)</option>
+            <option value="APPROVATA">✅ Offerta Accettata dal Cliente</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">
+          Testo Preventivo Ufficiale (pronto per Email o WhatsApp):
+        </label>
+        <textarea id="offerMessageText" rows="9" style="width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 0.84rem; line-height: 1.5; font-family: inherit;"></textarea>
+      </div>
+    </div>
+    <div class="modal-card-footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="copyOfferToClipboard()">
+          📋 Copia Preventivo
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" style="background: #dcfce7; color: #166534; border-color: #86efac;" onclick="sendOfferWhatsApp()">
+          💬 Invia su WhatsApp
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="sendOfferEmail()">
+          ✉️ Invia Offerta via Email
+        </button>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="saveOfferChangesAndClose()">Salva Offerta</button>
+        <button type="button" class="btn btn-primary btn-sm" style="background: var(--brand-navy-900);" onclick="proceedFromOfferToAssign()">
+          ⚡ Assegna a Impresa &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- JAVASCRIPT GESTIONE STATO E INTERAZIONI -->
 <script type="module">
   import { enforceRoleGuard, logoutUser, getSharedPlatformData } from './js/auth-guard.js';
@@ -356,8 +633,105 @@
   if (!session) throw new Error('Accesso riservato all\'Amministratore Totale del Portale');
 
   document.getElementById('adminSidebarName').textContent = session.name || 'Amministrazione Rete';
-  document.getElementById('adminSidebarEmail').textContent = session.email || 'admin@firenzepulizie.it';
+  document.getElementById('adminSidebarEmail').textContent = session.email || 'admin@puliziefiorentine.it';
   document.getElementById('btnLogoutAdmin').addEventListener('click', () => logoutUser());
+
+  const SCRAPED_STORAGE_KEY = 'fp_registro_imprese_leads_v1';
+
+  // LISTA INIZIALE CON IL RISULTATO ESTRATTO DAL TUO HTML + ESEMPI REALISTICI ATECO 68.32 FIRENZE
+  const DEFAULT_SCRAPED_COMPANIES = [
+    {
+      id: 'RI-01',
+      name: 'Bestabit Di Enrico Borghini',
+      hqType: 'Sede Legale',
+      city: 'Firenze (FI)',
+      legalForm: 'Altre Forme',
+      activity: 'Case e appartamenti vacanze (Ricerca ATECO 68.32)',
+      regStatus: 'Registrata',
+      email: '',
+      phone: 'Estratto da pagina HTML Registro Imprese',
+      category: 'RICETTIVO_CAV',
+      outboundStatus: 'DA_CONTATTARE',
+      extractedAt: 'Oggi (Da HTML Registro Imprese)'
+    },
+    {
+      id: 'RI-02',
+      name: 'Studio Amministrazioni Condominiali Brunelleschi S.r.l.',
+      hqType: 'Sede Legale',
+      city: 'Firenze (FI)',
+      legalForm: 'Società di capitali',
+      activity: 'Amministrazione di condomini e gestione di beni immobili per conto terzi (ATECO 68.32.00)',
+      regStatus: 'Registrata',
+      email: 'studiobrunelleschi@pec.it',
+      phone: 'Zona Campo di Marte / Viale dei Mille',
+      category: 'AMMINISTRATORE_CONDOMINIO',
+      outboundStatus: 'DA_CONTATTARE',
+      extractedAt: 'Archivio ATECO 68.32 FI'
+    },
+    {
+      id: 'RI-03',
+      name: 'Gestione Immobiliare & Condomini Firenze Nord S.a.s.',
+      hqType: 'Sede Legale',
+      city: 'Firenze (FI)',
+      legalForm: 'Società di persone',
+      activity: 'Amministrazione di condomini e gestione di beni immobili per conto terzi (ATECO 68.32.00)',
+      regStatus: 'Registrata',
+      email: 'condominifirenzenord@pec.it',
+      phone: 'Zona Novoli / Rifredi',
+      category: 'AMMINISTRATORE_CONDOMINIO',
+      outboundStatus: 'CONTATTATO_PEC',
+      extractedAt: 'Archivio ATECO 68.32 FI'
+    },
+    {
+      id: 'RI-04',
+      name: 'Studio Tecnico Amministrativo Mediceo S.r.l.',
+      hqType: 'Sede Legale',
+      city: 'Firenze (FI)',
+      legalForm: 'Società di capitali',
+      activity: 'Amministrazione di condomini e gestione di beni immobili per conto terzi (ATECO 68.32.00)',
+      regStatus: 'Registrata',
+      email: 'studiomediceo.fi@pec.it',
+      phone: 'Centro Storico / Piazza Savonarola',
+      category: 'AMMINISTRATORE_CONDOMINIO',
+      outboundStatus: 'DA_CONTATTARE',
+      extractedAt: 'Archivio ATECO 68.32 FI'
+    },
+    {
+      id: 'RI-05',
+      name: 'Futura Condomini & Patrimoni Immobiliari S.r.l.',
+      hqType: 'Sede Legale',
+      city: 'Scandicci (FI)',
+      legalForm: 'Società di capitali',
+      activity: 'Amministrazione di condomini e gestione di beni immobili per conto terzi (ATECO 68.32.00)',
+      regStatus: 'Registrata',
+      email: 'futuracondomini@pec.it',
+      phone: 'Scandicci / Isolotto',
+      category: 'AMMINISTRATORE_CONDOMINIO',
+      outboundStatus: 'IN_TRATTATIVA',
+      extractedAt: 'Archivio ATECO 68.32 FI'
+    }
+  ];
+
+  function loadScrapedFromStorage() {
+    try {
+      const raw = localStorage.getItem(SCRAPED_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn('Errore lettura localStorage:', e);
+    }
+    return [...DEFAULT_SCRAPED_COMPANIES];
+  }
+
+  function saveScrapedToStorage() {
+    try {
+      localStorage.setItem(SCRAPED_STORAGE_KEY, JSON.stringify(STATE.scrapedCompanies));
+    } catch (e) {
+      console.warn('Errore salvataggio localStorage:', e);
+    }
+  }
 
   // DATI STATO LOCALE PIATTAFORMA
   const STATE = {
@@ -367,12 +741,17 @@
         code: 'LEAD-2026-FI-4821',
         name: 'Studio Legale Rossi & Partners',
         contact: 'Avv. Rossi (333 4567890)',
+        phone: '333 4567890',
         email: 'info@rossilex.it',
         sector: 'COMMERCIALE',
         customer_type: 'AZIENDA',
         zone_id: 'FI-CENTRO',
         zone_name: 'Centro Storico (ZTL, Tornabuoni)',
         address: 'Via de\' Tornabuoni 14',
+        sqm: 240,
+        frequency: 'TRISETTIMANALE',
+        estimated_offer: '€ 420/mese (Trisettimanale • ZTL Zero Trasferta)',
+        offer_status: 'DA_INVIARE',
         details: 'Uffici 240 mq, 3 bagni, pavimenti cotto e parquet. Pulizia trisettimanale serale.',
         status: 'NUOVA',
         assigned_company_id: null,
@@ -383,12 +762,17 @@
         code: 'LEAD-2026-FI-4822',
         name: 'Condominio Parco San Donato',
         contact: 'Dott.ssa Bianchi (Amministratore)',
+        phone: '055 3214567',
         email: 'studiobianchi.amm@gmail.com',
         sector: 'CONDOMINIO',
         customer_type: 'AMMINISTRATORE',
         zone_id: 'FI-NOVOLI',
         zone_name: 'Novoli / San Donato',
         address: 'Via di Novoli 42',
+        sqm: 380,
+        frequency: 'BISETTIMANALE',
+        estimated_offer: '€ 340/mese (2 Scale 6 Piani • Report Foto GPS)',
+        offer_status: 'DA_INVIARE',
         details: '2 scale, 6 piani ciascuna, vetrate ingresso, ascensori, garage piano -1. Frequenza bisettimanale.',
         status: 'NUOVA',
         assigned_company_id: null,
@@ -399,12 +783,17 @@
         code: 'LEAD-2026-FI-4823',
         name: 'Famiglia Martelli',
         contact: 'Elena Martelli (347 1122334)',
+        phone: '347 1122334',
         email: 'elena.martelli@yahoo.it',
         sector: 'PRIVATO',
         customer_type: 'PRIVATO',
         zone_id: 'FI-RIFREDI',
         zone_name: 'Rifredi / Careggi',
         address: 'Via Taddeo Alderotti 28',
+        sqm: 110,
+        frequency: 'UNA_TANTUM',
+        estimated_offer: '€ 195 (Sgrosso Post-Ristrutturazione 110 mq)',
+        offer_status: 'DA_INVIARE',
         details: 'Appartamento 110 mq post-ristrutturazione (polvere calce, infissi, tapparelle, sgrosso profondo).',
         status: 'NUOVA',
         assigned_company_id: null,
@@ -415,12 +804,17 @@
         code: 'LEAD-2026-FI-4790',
         name: 'Clinica Odontoiatrica Firenze Est',
         contact: 'Dr. Nardi (055 654321)',
+        phone: '055 654321',
         email: 'direzione@firenzeestdental.it',
         sector: 'COMMERCIALE',
         customer_type: 'AZIENDA',
         zone_id: 'FI-CAMPO-MARTE',
         zone_name: 'Campo di Marte',
         address: 'Viale dei Mille 85',
+        sqm: 180,
+        frequency: 'GIORNALIERA',
+        estimated_offer: '€ 640/mese (Sanificazione Giornaliera Clinica)',
+        offer_status: 'APPROVATA',
         details: 'Sanificazione giornaliera ambienti medici, sale attesa e sterilizzazione. 180 mq.',
         status: 'ASSEGNATA',
         assigned_company_id: 'C02',
@@ -431,12 +825,17 @@
         code: 'LEAD-2026-FI-4781',
         name: 'Tech Hub Coworking Scandicci',
         contact: 'Marco Bellini (338 9988776)',
+        phone: '338 9988776',
         email: 'hub@scandiccispaces.it',
         sector: 'COMMERCIALE',
         customer_type: 'AZIENDA',
         zone_id: 'COM-SCANDICCI',
         zone_name: 'Scandicci',
         address: 'Via Pisana 310',
+        sqm: 450,
+        frequency: 'GIORNALIERA',
+        estimated_offer: '€ 890/mese (Fascia Pre-Apertura 06:00-08:00)',
+        offer_status: 'APPROVATA',
         details: 'Open space 450 mq, cucina comune, sale riunioni. Pulizia giornaliera prima delle 08:00.',
         status: 'IN_CORSO',
         assigned_company_id: 'C03',
@@ -493,7 +892,7 @@
         zones: ['COM-SESTO', 'COM-CALENZANO', 'FI-RIFREDI'],
         teams_count: 3,
         rating: 5.0,
-        status: 'IN_VALUTAZIONE' // Candidatura dal form partner.html
+        status: 'IN_VALUTAZIONE'
       }
     ],
 
@@ -539,7 +938,9 @@
       { code: 'COM-CAMPI', name: 'Campi Bisenzio, San Donnino, Capalle', cap: '50013', area: 'Cintura Ovest', default_co: 'Fiorentina Multiservizi Coop' }
     ],
 
-    selectedLeadForAssign: null
+    scrapedCompanies: loadScrapedFromStorage(),
+    selectedLeadForAssign: null,
+    selectedProspectForPitch: null
   };
 
   // INIZIALIZZAZIONE UI
@@ -550,39 +951,48 @@
     renderAllLeadsTable();
     renderCompaniesTable();
     renderZonesTable();
+    renderScrapedTable();
     setupNavigation();
   }
 
   // NAVIGAZIONE TAB SIDEBAR
+  function switchToTab(targetTab) {
+    const navItems = document.querySelectorAll('.dash-nav-item[data-tab]');
+    navItems.forEach(n => {
+      n.classList.toggle('active', n.dataset.tab === targetTab);
+    });
+
+    document.querySelectorAll('.tab-content-panel').forEach(panel => {
+      panel.style.display = 'none';
+    });
+
+    if (targetTab === 'tab-overview') {
+      document.getElementById('section-overview').style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Panoramica Operativa Rete';
+    } else if (targetTab === 'tab-leads') {
+      document.getElementById('section-leads').style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Tutti i Preventivi & Richieste';
+    } else if (targetTab === 'tab-companies') {
+      document.getElementById('section-companies').style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Imprese Partner Accreditate';
+    } else if (targetTab === 'tab-zones') {
+      document.getElementById('section-zones').style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Copertura Geografica Territoriale';
+    } else if (targetTab === 'tab-scraper') {
+      document.getElementById('section-scraper').style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Estrattore Registro Imprese & CRM Outbound B2B';
+    } else if (targetTab === 'tab-jobs') {
+      document.getElementById('section-overview').style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Cantieri Live in Tempo Reale';
+      window.scrollTo({ top: 600, behavior: 'smooth' });
+    }
+  }
+
   function setupNavigation() {
     const navItems = document.querySelectorAll('.dash-nav-item[data-tab]');
     navItems.forEach(item => {
       item.addEventListener('click', () => {
-        navItems.forEach(n => n.classList.remove('active'));
-        item.classList.add('active');
-
-        const targetTab = item.dataset.tab;
-        document.querySelectorAll('.tab-content-panel').forEach(panel => {
-          panel.style.display = 'none';
-        });
-
-        if (targetTab === 'tab-overview') {
-          document.getElementById('section-overview').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Panoramica Operativa Rete';
-        } else if (targetTab === 'tab-leads') {
-          document.getElementById('section-leads').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Tutti i Preventivi & Richieste';
-        } else if (targetTab === 'tab-companies') {
-          document.getElementById('section-companies').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Imprese Partner Accreditata';
-        } else if (targetTab === 'tab-zones') {
-          document.getElementById('section-zones').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Copertura Geografica Territoriale';
-        } else if (targetTab === 'tab-jobs') {
-          document.getElementById('section-overview').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Cantieri Live in Tempo Reale';
-          window.scrollTo({ top: 600, behavior: 'smooth' });
-        }
+        switchToTab(item.dataset.tab);
       });
     });
   }
@@ -592,6 +1002,7 @@
     const pendingLeads = STATE.leads.filter(l => l.status === 'NUOVA').length;
     const activeCompanies = STATE.companies.filter(c => c.status === 'ATTIVA').length;
     const pendingCompanies = STATE.companies.filter(c => c.status === 'IN_VALUTAZIONE').length;
+    const totalScraped = STATE.scrapedCompanies.length;
 
     document.getElementById('kpiNewLeads').textContent = pendingLeads;
     document.getElementById('badgePendingLeads').textContent = pendingLeads;
@@ -600,6 +1011,529 @@
     document.getElementById('kpiActiveCompanies').textContent = activeCompanies;
     document.getElementById('badgePendingCompanies').textContent = pendingCompanies;
     document.getElementById('badgePendingCompanies').style.display = pendingCompanies > 0 ? 'inline-block' : 'none';
+
+    const kpiScrapedEl = document.getElementById('kpiScrapedTotal');
+    if (kpiScrapedEl) kpiScrapedEl.textContent = totalScraped;
+    const badgeScrapedEl = document.getElementById('badgeScrapedCount');
+    if (badgeScrapedEl) badgeScrapedEl.textContent = totalScraped;
+  }
+
+  // =========================================================================
+  // PARSER INTELLIGENTE HTML REGISTROIMPRESE.IT + CSV / TESTO
+  // =========================================================================
+  function cleanText(str) {
+    return (str || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function extractFromRegistroImpreseHTML(rawInput, defaultCategory) {
+    const extracted = [];
+    const trimmed = rawInput.trim();
+    if (!trimmed) return extracted;
+
+    // 1. Se contiene tag HTML (es. pagina di registroimprese.it)
+    if (trimmed.includes('<') && trimmed.includes('>')) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(trimmed, 'text/html');
+
+      // A. Struttura standard RegistroImprese.it: <td class="gratuitaTd"> oppure <div class="row-padre">
+      const rows = doc.querySelectorAll('td.gratuitaTd, div.row-padre');
+      const seenElements = new Set();
+
+      rows.forEach(rowEl => {
+        const container = rowEl.classList.contains('gratuitaTd') ? rowEl : (rowEl.closest('td.gratuitaTd') || rowEl);
+        if (seenElements.has(container)) return;
+        seenElements.add(container);
+
+        // Denominazione
+        const denomDesktop = container.querySelector('.spanDenominazioneLista .limitaDimensioneRic, .limitaDimensioneRic');
+        const denomMobile = container.querySelector('.denomMobile b, .denomMobile');
+        const name = cleanText(denomDesktop?.textContent || denomMobile?.textContent || '');
+        if (!name) return;
+
+        // Forma Giuridica
+        let legalForm = '';
+        const fgMobile = container.querySelector('.forma-giuridica-mobile');
+        if (fgMobile) {
+          legalForm = cleanText(fgMobile.textContent.replace(/Forma Giuridica\s*:/i, ''));
+        }
+
+        // Attività
+        let activity = '';
+        const attMobile = container.querySelector('.attivita-mobile');
+        const attDesktop = container.querySelector('.dimLimit');
+        if (attMobile) {
+          activity = cleanText(attMobile.textContent.replace(/Descrizione Attivit[àa]\s*:/i, ''));
+        } else if (attDesktop) {
+          activity = cleanText(attDesktop.textContent);
+        }
+
+        // Stato (Registrata / Inattiva / ecc.)
+        let regStatus = 'Registrata';
+        const statoMobile = container.querySelector('.descr-stato-mobile strong');
+        if (statoMobile) {
+          regStatus = cleanText(statoMobile.textContent);
+        }
+
+        // Sede & Comune
+        let hqType = 'Sede Legale';
+        let city = 'Firenze (FI)';
+        const logoMobileSpan = container.querySelector('.imgLogoGratuita .visible-phone');
+        if (logoMobileSpan) {
+          const rawSede = cleanText(logoMobileSpan.textContent);
+          const parts = rawSede.split(/\bdi\b/i);
+          if (parts.length >= 2) {
+            hqType = cleanText(parts[0]) || 'Sede Legale';
+            city = cleanText(parts.slice(1).join(' ')) || 'Firenze';
+          }
+        } else {
+          const span1Cols = container.querySelectorAll('div.span1.hidden-phone.hidden-tablet');
+          if (span1Cols.length >= 2) {
+            hqType = cleanText(span1Cols[0].textContent) || hqType;
+            city = cleanText(span1Cols[1].textContent) || city;
+            if (!legalForm && span1Cols[2]) {
+              legalForm = cleanText(span1Cols[2].textContent);
+            }
+          }
+        }
+
+        // Ricerca eventuale PEC / Email nella riga
+        const emailMatch = container.textContent.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+
+        extracted.push({
+          id: 'RI-' + Date.now() + '-' + Math.floor(Math.random() * 10000),
+          name,
+          hqType,
+          city: city.includes('(') ? city : `${city} (FI)`,
+          legalForm: legalForm || 'Impresa Registrata',
+          activity: activity || 'Attività Immobiliare / Condominiale',
+          regStatus,
+          email: emailMatch ? emailMatch[0].toLowerCase() : '',
+          phone: 'Estratto da Registro Imprese',
+          category: defaultCategory,
+          outboundStatus: 'DA_CONTATTARE',
+          extractedAt: new Date().toLocaleDateString('it-IT')
+        });
+      });
+
+      // B. Fallback: se l'utente ha incollato un'altra tabella HTML (es. INI-PEC, Telemaco, PagineGialle)
+      if (extracted.length === 0) {
+        const genericRows = doc.querySelectorAll('table tr');
+        genericRows.forEach((tr, idx) => {
+          const cells = Array.from(tr.querySelectorAll('td')).map(td => cleanText(td.textContent)).filter(Boolean);
+          if (cells.length >= 2 && idx > 0) {
+            const name = cells[0];
+            if (name.length > 2 && !/denominazione|ragione sociale/i.test(name)) {
+              const rowText = cells.join(' ');
+              const emailMatch = rowText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+              extracted.push({
+                id: 'RI-' + Date.now() + '-' + idx,
+                name,
+                hqType: 'Sede Legale',
+                city: cells[1] || 'Firenze (FI)',
+                legalForm: cells[2] || 'Società / Studio',
+                activity: cells[3] || 'Estratto da Tabella HTML',
+                regStatus: 'Registrata',
+                email: emailMatch ? emailMatch[0].toLowerCase() : '',
+                phone: cells[4] || '',
+                category: defaultCategory,
+                outboundStatus: 'DA_CONTATTARE',
+                extractedAt: new Date().toLocaleDateString('it-IT')
+              });
+            }
+          }
+        });
+      }
+    } else {
+      // 2. Parsing CSV / TSV / Elenco testuale riga per riga
+      const lines = trimmed.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      lines.forEach((line, idx) => {
+        if (idx === 0 && /denominazione|ragione sociale|azienda|nome/i.test(line)) return;
+        const delimiter = line.includes(';') ? ';' : (line.includes('\t') ? '\t' : ',');
+        const cols = line.split(delimiter).map(c => c.replace(/^["']|["']$/g, '').trim());
+        const name = cols[0];
+        if (!name || name.length < 2) return;
+
+        const emailMatch = line.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+        const phoneMatch = line.match(/(?:\+39\s?)?(?:055|3\d{2})[\s./-]?\d{5,8}/);
+
+        extracted.push({
+          id: 'CSV-' + Date.now() + '-' + idx,
+          name,
+          hqType: 'Sede Legale',
+          city: cols[1] || 'Firenze (FI)',
+          legalForm: cols[2] || 'Società / Studio',
+          activity: cols[3] || 'Importazione CSV / Elenco',
+          regStatus: 'Registrata',
+          email: emailMatch ? emailMatch[0].toLowerCase() : (cols[4] || ''),
+          phone: phoneMatch ? phoneMatch[0] : (cols[5] || ''),
+          category: defaultCategory,
+          outboundStatus: 'DA_CONTATTARE',
+          extractedAt: new Date().toLocaleDateString('it-IT')
+        });
+      });
+    }
+
+    return extracted;
+  }
+
+  function parseAndImportInput() {
+    const rawInput = document.getElementById('rawHtmlInput').value;
+    const defaultCategory = document.getElementById('defaultTargetCategory').value;
+    const feedback = document.getElementById('scraperFeedbackBox');
+
+    if (!rawInput || !rawInput.trim()) {
+      feedback.style.display = 'block';
+      feedback.style.background = '#fef2f2';
+      feedback.style.color = '#991b1b';
+      feedback.style.border = '1px solid #fecaca';
+      feedback.innerHTML = '⚠️ Incolla prima il codice HTML di Registro Imprese oppure un elenco CSV nella casella di testo.';
+      return;
+    }
+
+    const found = extractFromRegistroImpreseHTML(rawInput, defaultCategory);
+
+    if (found.length === 0) {
+      feedback.style.display = 'block';
+      feedback.style.background = '#fffbeb';
+      feedback.style.color = '#92400e';
+      feedback.style.border = '1px solid #fde68a';
+      feedback.innerHTML = '⚠️ Nessuna riga impresa trovata nel testo incollato. Assicurati di aver copiato il sorgente HTML della pagina con i risultati di ricerca o righe CSV valide.';
+      return;
+    }
+
+    let addedCount = 0;
+    let duplicateCount = 0;
+
+    found.forEach(item => {
+      const exists = STATE.scrapedCompanies.some(
+        existing => existing.name.toLowerCase() === item.name.toLowerCase()
+      );
+      if (!exists) {
+        STATE.scrapedCompanies.unshift(item);
+        addedCount++;
+      } else {
+        duplicateCount++;
+      }
+    });
+
+    saveScrapedToStorage();
+    renderKPIs();
+    renderScrapedTable();
+
+    feedback.style.display = 'block';
+    feedback.style.background = '#ecfdf5';
+    feedback.style.color = '#065f46';
+    feedback.style.border = '1px solid #a7f3d0';
+    feedback.innerHTML = `✅ Estrazione completata! Trovate <strong>${found.length} aziende</strong> nel codice: <strong>${addedCount} nuove aggiunte</strong> in tabella${duplicateCount > 0 ? ` (${duplicateCount} già presenti saltate automaticamente)` : ''}.`;
+  }
+
+  function handleFileUpload(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      document.getElementById('rawHtmlInput').value = e.target.result || '';
+      parseAndImportInput();
+    };
+    reader.readAsText(file, 'UTF-8');
+  }
+
+  function renderScrapedTable() {
+    const tbody = document.getElementById('tbodyScrapedCompanies');
+    if (!tbody) return;
+
+    const query = (document.getElementById('searchScrapedInput')?.value || '').toLowerCase();
+    const statusFilter = document.getElementById('filterScrapedStatus')?.value || 'ALL';
+
+    const filtered = STATE.scrapedCompanies.filter(item => {
+      const matchQuery =
+        item.name.toLowerCase().includes(query) ||
+        item.activity.toLowerCase().includes(query) ||
+        item.city.toLowerCase().includes(query) ||
+        (item.email || '').toLowerCase().includes(query);
+      const matchStatus = statusFilter === 'ALL' || item.outboundStatus === statusFilter;
+      return matchQuery && matchStatus;
+    });
+
+    document.getElementById('scrapedTableCounter').textContent = filtered.length;
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 32px; color: var(--text-light);">
+        Nessuna azienda trovata con i filtri attuali. Incolla il codice HTML di Registro Imprese qui sopra per importare nuove aziende.
+      </td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(item => {
+      let statusBadge = '<span class="badge-status status-nuova">🎯 Da Contattare</span>';
+      if (item.outboundStatus === 'CONTATTATO_PEC') {
+        statusBadge = '<span class="badge-status status-assegnata">📨 PEC / Email Inviata</span>';
+      } else if (item.outboundStatus === 'IN_TRATTATIVA') {
+        statusBadge = '<span class="badge-status status-in-corso">🤝 In Trattativa</span>';
+      } else if (item.outboundStatus === 'CONVERTITO') {
+        statusBadge = '<span class="badge-status status-completata">✅ Convertito</span>';
+      }
+
+      const contactHtml = item.email
+        ? `<strong style="color: var(--brand-sky-600); font-size: 0.82rem;">✉️ ${item.email}</strong><br><small class="text-muted">${item.phone || ''}</small>`
+        : `<button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.72rem; padding: 3px 8px;" onclick="openEditProspectModal('${item.id}')">+ Aggiungi PEC/Email</button><br><small class="text-muted">${item.phone || ''}</small>`;
+
+      return `
+        <tr>
+          <td>
+            <strong style="color: var(--brand-navy-900); font-size: 0.92rem;">${item.name}</strong><br>
+            <small class="text-muted">✓ ${item.regStatus} • ${item.extractedAt}</small>
+          </td>
+          <td>
+            <div class="zone-tag">📍 ${item.city}</div>
+            <small class="text-muted">${item.hqType}</small>
+          </td>
+          <td><span class="badge-sector sector-comm" style="font-size: 0.72rem;">${item.legalForm}</span></td>
+          <td style="max-width: 250px; font-size: 0.8rem; line-height: 1.35;">
+            ${item.activity}
+          </td>
+          <td>${contactHtml}</td>
+          <td>
+            <select class="select-filter" style="font-size: 0.76rem; padding: 4px 8px;" onchange="changeScrapedStatus('${item.id}', this.value)">
+              <option value="DA_CONTATTARE" ${item.outboundStatus === 'DA_CONTATTARE' ? 'selected' : ''}>🎯 Da Contattare</option>
+              <option value="CONTATTATO_PEC" ${item.outboundStatus === 'CONTATTATO_PEC' ? 'selected' : ''}>📨 Proposta Inviata</option>
+              <option value="IN_TRATTATIVA" ${item.outboundStatus === 'IN_TRATTATIVA' ? 'selected' : ''}>🤝 In Trattativa</option>
+              <option value="CONVERTITO" ${item.outboundStatus === 'CONVERTITO' ? 'selected' : ''}>✅ Convertito</option>
+            </select>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="openPitchGenerator('${item.id}')" title="Genera Email / PEC Commerciale">
+              ✉️ Genera Offerta
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="convertScrapedToLead('${item.id}')" title="Trasforma in Richiesta Preventivo da smistare">
+              ⚡ Crea Lead
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function changeScrapedStatus(id, newStatus) {
+    const item = STATE.scrapedCompanies.find(c => c.id === id);
+    if (!item) return;
+    item.outboundStatus = newStatus;
+    saveScrapedToStorage();
+    renderScrapedTable();
+  }
+
+  function exportScrapedToCSV() {
+    if (STATE.scrapedCompanies.length === 0) {
+      alert('Nessuna azienda da esportare.');
+      return;
+    }
+    const headers = ['Denominazione', 'Tipo Sede', 'Comune', 'Forma Giuridica', 'Attivita ATECO', 'Stato Registro', 'Email o PEC', 'Note / Zona', 'Stato Contatto Marketing'];
+    const rows = STATE.scrapedCompanies.map(c => [
+      c.name,
+      c.hqType,
+      c.city,
+      c.legalForm,
+      c.activity,
+      c.regStatus,
+      c.email || '',
+      c.phone || '',
+      c.outboundStatus
+    ]);
+
+    const csvContent = '\uFEFF' + [headers, ...rows]
+      .map(r => r.map(field => `"${String(field || '').replace(/"/g, '""')}"`).join(';'))
+      .join('\r\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `aziende_registro_imprese_firenze_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  function clearScrapedDatabase() {
+    if (!confirm('Vuoi davvero svuotare la lista corrente delle aziende estratte?')) return;
+    STATE.scrapedCompanies = [];
+    saveScrapedToStorage();
+    renderKPIs();
+    renderScrapedTable();
+  }
+
+  // GENERATORE PROPOSTA COMMERCIALE B2B / PEC
+  function openPitchGenerator(id) {
+    const item = STATE.scrapedCompanies.find(c => c.id === id);
+    if (!item) return;
+    STATE.selectedProspectForPitch = item;
+
+    document.getElementById('pitchModalTitle').textContent = `✉️ Proposta B2B per: ${item.name}`;
+    document.getElementById('pitchRecipientEmail').value = item.email || '';
+
+    const selectEl = document.getElementById('pitchTemplateType');
+    if (/vacanze|alberg|hotel|b&b|affittacamere|cav/i.test(item.activity)) {
+      selectEl.value = 'CAV';
+    } else if (/condomin|immobili/i.test(item.activity)) {
+      selectEl.value = 'CONDOMINIO';
+    } else {
+      selectEl.value = 'UFFICI';
+    }
+
+    updatePitchPreview();
+    document.getElementById('modalPitchGenerator').classList.add('active');
+  }
+
+  function updatePitchPreview() {
+    const item = STATE.selectedProspectForPitch;
+    if (!item) return;
+    const tpl = document.getElementById('pitchTemplateType').value;
+    const subjEl = document.getElementById('pitchSubject');
+    const bodyEl = document.getElementById('pitchBody');
+
+    if (tpl === 'CONDOMINIO') {
+      subjEl.value = `Convenzione Pulizia Condomini a Firenze (Zero Costi Trasferta + Report Fotografico) - Alla c.a. ${item.name}`;
+      bodyEl.value = `Gentile Direzione di ${item.name},\n\nvi contattiamo dalla Centrale Operativa di Firenze Pulizie (https://puliziefiorentine.it), la rete territoriale di imprese di pulizia certificate con squadre fisse distribuite nei singoli quartieri di Firenze.\n\nPer gli Studi di Amministrazione Condominiale di ${item.city} abbiamo attivato il protocollo "Zero Telefonate di Reclamo":\n1. Zero Costi di Trasferta: assegniamo a ogni condominio la squadra già operativa nel medesimo quartiere (Centro ZTL, Campo di Marte, Novoli, Rifredi, Gavinana, Scandicci).\n2. Verbale Fotografico Certificato: a fine turno la squadra carica foto Prima/Dopo con orario GPS direttamente consultabili dallo Studio.\n3. Sconto Convenzione Multi-Stabile fino al -15% sui capitolati annuali e Primo Mese di Prova Senza Vincolo.\n\nPotete calcolare in 30 secondi il preventivo per scala e unità direttamente sul nostro Simulatore online dedicato agli Amministratori:\n👉 https://puliziefiorentine.it/pulizie-condomini.html#calcolatore-condominio\n\nRestiamo a disposizione per un sopralluogo gratuito di prova su uno dei vostri stabili a Firenze.\n\nCordiali saluti,\nDirezione Convenzioni Condominiali — Rete Firenze Pulizie\nWeb: https://puliziefiorentine.it | Email: info@puliziefiorentine.it`;
+    } else if (tpl === 'CAV') {
+      subjEl.value = `Servizio Pulizie & Sanificazione Strutture Ricettive a Firenze (Prossimità Quartiere) - ${item.name}`;
+      bodyEl.value = `Gentile Titolare di ${item.name},\n\nabbiamo rilevato la vostra attività (${item.activity}) a ${item.city} e desideriamo presentarvi il servizio di pulizia professionale di prossimità della Rete Firenze Pulizie (https://puliziefiorentine.it).\n\nGrazie a squadre distribuite in ogni quartiere di Firenze (inclusa ZTL Centro Storico), garantiamo:\n- Interventi rapidi senza addebiti di trasferta chilometrica;\n- Checklist digitale di sanificazione e prove fotografiche fine intervento;\n- Sostituzione garantita in 60 minuti in caso di urgenze o imprevisti.\n\nPotete simulare subito il costo sul nostro calcolatore online e bloccare la tariffa di zona:\n👉 https://puliziefiorentine.it/pulizie-commerciali.html#calcolatore-b2b\n\nUn cordiale saluto,\nCoordinamento Operativo — Rete Firenze Pulizie\nhttps://puliziefiorentine.it`;
+    } else {
+      subjEl.value = `Ottimizzazione Canone Pulizie Uffici a Firenze (Zero Costi Trasferta) - ${item.name}`;
+      bodyEl.value = `Alla cortese attenzione della Direzione di ${item.name},\n\ncon la presente vi sottoponiamo il modello operativo di Firenze Pulizie (https://puliziefiorentine.it), la rete di imprese di pulizia con copertura di prossimità su tutti i quartieri di ${item.city}.\n\nAssegnando la vostra sede alla squadra già operativa nel vostro isolato:\n- Tagliamo del 100% i costi di trasferta sul canone mensile;\n- Garantiamo interventi in fascia pre-apertura (06:00-08:30) o serale con referto fotografico certificato;\n- Offriamo conformità integrale DURC, D.Lgs. 81/08 e polizza RCT.\n\nCalcolate in tempo reale il risparmio per la vostra metratura sul nostro simulatore B2B:\n👉 https://puliziefiorentine.it/pulizie-commerciali.html#calcolatore-b2b\n\nCordiali saluti,\nDirezione Commerciale B2B — Rete Firenze Pulizie\nhttps://puliziefiorentine.it`;
+    }
+  }
+
+  function copyPitchToClipboard() {
+    const subj = document.getElementById('pitchSubject').value;
+    const body = document.getElementById('pitchBody').value;
+    navigator.clipboard.writeText(`OGGETTO: ${subj}\n\n${body}`);
+    if (STATE.selectedProspectForPitch) {
+      STATE.selectedProspectForPitch.outboundStatus = 'CONTATTATO_PEC';
+      saveScrapedToStorage();
+      renderScrapedTable();
+    }
+    alert('✅ Testo dell\'offerta copiato negli appunti! Stato azienda aggiornato a "Proposta Inviata".');
+  }
+
+  function sendPitchMailto() {
+    const email = document.getElementById('pitchRecipientEmail').value.trim();
+    const subj = encodeURIComponent(document.getElementById('pitchSubject').value);
+    const body = encodeURIComponent(document.getElementById('pitchBody').value);
+    if (STATE.selectedProspectForPitch) {
+      if (email) STATE.selectedProspectForPitch.email = email;
+      STATE.selectedProspectForPitch.outboundStatus = 'CONTATTATO_PEC';
+      saveScrapedToStorage();
+      renderScrapedTable();
+    }
+    window.location.href = `mailto:${email}?subject=${subj}&body=${body}`;
+  }
+
+  function openAddManualProspectModal() {
+    document.getElementById('manualProspectTitle').textContent = 'Aggiungi Nuova Azienda Target';
+    document.getElementById('editProspectId').value = '';
+    document.getElementById('mpName').value = '';
+    document.getElementById('mpCity').value = 'Firenze (FI)';
+    document.getElementById('mpLegalForm').value = 'S.R.L.';
+    document.getElementById('mpActivity').value = '68.32 - Amministrazione di condomini';
+    document.getElementById('mpEmail').value = '';
+    document.getElementById('mpPhone').value = '';
+    document.getElementById('modalManualProspect').classList.add('active');
+  }
+
+  function openEditProspectModal(id) {
+    const item = STATE.scrapedCompanies.find(c => c.id === id);
+    if (!item) return;
+    document.getElementById('manualProspectTitle').textContent = `Modifica Dati: ${item.name}`;
+    document.getElementById('editProspectId').value = item.id;
+    document.getElementById('mpName').value = item.name;
+    document.getElementById('mpCity').value = item.city;
+    document.getElementById('mpLegalForm').value = item.legalForm;
+    document.getElementById('mpActivity').value = item.activity;
+    document.getElementById('mpEmail').value = item.email || '';
+    document.getElementById('mpPhone').value = item.phone || '';
+    document.getElementById('modalManualProspect').classList.add('active');
+  }
+
+  function saveManualProspect() {
+    const id = document.getElementById('editProspectId').value;
+    const name = document.getElementById('mpName').value.trim();
+    if (!name) {
+      alert('Inserisci la denominazione dell\'azienda.');
+      return;
+    }
+
+    if (id) {
+      const existing = STATE.scrapedCompanies.find(c => c.id === id);
+      if (existing) {
+        existing.name = name;
+        existing.city = document.getElementById('mpCity').value.trim() || 'Firenze (FI)';
+        existing.legalForm = document.getElementById('mpLegalForm').value.trim() || 'Società';
+        existing.activity = document.getElementById('mpActivity').value.trim();
+        existing.email = document.getElementById('mpEmail').value.trim();
+        existing.phone = document.getElementById('mpPhone').value.trim();
+      }
+    } else {
+      STATE.scrapedCompanies.unshift({
+        id: 'MAN-' + Date.now(),
+        name,
+        hqType: 'Sede Legale',
+        city: document.getElementById('mpCity').value.trim() || 'Firenze (FI)',
+        legalForm: document.getElementById('mpLegalForm').value.trim() || 'Società',
+        activity: document.getElementById('mpActivity').value.trim() || 'Amministrazione Condomini / Uffici',
+        regStatus: 'Registrata',
+        email: document.getElementById('mpEmail').value.trim(),
+        phone: document.getElementById('mpPhone').value.trim(),
+        category: 'AMMINISTRATORE_CONDOMINIO',
+        outboundStatus: 'DA_CONTATTARE',
+        extractedAt: new Date().toLocaleDateString('it-IT')
+      });
+    }
+
+    saveScrapedToStorage();
+    renderKPIs();
+    renderScrapedTable();
+    closeModal('modalManualProspect');
+  }
+
+  function convertScrapedToLead(id) {
+    const item = STATE.scrapedCompanies.find(c => c.id === id);
+    if (!item) return;
+
+    const isCondo = /condomin|68\.32/i.test(item.activity);
+    const newLeadCode = `LEAD-2026-RI-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newLead = {
+      id: 'L-RI-' + Date.now(),
+      code: newLeadCode,
+      name: item.name,
+      contact: item.phone || item.email || 'Contatto da Registro Imprese',
+      phone: item.phone || '',
+      email: item.email || 'da-verificare@pec.it',
+      sector: isCondo ? 'CONDOMINIO' : 'COMMERCIALE',
+      customer_type: isCondo ? 'AMMINISTRATORE' : 'AZIENDA',
+      zone_id: 'FI-CENTRO',
+      zone_name: item.city,
+      address: `${item.hqType} - ${item.city}`,
+      estimated_offer: isCondo
+        ? '€ 260/mese (Convenzione Amministratori -15%)'
+        : '€ 220/mese (Tariffa B2B Prossimità)',
+      offer_status: 'DA_INVIARE',
+      details: `[Lead Outbound Registro Imprese] Attività: ${item.activity} (${item.legalForm}). Richiesto sopralluogo commerciale.`,
+      status: 'NUOVA',
+      assigned_company_id: null,
+      created_at: new Date().toLocaleString('it-IT')
+    };
+
+    STATE.leads.unshift(newLead);
+    item.outboundStatus = 'CONVERTITO';
+    saveScrapedToStorage();
+    renderKPIs();
+    renderPendingTable();
+    renderAllLeadsTable();
+    renderScrapedTable();
+
+    alert(`🎉 "${item.name}" convertita nel preventivo ${newLeadCode}!\nOra puoi visionare l'offerta o assegnarla a un'impresa partner nella scheda Panoramica.`);
+    switchToTab('tab-overview');
   }
 
   // RENDERING TABELLA RICHIESTE DA ASSEGNARE (OVERVIEW)
@@ -616,7 +1550,7 @@
     });
 
     if (pendingLeads.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 32px; color: var(--text-light);">
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 32px; color: var(--text-light);">
         🎉 Nessun preventivo in attesa! Tutte le richieste sono state assegnate alle squadre di prossimità.
       </td></tr>`;
       return;
@@ -624,25 +1558,40 @@
 
     tbody.innerHTML = pendingLeads.map(l => {
       const sectorBadgeClass = l.sector === 'COMMERCIALE' ? 'sector-comm' : (l.sector === 'CONDOMINIO' ? 'sector-condo' : 'sector-priv');
+      const offerText = l.estimated_offer || '€ 220/mese (Da confermare)';
+      const offerStateBadge = l.offer_status === 'OFFERTA_INVIATA'
+        ? '<span style="font-size: 0.7rem; color: #0284c7; font-weight: 700;">📨 Offerta Inviata</span>'
+        : (l.offer_status === 'APPROVATA'
+            ? '<span style="font-size: 0.7rem; color: #059669; font-weight: 700;">✅ Approvata</span>'
+            : '<span style="font-size: 0.7rem; color: #d97706; font-weight: 700;">⏳ Offerta da Inviare</span>');
+
       return `
         <tr>
           <td><strong style="font-family: monospace; color: var(--brand-navy-900);">${l.code}</strong><br><small class="text-muted">${l.created_at}</small></td>
           <td>
             <strong>${l.name}</strong><br>
-            <small style="color: var(--text-muted);">${l.contact}</small>
+            <small style="color: var(--text-muted);">${l.contact}</small><br>
+            <small style="color: var(--brand-sky-600); font-weight: 600;">${l.email || ''}</small>
           </td>
           <td><span class="badge-sector ${sectorBadgeClass}">${l.sector}</span></td>
           <td>
             <div class="zone-tag">📍 ${l.zone_name}</div>
             <small class="text-muted">${l.address}</small>
           </td>
-          <td style="max-width: 280px; font-size: 0.82rem; line-height: 1.4;">
+          <td style="max-width: 240px; font-size: 0.81rem; line-height: 1.38;">
             ${l.details}
           </td>
+          <td>
+            <strong style="color: #065f46; font-size: 0.86rem;">${offerText}</strong><br>
+            ${offerStateBadge}
+          </td>
           <td><span class="badge-status status-nuova">NUOVA</span></td>
-          <td style="text-align: right;">
-            <button class="btn btn-primary btn-sm" onclick="openAssignModal('${l.id}')">
-              ⚡ Assegna a Impresa
+          <td style="text-align: right; white-space: nowrap;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="openOfferModal('${l.id}')" style="margin-right: 4px;" title="Visiona dettagli e invia preventivo al cliente">
+              📋 Visiona &amp; Offerta
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="openAssignModal('${l.id}')">
+              ⚡ Assegna
             </button>
           </td>
         </tr>
@@ -703,18 +1652,27 @@
     tbody.innerHTML = filtered.map(l => {
       const company = l.assigned_company_id ? (STATE.companies.find(c => c.id === l.assigned_company_id)?.name || 'Assegnata') : '<span class="text-muted">Da Assegnare</span>';
       const statusClass = l.status === 'NUOVA' ? 'status-nuova' : (l.status === 'ASSEGNATA' ? 'status-assegnata' : 'status-in-corso');
+      const offerText = l.estimated_offer || '€ 220/mese';
       return `
         <tr>
           <td><strong style="font-family: monospace;">${l.code}</strong></td>
           <td><small class="text-muted">${l.created_at}</small></td>
-          <td><strong>${l.name}</strong><br><small class="text-muted">${l.email}</small></td>
+          <td>
+            <strong>${l.name}</strong><br>
+            <small class="text-muted">${l.contact || ''}</small><br>
+            <small style="color: var(--brand-sky-600);">${l.email || ''}</small>
+          </td>
           <td><span class="badge-sector sector-comm">${l.sector}</span></td>
-          <td>📍 ${l.zone_name}</td>
-          <td><small>${l.details.slice(0, 50)}...</small></td>
+          <td>📍 ${l.zone_name}<br><small class="text-muted">${l.address}</small></td>
+          <td>
+            <strong style="color: #065f46; font-size: 0.85rem;">${offerText}</strong><br>
+            <small class="text-muted">${l.details.slice(0, 55)}...</small>
+          </td>
           <td><strong>${company}</strong></td>
           <td><span class="badge-status ${statusClass}">${l.status}</span></td>
-          <td>
-            ${l.status === 'NUOVA' ? `<button class="btn btn-secondary btn-sm" onclick="openAssignModal('${l.id}')">Assegna</button>` : `<span class="text-muted" style="font-size: 0.8rem;">In gestione</span>`}
+          <td style="text-align: right; white-space: nowrap;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="openOfferModal('${l.id}')">📋 Offerta</button>
+            ${l.status === 'NUOVA' ? `<button type="button" class="btn btn-primary btn-sm" onclick="openAssignModal('${l.id}')">⚡ Assegna</button>` : ''}
           </td>
         </tr>
       `;
@@ -723,6 +1681,125 @@
 
   function filterAllLeadsTable() {
     renderAllLeadsTable();
+  }
+
+  // MODALE VISIONA RICHIESTA & FORMULA OFFERTA COMMERCIALE AL CLIENTE
+  let currentOfferLead = null;
+
+  function openOfferModal(leadId) {
+    const lead = STATE.leads.find(l => l.id === leadId);
+    if (!lead) return;
+    currentOfferLead = lead;
+
+    document.getElementById('offerModalTitle').textContent = `📋 Dossier & Offerta per ${lead.code}`;
+    document.getElementById('offerLeadSummary').innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div><strong>Cliente / Richiedente:</strong> ${lead.name}</div>
+        <div><strong>Settore:</strong> <span class="badge-sector sector-comm">${lead.sector}</span></div>
+        <div><strong>Recapito Telefonico:</strong> <a href="tel:${(lead.phone || lead.contact || '').replace(/[^0-9+]/g, '')}" style="color: var(--brand-sky-600); font-weight: 700;">📞 ${lead.contact}</a></div>
+        <div><strong>Email Cliente:</strong> <a href="mailto:${lead.email}" style="color: var(--brand-sky-600); font-weight: 700;">✉️ ${lead.email}</a></div>
+        <div><strong>Quartiere Firenze:</strong> 📍 ${lead.zone_name}</div>
+        <div><strong>Indirizzo Immobile:</strong> ${lead.address}</div>
+      </div>
+      <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border-light);">
+        <strong>Dettagli Richiesta &amp; Note Calcolatore:</strong><br>
+        <span style="color: var(--brand-navy-900);">${lead.details}</span>
+      </div>
+    `;
+
+    document.getElementById('offerPriceInput').value = lead.estimated_offer || '€ 240/mese (Tariffa Prossimità Zero-Trasferta)';
+    document.getElementById('offerStatusSelect').value = lead.offer_status || 'DA_INVIARE';
+
+    refreshOfferMessagePreview();
+    document.getElementById('modalInspectOffer').classList.add('active');
+  }
+
+  function refreshOfferMessagePreview() {
+    if (!currentOfferLead) return;
+    const priceText = document.getElementById('offerPriceInput').value.trim();
+    const l = currentOfferLead;
+
+    document.getElementById('offerMessageText').value =
+`Gentile ${l.name},
+
+in riferimento alla Sua richiesta di preventivo (${l.code}) per l'immobile situato in zona ${l.zone_name} (${l.address}), siamo lieti di trasmetterLe l'offerta riservata di Pulizie Fiorentine — Roby&Lia:
+
+📌 RIEPILOGO INTERVENTO RICHIESTO:
+${l.details}
+
+💰 OFFERTA ECONOMICA RISERVATA (SQUADRA DI QUARTIERE):
+👉 ${priceText}
+(Tariffa comprensiva di Sconto Prossimità con € 0 di spese di trasferta, prodotti certificati CAM/HACCP, DURC regolare, assicurazione RCT € 2.500.000 e Report Fotografico GPS di fine intervento).
+
+Per confermare il sopralluogo gratuito di avvio con il caposquadra di zona, può rispondere direttamente a questo messaggio o contattarci al 347-370.51.89.
+
+Cordiali saluti,
+Pulizie Fiorentine — Roby&Lia
+Tel / WhatsApp: 347-370.51.89
+Web: https://puliziefiorentine.it`;
+  }
+
+  function saveOfferStateInternal(newStatus) {
+    if (!currentOfferLead) return;
+    currentOfferLead.estimated_offer = document.getElementById('offerPriceInput').value.trim();
+    currentOfferLead.offer_status = newStatus || document.getElementById('offerStatusSelect').value;
+
+    // Aggiorna anche l'eventuale copia nel bridge localStorage
+    try {
+      const raw = localStorage.getItem('fp_incoming_leads_v1');
+      if (raw) {
+        const list = JSON.parse(raw);
+        const match = list.find(item => item.code === currentOfferLead.code);
+        if (match) {
+          match.estimated_offer = currentOfferLead.estimated_offer;
+          match.offer_status = currentOfferLead.offer_status;
+          localStorage.setItem('fp_incoming_leads_v1', JSON.stringify(list));
+        }
+      }
+    } catch (e) {}
+
+    renderPendingTable();
+    renderAllLeadsTable();
+  }
+
+  function copyOfferToClipboard() {
+    const msg = document.getElementById('offerMessageText').value;
+    navigator.clipboard.writeText(msg);
+    document.getElementById('offerStatusSelect').value = 'OFFERTA_INVIATA';
+    saveOfferStateInternal('OFFERTA_INVIATA');
+    alert('✅ Preventivo copiato negli appunti! Stato aggiornato a "Offerta Inviata".');
+  }
+
+  function sendOfferWhatsApp() {
+    if (!currentOfferLead) return;
+    const msg = encodeURIComponent(document.getElementById('offerMessageText').value);
+    const rawPhone = (currentOfferLead.phone || currentOfferLead.contact || '').replace(/[^0-9]/g, '');
+    const waNumber = rawPhone.startsWith('39') ? rawPhone : (rawPhone ? `39${rawPhone}` : '');
+    document.getElementById('offerStatusSelect').value = 'OFFERTA_INVIATA';
+    saveOfferStateInternal('OFFERTA_INVIATA');
+    window.open(`https://wa.me/${waNumber}?text=${msg}`, '_blank');
+  }
+
+  function sendOfferEmail() {
+    if (!currentOfferLead) return;
+    const subj = encodeURIComponent(`Offerta Ufficiale Pulizie Fiorentine — Pratica ${currentOfferLead.code} (${currentOfferLead.zone_name})`);
+    const body = encodeURIComponent(document.getElementById('offerMessageText').value);
+    document.getElementById('offerStatusSelect').value = 'OFFERTA_INVIATA';
+    saveOfferStateInternal('OFFERTA_INVIATA');
+    window.location.href = `mailto:${currentOfferLead.email || ''}?subject=${subj}&body=${body}`;
+  }
+
+  function saveOfferChangesAndClose() {
+    saveOfferStateInternal();
+    closeModal('modalInspectOffer');
+  }
+
+  function proceedFromOfferToAssign() {
+    if (!currentOfferLead) return;
+    const id = currentOfferLead.id;
+    saveOfferStateInternal();
+    closeModal('modalInspectOffer');
+    openAssignModal(id);
   }
 
   // RENDERING IMPRESE PARTNER (TAB COMPANIES)
@@ -794,14 +1871,13 @@
         <div><strong>Cliente:</strong> ${lead.name}</div>
         <div><strong>Settore:</strong> ${lead.sector}</div>
         <div><strong>Zona:</strong> 📍 ${lead.zone_name}</div>
-        <div><strong>Indirizzo:</strong> ${lead.address}</div>
+        <div><strong>Offerta Stimata:</strong> <strong style="color: #065f46;">${lead.estimated_offer || '€ 220/mese'}</strong></div>
       </div>
       <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-light);">
         <strong>Richiesta:</strong> ${lead.details}
       </div>
     `;
 
-    // Filtra e ordina imprese consigliate per prossimità
     const container = document.getElementById('modalCompanyOptions');
     const eligibleCompanies = STATE.companies.filter(c => c.status === 'ATTIVA');
 
@@ -840,16 +1916,30 @@
     lead.status = 'ASSEGNATA';
     lead.assigned_company_id = companyId;
 
-    // Sincronizzazione Supabase Live
-    fetch(`https://tvgvcphkqdhtjwfjysyv.supabase.co/rest/v1/leads?lead_code=eq.${lead.code}`, {
+    // Aggiorna anche eventuale copia nel bridge locale
+    try {
+      const raw = localStorage.getItem('fp_incoming_leads_v1');
+      if (raw) {
+        const list = JSON.parse(raw);
+        const match = list.find(item => item.code === lead.code);
+        if (match) {
+          match.status = 'ASSEGNATA';
+          match.assigned_company_id = companyId;
+          localStorage.setItem('fp_incoming_leads_v1', JSON.stringify(list));
+        }
+      }
+    } catch (e) {}
+
+    // Sincronizzazione tramite Gateway interno protetto
+    fetch('/api/leads', {
       method: 'PATCH',
-      headers: {
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3ZjcGhrcWRodGp3Zmp5c3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MDY2MDksImV4cCI6MjEwNjk4MjYwOX0.7yhLjkaV3XKcRsZquABvhSY9TEgp3IbC5vHYBBXJUb0',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3ZjcGhrcWRodGp3Zmp5c3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MDY2MDksImV4cCI6MjEwNjk4MjYwOX0.7yhLjkaV3XKcRsZquABvhSY9TEgp3IbC5vHYBBXJUb0',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ assigned_company_id: companyId, status: 'ASSEGNATA' })
-    }).catch(err => console.log('Sincronizzazione Supabase:', err));
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        lead_code: lead.code,
+        assigned_company_id: companyId,
+        status: 'ASSEGNATA'
+      })
+    }).catch(() => {});
 
     closeModal('modalAssignLead');
     alert(`Preventivo ${lead.code} assegnato con successo a "${company.name}"!\nL'impresa riceverà notifica e prenderà in carico il sopralluogo entro 2 ore.`);
@@ -859,34 +1949,67 @@
     renderAllLeadsTable();
   }
 
-  async function loadSupabaseLiveLeads() {
+  async function syncIncomingLeadsAndPartners() {
+    // 1. Carica immediatamente richieste e candidature dal bridge locale del browser
     try {
-      const res = await fetch('https://tvgvcphkqdhtjwfjysyv.supabase.co/rest/v1/leads?select=*&order=created_at.desc', {
-        headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3ZjcGhrcWRodGp3Zmp5c3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MDY2MDksImV4cCI6MjEwNjk4MjYwOX0.7yhLjkaV3XKcRsZquABvhSY9TEgp3IbC5vHYBBXJUb0',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3ZjcGhrcWRodGp3Zmp5c3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MDY2MDksImV4cCI6MjEwNjk4MjYwOX0.7yhLjkaV3XKcRsZquABvhSY9TEgp3IbC5vHYBBXJUb0'
+      const localLeadsRaw = localStorage.getItem('fp_incoming_leads_v1');
+      if (localLeadsRaw) {
+        const localLeads = JSON.parse(localLeadsRaw);
+        if (Array.isArray(localLeads)) {
+          localLeads.forEach(item => {
+            if (!STATE.leads.some(l => l.code === item.code)) {
+              STATE.leads.unshift(item);
+            }
+          });
         }
-      });
+      }
+
+      const localPartnersRaw = localStorage.getItem('fp_incoming_partners_v1');
+      if (localPartnersRaw) {
+        const localPartners = JSON.parse(localPartnersRaw);
+        if (Array.isArray(localPartners)) {
+          localPartners.forEach(comp => {
+            if (!STATE.companies.some(c => c.piva === comp.piva || c.name === comp.name)) {
+              STATE.companies.push(comp);
+            }
+          });
+        }
+      }
+    } catch (e) {}
+
+    renderKPIs();
+    renderPendingTable();
+    renderAllLeadsTable();
+    renderCompaniesTable();
+
+    // 2. Sincronizza con il Gateway API interno (/api/leads)
+    try {
+      const res = await fetch('/api/leads');
       if (res.ok) {
-        const liveLeads = await res.json();
-        if (liveLeads && liveLeads.length > 0) {
-          liveLeads.forEach(item => {
+        const payload = await res.json();
+        const remoteLeads = payload.data || [];
+        if (Array.isArray(remoteLeads) && remoteLeads.length > 0) {
+          remoteLeads.forEach(item => {
             if (!STATE.leads.some(l => l.code === item.lead_code)) {
+              const offerMatch = (item.notes || '').match(/Offerta Stimata:\s*([^•]+)/i);
               STATE.leads.unshift({
-                id: item.id,
+                id: item.id || ('L-' + Date.now()),
                 code: item.lead_code,
-                name: item.full_name || 'Nuovo Richiedente',
+                name: item.full_name || 'Nuovo Richiedente Online',
                 contact: item.phone || item.email,
-                email: item.email,
+                phone: item.phone || '',
+                email: item.email || '',
                 sector: item.sector || 'COMMERCIALE',
                 customer_type: item.customer_type || 'AZIENDA',
-                zone_id: item.geographic_area_id || 'geo-fi-centro',
-                zone_name: 'Firenze (Dati Live Supabase)',
+                zone_id: item.geographic_area_id || 'FI-CENTRO',
+                zone_name: item.address || 'Firenze',
                 address: item.address || 'Firenze',
-                details: item.notes || 'Richiesta ricevuta online',
+                estimated_offer: offerMatch ? offerMatch[1].trim() : '€ 230/mese (Tariffa Prossimità)',
+                offer_status: 'DA_INVIARE',
+                details: item.notes || 'Richiesta preventivo online',
                 status: item.status || 'NUOVA',
                 assigned_company_id: item.assigned_company_id || null,
-                created_at: new Date(item.created_at).toLocaleString('it-IT')
+                created_at: item.created_at ? new Date(item.created_at).toLocaleString('it-IT') : new Date().toLocaleString('it-IT')
               });
             }
           });
@@ -896,9 +2019,16 @@
         }
       }
     } catch (e) {
-      console.log('Modalità offline Supabase:', e);
+      // Operatività locale garantita
     }
   }
+
+  // Ascolta in tempo reale nuovi preventivi inviati da altre schede del browser
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'fp_incoming_leads_v1' || e.key === 'fp_incoming_partners_v1') {
+      syncIncomingLeadsAndPartners();
+    }
+  });
 
   function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('active');
@@ -909,6 +2039,7 @@
   }
 
   // Espone funzioni globali per gli attributi onclick nell'HTML
+  window.switchToTab = switchToTab;
   window.filterPendingTable = filterPendingTable;
   window.filterAllLeadsTable = filterAllLeadsTable;
   window.openAssignModal = openAssignModal;
@@ -916,938 +2047,32 @@
   window.approveCompany = approveCompany;
   window.closeModal = closeModal;
   window.openNewLeadModal = openNewLeadModal;
+  window.parseAndImportInput = parseAndImportInput;
+  window.handleFileUpload = handleFileUpload;
+  window.renderScrapedTable = renderScrapedTable;
+  window.changeScrapedStatus = changeScrapedStatus;
+  window.exportScrapedToCSV = exportScrapedToCSV;
+  window.clearScrapedDatabase = clearScrapedDatabase;
+  window.openPitchGenerator = openPitchGenerator;
+  window.updatePitchPreview = updatePitchPreview;
+  window.copyPitchToClipboard = copyPitchToClipboard;
+  window.sendPitchMailto = sendPitchMailto;
+  window.openAddManualProspectModal = openAddManualProspectModal;
+  window.openEditProspectModal = openEditProspectModal;
+  window.saveManualProspect = saveManualProspect;
+  window.convertScrapedToLead = convertScrapedToLead;
+  window.openOfferModal = openOfferModal;
+  window.refreshOfferMessagePreview = refreshOfferMessagePreview;
+  window.copyOfferToClipboard = copyOfferToClipboard;
+  window.sendOfferWhatsApp = sendOfferWhatsApp;
+  window.sendOfferEmail = sendOfferEmail;
+  window.saveOfferChangesAndClose = saveOfferChangesAndClose;
+  window.proceedFromOfferToAssign = proceedFromOfferToAssign;
 
   // AVVIO
   initDashboard();
-  loadSupabaseLiveLeads();
+  syncIncomingLeadsAndPartners();
 </script>
 
 </body>
 </html>
-=======
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Centrale Amministrativa Rete — FIRENZE PULIZIE</title>
-  <meta name="description" content="Cruscotto centrale di coordinamento della Rete Firenze Pulizie: gestione richieste, assegnazione di prossimità, accreditamento imprese e controllo SLA.">
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/dashboard.css">
-</head>
-<body>
-
-<div class="dashboard-layout">
-
-  <!-- SIDEBAR -->
-  <aside class="dash-sidebar">
-    <div class="dash-sidebar-header">
-      <a href="index.html" class="dash-brand">
-        <div class="dash-brand-icon">✨</div>
-        <div>FIRENZE <span style="color: var(--brand-sky-400);">PULIZIE</span></div>
-      </a>
-    </div>
-
-    <nav class="dash-sidebar-nav">
-      <div class="dash-nav-section-title">Coordinamento Rete</div>
-      <button type="button" class="dash-nav-item active" data-tab="tab-overview">
-        <span class="icon">📊</span> Panoramica
-      </button>
-      <button type="button" class="dash-nav-item" data-tab="tab-leads">
-        <span class="icon">📥</span> Richieste & Preventivi
-        <span class="badge-count" id="badgePendingLeads">3</span>
-      </button>
-      <button type="button" class="dash-nav-item" data-tab="tab-companies">
-        <span class="icon">🏢</span> Imprese Partner
-        <span class="badge-count" style="background: var(--brand-amber-500); color: white;" id="badgePendingCompanies">1</span>
-      </button>
-      <button type="button" class="dash-nav-item" data-tab="tab-jobs">
-        <span class="icon">🧹</span> Cantieri Live Oggi
-      </button>
-
-      <div class="dash-nav-section-title">Configurazione Territorio</div>
-      <button type="button" class="dash-nav-item" data-tab="tab-zones">
-        <span class="icon">📍</span> Zone & Quartieri Firenze
-      </button>
-      <a href="richiedi-preventivo.html" target="_blank" class="dash-nav-item">
-        <span class="icon">🔗</span> Form Preventivi Pubblico
-      </a>
-      <a href="partner.html" target="_blank" class="dash-nav-item">
-        <span class="icon">🤝</span> Form Candidatura Partner
-      </a>
-    </nav>
-
-    <div class="dash-sidebar-footer">
-      <div class="user-snippet">
-        <div class="user-avatar">AD</div>
-        <div class="user-meta">
-          <div class="user-name" id="adminSidebarName">Amministrazione Rete</div>
-          <div class="user-role" id="adminSidebarEmail">admin@firenzepulizie.it</div>
-        </div>
-        <button type="button" id="btnLogoutAdmin" title="Disconnetti" style="background: none; border: none; cursor: pointer; color: #f87171; font-size: 1.15rem; margin-left: auto;">🚪</button>
-      </div>
-    </div>
-  </aside>
-
-  <!-- MAIN AREA -->
-  <main class="dash-main">
-
-    <!-- TOPBAR -->
-    <header class="dash-topbar">
-      <div class="dash-topbar-left">
-        <h1 class="dash-page-title" id="pageTitle">Panoramica Operativa Rete</h1>
-      </div>
-      <div class="dash-topbar-right">
-        <div class="network-live-pill">
-          <span class="pulse-dot"></span>
-          <span>Rete Attiva • 13 Zone Monitorate</span>
-        </div>
-        <button class="btn btn-primary btn-sm" id="btnQuickLead" onclick="openNewLeadModal()">
-          + Nuovo Preventivo
-        </button>
-      </div>
-    </header>
-
-    <!-- BODY -->
-    <div class="dash-body">
-
-      <!-- KPI METRICS -->
-      <section class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-head">
-            <span class="kpi-label">Nuove Richieste</span>
-            <div class="kpi-icon sky">📥</div>
-          </div>
-          <div class="kpi-value" id="kpiNewLeads">3</div>
-          <div class="kpi-sub" style="color: var(--brand-amber-500); font-weight: 700;">
-            ⚠️ In attesa di assegnazione territoriale
-          </div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-head">
-            <span class="kpi-label">Imprese Partner</span>
-            <div class="kpi-icon emerald">🏢</div>
-          </div>
-          <div class="kpi-value" id="kpiActiveCompanies">4</div>
-          <div class="kpi-sub">
-            <span>+1 candidatura P.IVA in verifica DURC</span>
-          </div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-head">
-            <span class="kpi-label">Cantieri Oggi</span>
-            <div class="kpi-icon violet">🧹</div>
-          </div>
-          <div class="kpi-value" id="kpiActiveJobs">8</div>
-          <div class="kpi-sub" style="color: var(--brand-emerald-600); font-weight: 700;">
-            ✓ 100% check-in orari rispettati
-          </div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-head">
-            <span class="kpi-label">Tempo Medio Assegnazione</span>
-            <div class="kpi-icon amber">⚡</div>
-          </div>
-          <div class="kpi-value">18 min</div>
-          <div class="kpi-sub">
-            <span>SLA obiettivo: &lt; 45 minuti</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 1: PANORAMICA & RICHIESTE DA SMISTARE -->
-      <section id="section-overview" class="tab-content-panel active">
-        
-        <!-- CARD: RICHIESTE DA SMISTARE (PROSSIMITÀ) -->
-        <div class="content-card">
-          <div class="content-card-header">
-            <div class="card-title-group">
-              <h2>Preventivi in Attesa di Assegnazione Territoriale</h2>
-              <p>Assegna tempestivamente la richiesta all'impresa più vicina per quartiere</p>
-            </div>
-            <div class="toolbar-actions">
-              <div class="search-input-wrap">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchLeadsOverview" placeholder="Cerca cliente, zona, codice..." oninput="filterPendingTable()">
-              </div>
-              <select id="filterZoneOverview" class="select-filter" onchange="filterPendingTable()">
-                <option value="ALL">Tutti i Quartieri</option>
-                <option value="FI-CENTRO">Centro Storico (ZTL)</option>
-                <option value="FI-NOVOLI">Novoli / San Donato</option>
-                <option value="FI-RIFREDI">Rifredi / Careggi</option>
-                <option value="FI-CAMPO-MARTE">Campo di Marte</option>
-                <option value="COM-SCANDICCI">Scandicci</option>
-                <option value="COM-SESTO">Sesto Fiorentino</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="custom-table" id="tablePendingLeads">
-              <thead>
-                <tr>
-                  <th>Codice Lead</th>
-                  <th>Cliente / Richiedente</th>
-                  <th>Settore</th>
-                  <th>Quartiere / Indirizzo</th>
-                  <th>Dettaglio Lavoro</th>
-                  <th>Stato</th>
-                  <th style="text-align: right;">Azione Assegnazione</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyPendingLeads">
-                <!-- Popolato da JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- CARD: MONITORAGGIO CANTIERI DEL GIORNO -->
-        <div class="content-card">
-          <div class="content-card-header">
-            <div class="card-title-group">
-              <h2>Stato Cantieri di Oggi a Firenze</h2>
-              <p>Tracciamento live orari squadre, checklist e conformità operativa</p>
-            </div>
-            <span class="badge-status status-in-corso">8 Squadre in Movimento</span>
-          </div>
-
-          <div class="table-responsive">
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th>Cantiere / Cliente</th>
-                  <th>Quartiere</th>
-                  <th>Impresa Assegnataria</th>
-                  <th>Squadra Operativa</th>
-                  <th>Orario Check-In</th>
-                  <th>Checklist Digitale</th>
-                  <th>Stato</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyJobsLive">
-                <!-- Popolato da JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- TAB 2: GESTIONE COMPLETA RICHIESTE -->
-      <section id="section-leads" class="tab-content-panel" style="display: none;">
-        <div class="content-card">
-          <div class="content-card-header">
-            <div class="card-title-group">
-              <h2>Archivio Completo Richieste e Preventivi</h2>
-              <p>Tutti i preventivi ricevuti dalla rete con storico stati e assegnazioni</p>
-            </div>
-            <div class="toolbar-actions">
-              <div class="search-input-wrap">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchAllLeads" placeholder="Cerca..." oninput="filterAllLeadsTable()">
-              </div>
-              <select id="filterStatusLeads" class="select-filter" onchange="filterAllLeadsTable()">
-                <option value="ALL">Tutti gli Stati</option>
-                <option value="NUOVA">Nuova (Da Assegnare)</option>
-                <option value="ASSEGNATA">Assegnata a Impresa</option>
-                <option value="IN_CORSO">Cantiere in Corso</option>
-                <option value="COMPLETATA">Completata</option>
-              </select>
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th>Codice</th>
-                  <th>Data Richiesta</th>
-                  <th>Cliente</th>
-                  <th>Settore</th>
-                  <th>Quartiere</th>
-                  <th>Metratura / Tipo</th>
-                  <th>Impresa Incaricata</th>
-                  <th>Stato</th>
-                  <th>Azioni</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyAllLeads">
-                <!-- Popolato da JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 3: IMPRESE PARTNER & ACCREDITAMENTO -->
-      <section id="section-companies" class="tab-content-panel" style="display: none;">
-        <div class="content-card">
-          <div class="content-card-header">
-            <div class="card-title-group">
-              <h2>Rete Imprese di Pulizia Partner Accreditata</h2>
-              <p>Verifica documentale (P.IVA/DURC), zone coperte, squadre e rating qualitativo</p>
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th>Impresa Partner</th>
-                  <th>Sede Operativa</th>
-                  <th>Zone / Quartieri Coperti</th>
-                  <th>Squadre</th>
-                  <th>Qualità SLA</th>
-                  <th>Stato Accreditamento</th>
-                  <th style="text-align: right;">Azioni</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyCompanies">
-                <!-- Popolato da JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 4: ZONE DI FIRENZE -->
-      <section id="section-zones" class="tab-content-panel" style="display: none;">
-        <div class="content-card">
-          <div class="content-card-header">
-            <div class="card-title-group">
-              <h2>Mappa Territoriale di Firenze e Cintura</h2>
-              <p>Copertura quartieri e comuni con assegnazione di prossimità</p>
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th>Codice Zona</th>
-                  <th>Nome Quartiere / Area</th>
-                  <th>CAP</th>
-                  <th>Area Strategica</th>
-                  <th>Imprese Assegnatarie Primarie</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyZones">
-                <!-- Popolato da JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-</div>
-
-<!-- MODAL ASSEGNAZIONE PREVENTIVO A IMPRESA -->
-<div class="modal-backdrop" id="modalAssignLead">
-  <div class="modal-card">
-    <div class="modal-card-header">
-      <h3 id="modalLeadTitle">Assegna Preventivo a Impresa di Prossimità</h3>
-      <button class="btn-close-modal" onclick="closeModal('modalAssignLead')">&times;</button>
-    </div>
-    <div class="modal-card-body">
-      <div id="modalLeadDetails" style="background: var(--bg-main); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.88rem;">
-        <!-- Dettagli lead -->
-      </div>
-
-      <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; color: var(--brand-navy-900);">
-        Imprese Consigliate per questo Quartiere:
-      </h4>
-      <div id="modalCompanyOptions" style="display: flex; flex-direction: column; gap: 10px;">
-        <!-- Radio/Cards imprese con score di prossimità -->
-      </div>
-    </div>
-    <div class="modal-card-footer">
-      <button class="btn btn-secondary" onclick="closeModal('modalAssignLead')">Annulla</button>
-      <button class="btn btn-primary" id="btnConfirmAssign" onclick="confirmAssignment()">
-        Conferma e Assegna Incarico
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- JAVASCRIPT GESTIONE STATO E INTERAZIONI -->
-<script type="module">
-  import { enforceRoleGuard, logoutUser, getSharedPlatformData } from './js/auth-guard.js';
-
-  // BLOCCO RIGOROSO ACCESSO: Solo l'Amministratore Totale può accedere a questo cruscotto
-  const session = enforceRoleGuard(['ADMIN_RETE']);
-  if (!session) throw new Error('Accesso riservato all\'Amministratore Totale del Portale');
-
-  document.getElementById('adminSidebarName').textContent = session.name || 'Amministrazione Rete';
-  document.getElementById('adminSidebarEmail').textContent = session.email || 'admin@firenzepulizie.it';
-  document.getElementById('btnLogoutAdmin').addEventListener('click', () => logoutUser());
-
-  // DATI STATO LOCALE PIATTAFORMA
-  const STATE = {
-    leads: [
-      {
-        id: 'L01',
-        code: 'LEAD-2026-FI-4821',
-        name: 'Studio Legale Rossi & Partners',
-        contact: 'Avv. Rossi (333 4567890)',
-        email: 'info@rossilex.it',
-        sector: 'COMMERCIALE',
-        customer_type: 'AZIENDA',
-        zone_id: 'FI-CENTRO',
-        zone_name: 'Centro Storico (ZTL, Tornabuoni)',
-        address: 'Via de\' Tornabuoni 14',
-        details: 'Uffici 240 mq, 3 bagni, pavimenti cotto e parquet. Pulizia trisettimanale serale.',
-        status: 'NUOVA',
-        assigned_company_id: null,
-        created_at: '2026-10-07 18:20'
-      },
-      {
-        id: 'L02',
-        code: 'LEAD-2026-FI-4822',
-        name: 'Condominio Parco San Donato',
-        contact: 'Dott.ssa Bianchi (Amministratore)',
-        email: 'studiobianchi.amm@gmail.com',
-        sector: 'CONDOMINIO',
-        customer_type: 'AMMINISTRATORE',
-        zone_id: 'FI-NOVOLI',
-        zone_name: 'Novoli / San Donato',
-        address: 'Via di Novoli 42',
-        details: '2 scale, 6 piani ciascuna, vetrate ingresso, ascensori, garage piano -1. Frequenza bisettimanale.',
-        status: 'NUOVA',
-        assigned_company_id: null,
-        created_at: '2026-10-07 19:05'
-      },
-      {
-        id: 'L03',
-        code: 'LEAD-2026-FI-4823',
-        name: 'Famiglia Martelli',
-        contact: 'Elena Martelli (347 1122334)',
-        email: 'elena.martelli@yahoo.it',
-        sector: 'PRIVATO',
-        customer_type: 'PRIVATO',
-        zone_id: 'FI-RIFREDI',
-        zone_name: 'Rifredi / Careggi',
-        address: 'Via Taddeo Alderotti 28',
-        details: 'Appartamento 110 mq post-ristrutturazione (polvere calce, infissi, tapparelle, sgrosso profondo).',
-        status: 'NUOVA',
-        assigned_company_id: null,
-        created_at: '2026-10-07 20:15'
-      },
-      {
-        id: 'L04',
-        code: 'LEAD-2026-FI-4790',
-        name: 'Clinica Odontoiatrica Firenze Est',
-        contact: 'Dr. Nardi (055 654321)',
-        email: 'direzione@firenzeestdental.it',
-        sector: 'COMMERCIALE',
-        customer_type: 'AZIENDA',
-        zone_id: 'FI-CAMPO-MARTE',
-        zone_name: 'Campo di Marte',
-        address: 'Viale dei Mille 85',
-        details: 'Sanificazione giornaliera ambienti medici, sale attesa e sterilizzazione. 180 mq.',
-        status: 'ASSEGNATA',
-        assigned_company_id: 'C02',
-        created_at: '2026-10-06 14:10'
-      },
-      {
-        id: 'L05',
-        code: 'LEAD-2026-FI-4781',
-        name: 'Tech Hub Coworking Scandicci',
-        contact: 'Marco Bellini (338 9988776)',
-        email: 'hub@scandiccispaces.it',
-        sector: 'COMMERCIALE',
-        customer_type: 'AZIENDA',
-        zone_id: 'COM-SCANDICCI',
-        zone_name: 'Scandicci',
-        address: 'Via Pisana 310',
-        details: 'Open space 450 mq, cucina comune, sale riunioni. Pulizia giornaliera prima delle 08:00.',
-        status: 'IN_CORSO',
-        assigned_company_id: 'C03',
-        created_at: '2026-10-05 09:30'
-      }
-    ],
-
-    companies: [
-      {
-        id: 'C01',
-        name: 'Clean Service Firenze Srl',
-        piva: 'IT06548920481',
-        base: 'Novoli / Via Baracca',
-        zones: ['FI-NOVOLI', 'FI-CENTRO', 'FI-RIFREDI'],
-        teams_count: 4,
-        rating: 4.9,
-        status: 'ATTIVA'
-      },
-      {
-        id: 'C02',
-        name: 'Toscana Pulizie & Sanificazioni',
-        piva: 'IT05891230485',
-        base: 'Campo di Marte / Coverciano',
-        zones: ['FI-CAMPO-MARTE', 'FI-GAVINANA', 'FI-CENTRO'],
-        teams_count: 3,
-        rating: 4.8,
-        status: 'ATTIVA'
-      },
-      {
-        id: 'C03',
-        name: 'Fiorentina Multiservizi Coop',
-        piva: 'IT07123980489',
-        base: 'Scandicci / Casellina',
-        zones: ['COM-SCANDICCI', 'FI-ISOLOTTO', 'COM-CAMPI'],
-        teams_count: 5,
-        rating: 4.9,
-        status: 'ATTIVA'
-      },
-      {
-        id: 'C04',
-        name: 'Rifredi EcoClean Sas',
-        piva: 'IT04455660482',
-        base: 'Rifredi / Dalmazia',
-        zones: ['FI-RIFREDI', 'COM-SESTO', 'FI-NOVOLI'],
-        teams_count: 2,
-        rating: 4.7,
-        status: 'ATTIVA'
-      },
-      {
-        id: 'C05',
-        name: 'Azzurra Pulizie Globali',
-        piva: 'IT08899110488',
-        base: 'Sesto Fiorentino',
-        zones: ['COM-SESTO', 'COM-CALENZANO', 'FI-RIFREDI'],
-        teams_count: 3,
-        rating: 5.0,
-        status: 'IN_VALUTAZIONE' // Candidatura dal form partner.html
-      }
-    ],
-
-    jobsLive: [
-      {
-        client: 'Tech Hub Coworking Scandicci',
-        zone: 'Scandicci',
-        company: 'Fiorentina Multiservizi Coop',
-        team: 'Squadra Bravo (Operatori: Luca M., Sara G.)',
-        checkin: '06:45',
-        checklist: '12 / 12 Spuntati (100%)',
-        status: 'COMPLETATA'
-      },
-      {
-        client: 'Condominio Viale Matteotti',
-        zone: 'Centro Storico / Piazza Libertà',
-        company: 'Clean Service Firenze Srl',
-        team: 'Squadra Alfa (Operatori: Marco T., Andrea B.)',
-        checkin: '07:30',
-        checklist: '8 / 10 Spuntati (In corso)',
-        status: 'IN_CORSO'
-      },
-      {
-        client: 'Clinica Odontoiatrica Firenze Est',
-        zone: 'Campo di Marte',
-        company: 'Toscana Pulizie & Sanificazioni',
-        team: 'Squadra Delta (Operatore: Giovanni P.)',
-        checkin: '08:00',
-        checklist: '15 / 15 Spuntati (100%)',
-        status: 'COMPLETATA'
-      }
-    ],
-
-    zones: [
-      { code: 'FI-CENTRO', name: 'Centro Storico (ZTL, Duomo, Tornabuoni, Santa Maria Novella)', cap: '50122 - 50123', area: 'Firenze Centro', default_co: 'Clean Service Firenze Srl' },
-      { code: 'FI-NOVOLI', name: 'Novoli, San Donato, Peretola, Piagge', cap: '50127', area: 'Firenze Ovest', default_co: 'Clean Service Firenze Srl' },
-      { code: 'FI-RIFREDI', name: 'Rifredi, Careggi, Piazza Dalmazia, Statuto', cap: '50134', area: 'Firenze Nord', default_co: 'Rifredi EcoClean Sas' },
-      { code: 'FI-CAMPO-MARTE', name: 'Campo di Marte, Coverciano, Le Cure', cap: '50137', area: 'Firenze Est', default_co: 'Toscana Pulizie & Sanificazioni' },
-      { code: 'FI-ISOLOTTO', name: 'Isolotto, Legnaia, Soffiano, Monticelli', cap: '50143', area: 'Firenze Sud-Ovest', default_co: 'Fiorentina Multiservizi Coop' },
-      { code: 'FI-GAVINANA', name: 'Gavinana, Galluzzo, Firenze Sud, Bellariva', cap: '50126', area: 'Firenze Sud', default_co: 'Toscana Pulizie & Sanificazioni' },
-      { code: 'COM-SCANDICCI', name: 'Scandicci, Casellina, Badia a Settimo', cap: '50018', area: 'Cintura Ovest', default_co: 'Fiorentina Multiservizi Coop' },
-      { code: 'COM-SESTO', name: 'Sesto Fiorentino e Polo Scientifico', cap: '50019', area: 'Cintura Nord', default_co: 'Rifredi EcoClean Sas' },
-      { code: 'COM-CAMPI', name: 'Campi Bisenzio, San Donnino, Capalle', cap: '50013', area: 'Cintura Ovest', default_co: 'Fiorentina Multiservizi Coop' }
-    ],
-
-    selectedLeadForAssign: null
-  };
-
-  // INIZIALIZZAZIONE UI
-  function initDashboard() {
-    renderKPIs();
-    renderPendingTable();
-    renderJobsLive();
-    renderAllLeadsTable();
-    renderCompaniesTable();
-    renderZonesTable();
-    setupNavigation();
-  }
-
-  // NAVIGAZIONE TAB SIDEBAR
-  function setupNavigation() {
-    const navItems = document.querySelectorAll('.dash-nav-item[data-tab]');
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        navItems.forEach(n => n.classList.remove('active'));
-        item.classList.add('active');
-
-        const targetTab = item.dataset.tab;
-        document.querySelectorAll('.tab-content-panel').forEach(panel => {
-          panel.style.display = 'none';
-        });
-
-        if (targetTab === 'tab-overview') {
-          document.getElementById('section-overview').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Panoramica Operativa Rete';
-        } else if (targetTab === 'tab-leads') {
-          document.getElementById('section-leads').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Tutti i Preventivi & Richieste';
-        } else if (targetTab === 'tab-companies') {
-          document.getElementById('section-companies').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Imprese Partner Accreditata';
-        } else if (targetTab === 'tab-zones') {
-          document.getElementById('section-zones').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Copertura Geografica Territoriale';
-        } else if (targetTab === 'tab-jobs') {
-          document.getElementById('section-overview').style.display = 'block';
-          document.getElementById('pageTitle').textContent = 'Cantieri Live in Tempo Reale';
-          window.scrollTo({ top: 600, behavior: 'smooth' });
-        }
-      });
-    });
-  }
-
-  // AGGIORNAMENTO KPI
-  function renderKPIs() {
-    const pendingLeads = STATE.leads.filter(l => l.status === 'NUOVA').length;
-    const activeCompanies = STATE.companies.filter(c => c.status === 'ATTIVA').length;
-    const pendingCompanies = STATE.companies.filter(c => c.status === 'IN_VALUTAZIONE').length;
-
-    document.getElementById('kpiNewLeads').textContent = pendingLeads;
-    document.getElementById('badgePendingLeads').textContent = pendingLeads;
-    document.getElementById('badgePendingLeads').style.display = pendingLeads > 0 ? 'inline-block' : 'none';
-
-    document.getElementById('kpiActiveCompanies').textContent = activeCompanies;
-    document.getElementById('badgePendingCompanies').textContent = pendingCompanies;
-    document.getElementById('badgePendingCompanies').style.display = pendingCompanies > 0 ? 'inline-block' : 'none';
-  }
-
-  // RENDERING TABELLA RICHIESTE DA ASSEGNARE (OVERVIEW)
-  function renderPendingTable() {
-    const tbody = document.getElementById('tbodyPendingLeads');
-    const query = (document.getElementById('searchLeadsOverview')?.value || '').toLowerCase();
-    const zoneFilter = document.getElementById('filterZoneOverview')?.value || 'ALL';
-
-    const pendingLeads = STATE.leads.filter(l => {
-      const matchStatus = l.status === 'NUOVA';
-      const matchQuery = l.name.toLowerCase().includes(query) || l.code.toLowerCase().includes(query) || l.zone_name.toLowerCase().includes(query);
-      const matchZone = zoneFilter === 'ALL' || l.zone_id === zoneFilter;
-      return matchStatus && matchQuery && matchZone;
-    });
-
-    if (pendingLeads.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 32px; color: var(--text-light);">
-        🎉 Nessun preventivo in attesa! Tutte le richieste sono state assegnate alle squadre di prossimità.
-      </td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = pendingLeads.map(l => {
-      const sectorBadgeClass = l.sector === 'COMMERCIALE' ? 'sector-comm' : (l.sector === 'CONDOMINIO' ? 'sector-condo' : 'sector-priv');
-      return `
-        <tr>
-          <td><strong style="font-family: monospace; color: var(--brand-navy-900);">${l.code}</strong><br><small class="text-muted">${l.created_at}</small></td>
-          <td>
-            <strong>${l.name}</strong><br>
-            <small style="color: var(--text-muted);">${l.contact}</small>
-          </td>
-          <td><span class="badge-sector ${sectorBadgeClass}">${l.sector}</span></td>
-          <td>
-            <div class="zone-tag">📍 ${l.zone_name}</div>
-            <small class="text-muted">${l.address}</small>
-          </td>
-          <td style="max-width: 280px; font-size: 0.82rem; line-height: 1.4;">
-            ${l.details}
-          </td>
-          <td><span class="badge-status status-nuova">NUOVA</span></td>
-          <td style="text-align: right;">
-            <button class="btn btn-primary btn-sm" onclick="openAssignModal('${l.id}')">
-              ⚡ Assegna a Impresa
-            </button>
-          </td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  function filterPendingTable() {
-    renderPendingTable();
-  }
-
-  // RENDERING CANTIERI LIVE (SINCRONIZZATO CON LE SQUADRE E LE IMPRESE)
-  function renderJobsLive() {
-    const tbody = document.getElementById('tbodyJobsLive');
-    const shared = getSharedPlatformData();
-    const liveList = (shared && shared.jobs && shared.jobs.length > 0)
-      ? shared.jobs.map(j => ({
-          client: j.client,
-          zone: j.zone,
-          company: j.companyName,
-          team: j.teamName,
-          checkin: j.checkinTime || 'Pianificato',
-          checklist: `${j.checklist.filter(c => c.done).length} / ${j.checklist.length} Spuntati • 📸 ${(j.photos || []).length} Foto`,
-          status: j.status === 'COMPLETATO' ? 'COMPLETATA' : 'IN_CORSO'
-        }))
-      : STATE.jobsLive;
-
-    tbody.innerHTML = liveList.map(j => {
-      const statusBadge = j.status === 'COMPLETATA' 
-        ? '<span class="badge-status status-completata">✓ Completata</span>'
-        : '<span class="badge-status status-in-corso">⏳ In Corso</span>';
-      return `
-        <tr>
-          <td><strong>${j.client}</strong></td>
-          <td>📍 ${j.zone}</td>
-          <td>${j.company}</td>
-          <td><small style="font-weight: 600;">${j.team}</small></td>
-          <td><span style="font-family: monospace; font-weight: 700;">${j.checkin}</span></td>
-          <td><strong style="color: var(--brand-emerald-600);">${j.checklist}</strong></td>
-          <td>${statusBadge}</td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  // RENDERING TUTTI I PREVENTIVI (TAB LEADS)
-  function renderAllLeadsTable() {
-    const tbody = document.getElementById('tbodyAllLeads');
-    const query = (document.getElementById('searchAllLeads')?.value || '').toLowerCase();
-    const statusFilter = document.getElementById('filterStatusLeads')?.value || 'ALL';
-
-    const filtered = STATE.leads.filter(l => {
-      const matchQuery = l.name.toLowerCase().includes(query) || l.code.toLowerCase().includes(query) || l.address.toLowerCase().includes(query);
-      const matchStatus = statusFilter === 'ALL' || l.status === statusFilter;
-      return matchQuery && matchStatus;
-    });
-
-    tbody.innerHTML = filtered.map(l => {
-      const company = l.assigned_company_id ? (STATE.companies.find(c => c.id === l.assigned_company_id)?.name || 'Assegnata') : '<span class="text-muted">Da Assegnare</span>';
-      const statusClass = l.status === 'NUOVA' ? 'status-nuova' : (l.status === 'ASSEGNATA' ? 'status-assegnata' : 'status-in-corso');
-      return `
-        <tr>
-          <td><strong style="font-family: monospace;">${l.code}</strong></td>
-          <td><small class="text-muted">${l.created_at}</small></td>
-          <td><strong>${l.name}</strong><br><small class="text-muted">${l.email}</small></td>
-          <td><span class="badge-sector sector-comm">${l.sector}</span></td>
-          <td>📍 ${l.zone_name}</td>
-          <td><small>${l.details.slice(0, 50)}...</small></td>
-          <td><strong>${company}</strong></td>
-          <td><span class="badge-status ${statusClass}">${l.status}</span></td>
-          <td>
-            ${l.status === 'NUOVA' ? `<button class="btn btn-secondary btn-sm" onclick="openAssignModal('${l.id}')">Assegna</button>` : `<span class="text-muted" style="font-size: 0.8rem;">In gestione</span>`}
-          </td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  function filterAllLeadsTable() {
-    renderAllLeadsTable();
-  }
-
-  // RENDERING IMPRESE PARTNER (TAB COMPANIES)
-  function renderCompaniesTable() {
-    const tbody = document.getElementById('tbodyCompanies');
-    tbody.innerHTML = STATE.companies.map(c => {
-      const isApproved = c.status === 'ATTIVA';
-      const statusBadge = isApproved 
-        ? '<span class="badge-status status-attiva">✓ Accreditata</span>' 
-        : '<span class="badge-status status-in-attesa">⚠️ In Valutazione DURC</span>';
-
-      const actionBtn = isApproved
-        ? `<button class="btn btn-secondary btn-sm" onclick="alert('Visualizzazione dossier ${c.name}')">Dossier</button>`
-        : `<button class="btn btn-primary btn-sm" style="background: var(--brand-emerald-600);" onclick="approveCompany('${c.id}')">Approva e Abilita</button>`;
-
-      return `
-        <tr>
-          <td>
-            <strong>${c.name}</strong><br>
-            <small class="text-muted">P.IVA: ${c.piva}</small>
-          </td>
-          <td>📍 ${c.base}</td>
-          <td>
-            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-              ${c.zones.map(z => `<span class="badge-sector sector-comm" style="font-size: 0.7rem;">${z}</span>`).join('')}
-            </div>
-          </td>
-          <td><strong>${c.teams_count} squadre</strong></td>
-          <td><strong style="color: #f59e0b;">⭐ ${c.rating}</strong></td>
-          <td>${statusBadge}</td>
-          <td style="text-align: right;">${actionBtn}</td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  function approveCompany(companyId) {
-    const company = STATE.companies.find(c => c.id === companyId);
-    if (!company) return;
-    company.status = 'ATTIVA';
-    alert(`Impresa ${company.name} accreditata con successo nella rete Firenze Pulizie!`);
-    renderKPIs();
-    renderCompaniesTable();
-  }
-
-  // RENDERING ZONE (TAB ZONES)
-  function renderZonesTable() {
-    const tbody = document.getElementById('tbodyZones');
-    tbody.innerHTML = STATE.zones.map(z => `
-      <tr>
-        <td><strong style="font-family: monospace; color: var(--brand-navy-900);">${z.code}</strong></td>
-        <td><strong>${z.name}</strong></td>
-        <td><span style="font-family: monospace;">${z.cap}</span></td>
-        <td><span class="badge-sector sector-condo">${z.area}</span></td>
-        <td><strong>${z.default_co}</strong></td>
-      </tr>
-    `).join('');
-  }
-
-  // MODALE ASSEGNAZIONE PREVENTIVO A IMPRESA
-  function openAssignModal(leadId) {
-    const lead = STATE.leads.find(l => l.id === leadId);
-    if (!lead) return;
-    STATE.selectedLeadForAssign = lead;
-
-    document.getElementById('modalLeadTitle').textContent = `Assegna ${lead.code}`;
-    document.getElementById('modalLeadDetails').innerHTML = `
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-        <div><strong>Cliente:</strong> ${lead.name}</div>
-        <div><strong>Settore:</strong> ${lead.sector}</div>
-        <div><strong>Zona:</strong> 📍 ${lead.zone_name}</div>
-        <div><strong>Indirizzo:</strong> ${lead.address}</div>
-      </div>
-      <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-light);">
-        <strong>Richiesta:</strong> ${lead.details}
-      </div>
-    `;
-
-    // Filtra e ordina imprese consigliate per prossimità
-    const container = document.getElementById('modalCompanyOptions');
-    const eligibleCompanies = STATE.companies.filter(c => c.status === 'ATTIVA');
-
-    container.innerHTML = eligibleCompanies.map((c, index) => {
-      const isServingZone = c.zones.includes(lead.zone_id);
-      const proximityScore = isServingZone ? 'Prossimità Ottimale (Copertura Diretta)' : 'Zona Adiacente';
-      const checkedAttr = index === 0 ? 'checked' : '';
-
-      return `
-        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 2px solid ${isServingZone ? 'var(--brand-sky-400)' : 'var(--border-light)'}; border-radius: var(--radius-md); background: ${isServingZone ? 'rgba(56, 189, 248, 0.05)' : 'white'}; cursor: pointer;">
-          <input type="radio" name="assignCompanyRadio" value="${c.id}" ${checkedAttr} style="margin-top: 4px;">
-          <div style="flex: 1;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <strong style="font-size: 0.95rem; color: var(--brand-navy-900);">${c.name}</strong>
-              <span class="proximity-score">${proximityScore}</span>
-            </div>
-            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">
-              Sede: <strong>${c.base}</strong> • Squadre: <strong>${c.teams_count}</strong> • Valutazione: <strong>⭐ ${c.rating}</strong>
-            </div>
-          </div>
-        </label>
-      `;
-    }).join('');
-
-    document.getElementById('modalAssignLead').classList.add('active');
-  }
-
-  function confirmAssignment() {
-    const selectedRadio = document.querySelector('input[name="assignCompanyRadio"]:checked');
-    if (!selectedRadio || !STATE.selectedLeadForAssign) return;
-
-    const companyId = selectedRadio.value;
-    const company = STATE.companies.find(c => c.id === companyId);
-    const lead = STATE.selectedLeadForAssign;
-
-    lead.status = 'ASSEGNATA';
-    lead.assigned_company_id = companyId;
-
-    // Sincronizzazione Supabase Live
-    fetch(`https://tvgvcphkqdhtjwfjysyv.supabase.co/rest/v1/leads?lead_code=eq.${lead.code}`, {
-      method: 'PATCH',
-      headers: {
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3ZjcGhrcWRodGp3Zmp5c3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MDY2MDksImV4cCI6MjEwNjk4MjYwOX0.7yhLjkaV3XKcRsZquABvhSY9TEgp3IbC5vHYBBXJUb0',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3ZjcGhrcWRodGp3Zmp5c3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MDY2MDksImV4cCI6MjEwNjk4MjYwOX0.7yhLjkaV3XKcRsZquABvhSY9TEgp3IbC5vHYBBXJUb0',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ assigned_company_id: companyId, status: 'ASSEGNATA' })
-    }).catch(err => console.log('Sincronizzazione Supabase:', err));
-
-    closeModal('modalAssignLead');
-    alert(`Preventivo ${lead.code} assegnato con successo a "${company.name}"!\nL'impresa riceverà notifica e prenderà in carico il sopralluogo entro 2 ore.`);
-
-    renderKPIs();
-    renderPendingTable();
-    renderAllLeadsTable();
-  }
-
-  async function loadSupabaseLiveLeads() {
-    try {
-      const res = await fetch('https://tvgvcphkqdhtjwfjysyv.supabase.co/rest/v1/leads?select=*&order=created_at.desc', {
-        headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3ZjcGhrcWRodGp3Zmp5c3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MDY2MDksImV4cCI6MjEwNjk4MjYwOX0.7yhLjkaV3XKcRsZquABvhSY9TEgp3IbC5vHYBBXJUb0',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3ZjcGhrcWRodGp3Zmp5c3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MDY2MDksImV4cCI6MjEwNjk4MjYwOX0.7yhLjkaV3XKcRsZquABvhSY9TEgp3IbC5vHYBBXJUb0'
-        }
-      });
-      if (res.ok) {
-        const liveLeads = await res.json();
-        if (liveLeads && liveLeads.length > 0) {
-          liveLeads.forEach(item => {
-            if (!STATE.leads.some(l => l.code === item.lead_code)) {
-              STATE.leads.unshift({
-                id: item.id,
-                code: item.lead_code,
-                name: item.full_name || 'Nuovo Richiedente',
-                contact: item.phone || item.email,
-                email: item.email,
-                sector: item.sector || 'COMMERCIALE',
-                customer_type: item.customer_type || 'AZIENDA',
-                zone_id: item.geographic_area_id || 'geo-fi-centro',
-                zone_name: 'Firenze (Dati Live Supabase)',
-                address: item.address || 'Firenze',
-                details: item.notes || 'Richiesta ricevuta online',
-                status: item.status || 'NUOVA',
-                assigned_company_id: item.assigned_company_id || null,
-                created_at: new Date(item.created_at).toLocaleString('it-IT')
-              });
-            }
-          });
-          renderKPIs();
-          renderPendingTable();
-          renderAllLeadsTable();
-        }
-      }
-    } catch (e) {
-      console.log('Modalità offline Supabase:', e);
-    }
-  }
-
-  function closeModal(modalId) {
-    document.getElementById(modalId).classList.remove('active');
-  }
-
-  function openNewLeadModal() {
-    window.location.href = 'richiedi-preventivo.html';
-  }
-
-  // Espone funzioni globali per gli attributi onclick nell'HTML
-  window.filterPendingTable = filterPendingTable;
-  window.filterAllLeadsTable = filterAllLeadsTable;
-  window.openAssignModal = openAssignModal;
-  window.confirmAssignment = confirmAssignment;
-  window.approveCompany = approveCompany;
-  window.closeModal = closeModal;
-  window.openNewLeadModal = openNewLeadModal;
-
-  // AVVIO
-  initDashboard();
-  loadSupabaseLiveLeads();
-</script>
-
-</body>
-</html>
->>>>>>> 81a6d34991145285c8d8c3d68eb388520d977cbe

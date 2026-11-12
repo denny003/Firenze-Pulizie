@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Area Operativa Squadra — FIRENZE PULIZIE</title>
+  <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Landing page operativa per il singolo team di lavoro: istruzioni cantiere, checklist digitale, foto dimostrative e invio report all'impresa.">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
@@ -283,6 +284,7 @@
   <script type="module">
     import { enforceRoleGuard, logoutUser, getSharedPlatformData, saveSharedPlatformData } from './js/auth-guard.js';
 
+    // 1. BLOCCO RIGOROSO RUOLO: Solo SQUADRA può vedere questa pagina
     const session = enforceRoleGuard(['SQUADRA']);
     if (!session) throw new Error('Accesso non autorizzato');
 
@@ -291,6 +293,7 @@
       document.getElementById('deniedBanner').style.display = 'block';
     }
 
+    // Popola intestazione con i dati specifici della squadra loggata
     document.getElementById('headerCompanyName').textContent = session.companyName || 'Impresa Partner';
     document.getElementById('headerTeamName').textContent = `🚚 ${session.teamName || 'Squadra Operativa'}`;
     document.getElementById('headerVanBadge').textContent = session.van || 'Mezzo Aziendale';
@@ -307,6 +310,7 @@
 
     function renderTeamJobs() {
       platformData = getSharedPlatformData();
+      // Filtra ESCLUSIVAMENTE i cantieri assegnati a questa squadra
       const myJobs = platformData.jobs.filter(j => j.teamId === session.teamId);
 
       document.getElementById('jobsCountBadge').textContent = `${myJobs.length} Cantieri Assegnati`;
@@ -400,6 +404,7 @@
 
             ${ztlHtml}
 
+            <!-- ISTRUZIONI RICEVUTE DALL'IMPRESA -->
             <div class="instructions-box">
               <div style="font-weight: 800; margin-bottom: 4px; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.04em;">
                 📌 Istruzioni Operative dell'Impresa (${job.companyName})
@@ -415,6 +420,7 @@
               ✓ Check-in GPS registrato alle ore ${job.checkinTime}
             </div>
 
+            <!-- CHECKLIST -->
             <div class="checklist-container">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <strong style="font-size: 0.9rem; color: var(--brand-navy-900);">Cosa fare (Checklist Cantiere)</strong>
@@ -423,6 +429,7 @@
               ${checklistHtml}
             </div>
 
+            <!-- FOTO PROVA LAVORO -->
             <div style="margin: 14px 0;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
                 <div>
@@ -444,6 +451,7 @@
       }).join('');
     }
 
+    // Spunta elemento checklist
     window.toggleChecklistItem = (jobId, itemId, isChecked) => {
       const data = getSharedPlatformData();
       const job = data.jobs.find(j => j.id === jobId);
@@ -456,10 +464,11 @@
       }
     };
 
+    // Carica foto reale da fotocamera/file
     window.handlePhotoFile = (jobId, input) => {
       if (!input.files || !input.files[0]) return;
       const file = input.files[0];
-      const label = prompt('Inserisci una breve descrizione della foto (es. "Pavimento Cotto Dopo Lavaggio", "Ingresso Pulito"):', 'Ambienti Puliti Fine Lavoro') || 'Foto Certificazione';
+      const label = prompt('Inserisci una breve descrizione della foto (es. "Pavimento Cotto Dopo Lavaggio", " Ingresso Pulito"):', 'Ambienti Puliti Fine Lavoro') || 'Foto Certificazione';
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = getSharedPlatformData();
@@ -479,6 +488,7 @@
       reader.readAsDataURL(file);
     };
 
+    // Simula scatto rapido foto certificata per testare subito da PC
     window.addSimulatedPhoto = (jobId) => {
       const label = prompt('Cosa ritrae questa foto dimostrativa? (es. "Pavimento Cotto Sala Riunioni", "Vetrata Ingresso"):', 'Pavimento Cotto & Postazioni Fine Lavoro');
       if (!label) return;
@@ -508,6 +518,7 @@
       renderTeamJobs();
     };
 
+    // Conclude il lavoro e genera il Report per l'Impresa
     window.submitJobReport = (jobId) => {
       const data = getSharedPlatformData();
       const job = data.jobs.find(j => j.id === jobId);

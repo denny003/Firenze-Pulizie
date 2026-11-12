@@ -13,6 +13,46 @@
   status = 200
 
 [[redirects]]
+  from = "/richiedi-preventivo"
+  to = "/richiedi-preventivo.html"
+  status = 200
+
+[[redirects]]
+  from = "/commerciale"
+  to = "/pulizie-commerciali.html"
+  status = 200
+
+[[redirects]]
+  from = "/pulizie-commerciali"
+  to = "/pulizie-commerciali.html"
+  status = 200
+
+[[redirects]]
+  from = "/condomini"
+  to = "/pulizie-condomini.html"
+  status = 200
+
+[[redirects]]
+  from = "/pulizie-condomini"
+  to = "/pulizie-condomini.html"
+  status = 200
+
+[[redirects]]
+  from = "/privati"
+  to = "/pulizie-private.html"
+  status = 200
+
+[[redirects]]
+  from = "/pulizie-private"
+  to = "/pulizie-private.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to = "/privacy.html"
+  status = 200
+
+[[redirects]]
   from = "/partner"
   to = "/partner.html"
   status = 200
@@ -44,3 +84,38 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Permissions-Policy = "camera=(self), geolocation=(self), microphone=()"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/dashboard-*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store, max-age=0"
+
+[[headers]]
+  for = "/app-squadra.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store, max-age=0"
+
+[[headers]]
+  for = "/login.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store, max-age=0"

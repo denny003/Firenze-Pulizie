@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accesso Unificato — FIRENZE PULIZIE</title>
+  <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Portale di autenticazione intelligente con riconoscimento automatico del profilo operativo per la Rete Firenze Pulizie.">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
@@ -135,9 +136,9 @@
   <!-- HEADER -->
   <header class="site-header">
     <div class="container nav-container">
-      <a href="index.html" class="brand-logo" id="logoLink">
-        <div class="brand-icon">✨</div>
-        <div>FIRENZE <span class="city-tag">PULIZIE</span></div>
+      <a href="index.html" class="brand-logo" id="logoLink" title="Pulizie Fiorentine — Roby&amp;Lia (347-370.51.89)">
+        <img src="assets/img/skyline-firenze.png" alt="Skyline Firenze — Pulizie Fiorentine" class="brand-skyline-img">
+        <img src="assets/img/logo-roby-lia.png" alt="Pulizie Fiorentine — Affidabilità e Qualità a Firenze — Roby&amp;Lia 347-370.51.89" class="brand-text-img">
       </a>
       <nav>
         <ul class="nav-menu">
@@ -186,7 +187,7 @@
         <div class="form-group">
           <label class="form-label" for="loginPassword" style="display: flex; justify-content: space-between;">
             <span>Password di Accesso</span>
-            <a href="#" onclick="alert('Contatta l\'amministrazione della tua impresa o il supporto centrale info@firenzepulizie.it per il reset credenziali.'); return false;" style="font-size: 0.8rem; color: var(--brand-sky-500); text-decoration: none;">Password smarrita?</a>
+            <a href="#" onclick="alert('Contatta l\'amministrazione della tua impresa o il supporto centrale info@puliziefiorentine.it per il reset credenziali.'); return false;" style="font-size: 0.8rem; color: var(--brand-sky-500); text-decoration: none;">Password smarrita?</a>
           </label>
           <input type="password" id="loginPassword" class="form-control" placeholder="••••••••••••" required>
         </div>
@@ -209,7 +210,7 @@
       <div class="demo-drawer">
         <button type="button" class="demo-toggle-btn" id="btnToggleDemo">
           <span>🧪 Simula Accesso per Ruolo (Collaudo Rapido)</span>
-          <span id="demoChevron">▲</span>
+          <span id="demoChevron">▼</span>
         </button>
         <div class="demo-profiles-grid open" id="demoProfilesGrid">
           <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">
@@ -253,7 +254,7 @@
           </button>
 
           <!-- 5. AMMINISTRATORE TOTALE PORTALE -->
-          <button type="button" class="demo-profile-btn" onclick="quickLogin('admin@firenzepulizie.it', 'Admin2026!')">
+          <button type="button" class="demo-profile-btn" onclick="quickLogin('admin@puliziefiorentine.it', 'Admin2026!')">
             <div>
               <strong>🛡️ Amministratore Totale del Portale</strong>
               <div style="font-size: 0.75rem; color: var(--text-muted);">Regia globale rete Firenze, smistamento Lead e accreditamento DURC</div>
@@ -288,11 +289,13 @@
     const securityPillText = document.getElementById('securityPillText');
     const roleIcon = document.getElementById('roleIcon');
 
+    // Controlla se l'utente è stato reindirizzato perché non autenticato
     const params = new URLSearchParams(window.location.search);
     if (params.get('reason') === 'unauthenticated') {
       showAlert('Accesso riservato: effettua prima l\'autenticazione per accedere all\'area protetta.', 'error');
     }
 
+    // Controlla se esiste già una sessione valida
     const existingSession = getCurrentSession();
     if (existingSession && existingSession.landingUrl) {
       const banner = document.getElementById('activeSessionBanner');
@@ -304,6 +307,7 @@
       });
     }
 
+    // Feedback visivo intelligente mentre si digita l'identificativo (senza svelare altri ruoli)
     loginEmailInput.addEventListener('input', () => {
       const val = loginEmailInput.value.trim().toLowerCase();
       if (val.startsWith('pin-') || val.startsWith('squadra')) {
@@ -321,6 +325,7 @@
       }
     });
 
+    // Toggle cassetto demo
     document.getElementById('btnToggleDemo').addEventListener('click', () => {
       const grid = document.getElementById('demoProfilesGrid');
       const isOpen = grid.classList.toggle('open');
@@ -346,6 +351,7 @@
       btnLoginSubmit.disabled = true;
       btnLoginSubmit.textContent = 'Identificazione profilo in corso...';
 
+      // Autenticazione unificata client + verifica API
       const localAuth = authenticateCredentials(identifier, password);
 
       if (localAuth.success) {
@@ -360,6 +366,7 @@
         return;
       }
 
+      // Tentativo via API serverless per profili dinamici aggiuntivi
       try {
         const res = await fetch('/api/auth/login', {
           method: 'POST',
@@ -376,7 +383,7 @@
           return;
         }
       } catch (e) {
-        // Fallback già gestito
+        // Fallback già gestito da authenticateCredentials
       }
 
       showAlert('Credenziali non valide o profilo non autorizzato. Usa uno dei profili di collaudo qui sotto.', 'error');
@@ -389,6 +396,7 @@
       performLogin(loginEmailInput.value, loginPasswordInput.value);
     });
 
+    // Espone funzione per i pulsanti rapidi di collaudo
     window.quickLogin = (id, pass) => {
       loginEmailInput.value = id;
       loginPasswordInput.value = pass;

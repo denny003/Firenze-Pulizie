@@ -3,119 +3,540 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pulizie Commerciali & B2B a Firenze — FIRENZE PULIZIE</title>
-  <meta name="description" content="Servizio di pulizia e sanificazione professionale per uffici, negozi, palestre, aziende e B&B a Firenze. Flessibilità oraria, contratti trasparenti e continuità garantita.">
+  <title>Pulizie Uffici, Negozi e Studi Medici a Firenze (Anche ZTL) | Pulizie Fiorentine B2B</title>
+  <meta name="description" content="Impresa di pulizie commerciali e sanificazione B2B a Firenze (Centro Storico ZTL, Novoli, Rifredi, Campo di Marte, Scandicci). Pulizia uffici, studi medici, negozi e coworking con report fotografico GPS e sostituzione garantita in 2 ore.">
+  <meta name="keywords" content="pulizie uffici firenze, impresa pulizie commerciali firenze, sanificazione studi medici firenze, pulizie negozi firenze centro ztl, pulizie coworking firenze, ditta pulizie b2b firenze">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://puliziefiorentine.it/pulizie-commerciali.html">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://puliziefiorentine.it/sitemap.xml">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:title" content="Pulizie Uffici, Cliniche & Negozi a Firenze — Simulatore Preventivo B2B">
+  <meta property="og:description" content="Zero costi di trasferta ZTL, report fotografico di fine turno e continuità garantita per aziende e studi professionali a Firenze.">
+  <meta property="og:url" content="https://puliziefiorentine.it/pulizie-commerciali.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Pulizie Commerciali, Uffici, Cliniche e Negozi B2B",
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Pulizie Fiorentine — Divisione B2B Firenze",
+      "url": "https://puliziefiorentine.it/pulizie-commerciali.html",
+      "areaServed": "Firenze e Provincia"
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "Firenze"
+    },
+    "description": "Servizio continuativo di pulizia e sanificazione per uffici, studi professionali, ambulatori medici, negozi in ZTL e strutture ricettive a Firenze con report fotografico certificato."
+  }
+  </script>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/public.css">
+  <style>
+    .b2b-trust-bar {
+      background: #0f172a;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 16px 0;
+      color: #e2e8f0;
+    }
+    .b2b-trust-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      text-align: center;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+    .b2b-trust-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.04);
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .calc-box {
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 2px solid var(--brand-sky-500);
+      box-shadow: var(--shadow-xl);
+      padding: 36px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .calc-result-panel {
+      background: linear-gradient(135deg, #0a192f 0%, #16365c 100%);
+      color: white;
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+    }
+    .report-preview-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-lg);
+      padding: 24px;
+    }
+    .package-card {
+      background: white;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .package-card.featured {
+      border: 2px solid var(--brand-sky-500);
+      box-shadow: var(--shadow-lg);
+    }
+    .package-badge {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--brand-sky-500);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+    }
+    @media (max-width: 820px) {
+      .calc-box { grid-template-columns: 1fr; padding: 24px; }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- TOP BAR CONTATTO DIRETTO & TRUST LEGALE -->
+  <div class="top-contact-bar">
+    <div class="container top-contact-inner">
+      <div class="top-trust-badges">
+        <span>🛡️ <strong>DURC Regolare</strong> &amp; Polizza RCT € 2.500.000</span>
+        <span>📍 Permessi ZTL Firenze Attivi · Sopralluogo B2B Gratuito in 24h</span>
+      </div>
+      <div class="top-contact-links">
+        <a href="tel:+393473705189" class="top-contact-pill phone">📞 347-370.51.89 (Ufficio B2B)</a>
+        <a href="https://wa.me/393473705189?text=Buongiorno%20Pulizie%20Fiorentine%2C%20vorrei%20informazioni%20per%20pulizie%20uffici%20%2F%20commerciali%20a%20Firenze." target="_blank" rel="noopener" class="top-contact-pill whatsapp">💬 WhatsApp: 347-370.51.89</a>
+        <a href="mailto:info@puliziefiorentine.it" style="color:#e2e8f0;">✉️ info@puliziefiorentine.it</a>
+      </div>
+    </div>
+  </div>
 
   <!-- HEADER -->
   <header class="site-header">
     <div class="container nav-container">
-      <a href="index.html" class="brand-logo">
-        <div class="brand-icon">✨</div>
-        <div>FIRENZE <span class="city-tag">PULIZIE</span></div>
+      <a href="index.html" class="brand-logo" title="Pulizie Fiorentine — Roby&amp;Lia (347-370.51.89)">
+        <img src="assets/img/skyline-firenze.png" alt="Skyline Firenze — Pulizie Fiorentine" class="brand-skyline-img">
+        <img src="assets/img/logo-roby-lia.png" alt="Pulizie Fiorentine — Affidabilità e Qualità a Firenze — Roby&amp;Lia 347-370.51.89" class="brand-text-img">
       </a>
       <nav>
         <ul class="nav-menu">
           <li><a href="pulizie-commerciali.html" class="nav-link active">Commerciale & B2B</a></li>
           <li><a href="pulizie-condomini.html" class="nav-link">Condomini</a></li>
           <li><a href="pulizie-private.html" class="nav-link">Privati</a></li>
-          <li><a href="index.html#territorio" class="nav-link">Zone</a></li>
+          <li><a href="index.html#garanzie-referenze" class="nav-link">DURC & Referenze</a></li>
           <li><a href="partner.html" class="nav-link">Imprese Partner</a></li>
         </ul>
       </nav>
       <div class="nav-actions">
-        <a href="richiedi-preventivo.html?category=COMMERCIAL" class="btn btn-primary btn-sm">Richiedi Preventivo B2B</a>
+        <a href="tel:+393473705189" class="btn btn-secondary btn-sm">📞 347-370.51.89</a>
+        <a href="#simulatore-b2b" class="btn btn-primary btn-sm">Calcola Preventivo B2B</a>
       </div>
     </div>
   </header>
 
   <!-- HERO SETTORE COMMERCIALE -->
-  <section class="hero-section text-center" style="padding: 70px 0 80px;">
+  <section class="hero-section text-center" style="padding: 70px 0 75px;">
     <div class="container">
       <div class="hero-badge-wrap">
-        <span>🏢 Soluzioni per Attività, Uffici & Punti Vendita</span>
+        <span>🏢 Divisione B2B: Uffici, Studi Professionali, Cliniche, Negozi & Coworking</span>
       </div>
       <h1 class="hero-title">
-        Pulizie Commerciali a Firenze.<br>
-        <span class="highlight">Flessibilità e continuità</span> per il tuo business.
+        Pulizie Aziendali a Firenze con<br>
+        <span class="highlight">Report Fotografico e SLA Garantito</span>.
       </h1>
       <p class="hero-subtitle">
-        Dall'igienizzazione quotidiana degli uffici alle pulizie straordinarie di negozi e strutture ricettive. Squadre dedicate di prossimità per orari su misura senza interferire con la tua attività.
+        Basta fornitori che saltano i turni o lasciano gli uffici a metà. Ti assegniamo la squadra certificata già operativa nel tuo quartiere (anche ZTL Centro Storico), con <strong>check-in GPS, prova fotografica di fine turno</strong> e sostituzione garantita in 2 ore.
       </p>
       <div class="hero-ctas">
-        <a href="richiedi-preventivo.html?category=COMMERCIAL" class="btn btn-primary btn-lg">Richiedi Contatto per la Tua Azienda</a>
+        <a href="#simulatore-b2b" class="btn btn-primary btn-lg">⚡ Calcola Stima Immediata B2B</a>
+        <a href="https://wa.me/393473705189?text=Buongiorno%20Pulizie%20Fiorentine%2C%20vorrei%20un%20preventivo%20per%20pulizie%20ufficio%20%2F%20negozio%20a%20Firenze." target="_blank" rel="noopener" class="btn btn-lg" style="background:#25D366; color:#ffffff; font-weight:800; border:none;">💬 Sopralluogo Rapido WhatsApp</a>
+        <a href="tel:+393473705189" class="btn btn-outline-white btn-lg">📞 Chiama 347-370.51.89</a>
       </div>
     </div>
   </section>
 
-  <!-- DETTAGLI SERVIZI B2B -->
-  <section class="section">
+  <!-- BARRA DI GARANZIA ISTITUZIONALE B2B -->
+  <div class="b2b-trust-bar">
+    <div class="container b2b-trust-grid">
+      <div class="b2b-trust-item"><span>🛡️</span> <span>DURC Regolare & Polizza RCT € 2.500.000</span></div>
+      <div class="b2b-trust-item"><span>🚗</span> <span>Mezzi con Permesso ZTL Firenze (Zero Costi Trasferta)</span></div>
+      <div class="b2b-trust-item"><span>📸</span> <span>Report Fotografico Certificato ad Ogni Intervento</span></div>
+      <div class="b2b-trust-item"><span>🔄</span> <span>Sostituzione Operatore Garantita in &lt; 2 Ore</span></div>
+    </div>
+  </div>
+
+  <!-- SIMULATORE INTERATTIVO DI PREVENTIVO B2B (LEAD MAGNET) -->
+  <section class="section" id="simulatore-b2b" style="background: #f8fafc;">
     <div class="container">
       <div class="section-head">
-        <span class="section-eyebrow">Ambiti di Intervento</span>
-        <h2 class="section-title">A chi ci rivolgiamo</h2>
-        <p class="text-muted">Servizi calibrati per garantire ambienti accoglienti, igienizzati e in piena conformità con le normative.</p>
+        <span class="section-eyebrow">Trasparenza Immediata B2B</span>
+        <h2 class="section-title">Calcola in 15 secondi l'investimento per la tua attività</h2>
+        <p class="text-muted">Grazie all'assegnazione della squadra già presente nel tuo quartiere di Firenze, abbattiamo fino al 22% i costi morti di trasferta.</p>
+      </div>
+
+      <div class="calc-box">
+        <div>
+          <div class="form-group">
+            <label class="form-label">1. Tipologia di Ambiente Aziendale</label>
+            <select id="b2bType" class="form-select" onchange="updateB2BCalc()">
+              <option value="1.0" data-name="Pulizia Uffici & Coworking">💻 Ufficio / Studio Professionale / Coworking</option>
+              <option value="1.15" data-name="Negozi & Punti Vendita">🛍️ Negozio / Boutique / Showroom (Alto Calpestio & Vetrine)</option>
+              <option value="1.30" data-name="Studi Medici & Professionali">🏥 Studio Medico / Dentistico / Clinica (Protocollo PMC)</option>
+              <option value="1.20" data-name="B&B & Strutture Ricettive">🛏️ Struttura Ricettiva / B&B / Hospitality</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" style="display: flex; justify-content: space-between;">
+              <span>2. Superficie Indicativa dell'Immobile</span>
+              <strong style="color: var(--brand-sky-500); font-size: 1.05rem;" id="b2bSqmLabel">180 mq</strong>
+            </label>
+            <input type="range" id="b2bSqm" min="40" max="800" step="20" value="180" style="width: 100%; accent-color: var(--brand-sky-500); cursor: pointer;" oninput="updateB2BCalc()">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-light);">
+              <span>40 mq (Piccolo Studio)</span>
+              <span>300 mq (Sede Media)</span>
+              <span>800+ mq (Open Space / Clinica)</span>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">3. Frequenza di Pulizia Richiesta</label>
+            <select id="b2bFreq" class="form-select" onchange="updateB2BCalc()">
+              <option value="1" data-code="SETTIMANALE">1 passaggio a settimana (4 interventi/mese)</option>
+              <option value="2" data-code="BISETTIMANALE" selected>2 passaggi a settimana (8 interventi/mese — Più scelto)</option>
+              <option value="3" data-code="BISETTIMANALE">3 passaggi a settimana (12 interventi/mese)</option>
+              <option value="5" data-code="SETTIMANALE">Giornaliero Lun-Ven (20 interventi/mese)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calc-result-panel">
+          <div style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-sky-400); font-weight: 800;">
+            Canone Mensile Stimato (Tutto Incluso)
+          </div>
+          <div style="font-size: 2.3rem; font-weight: 900; margin: 10px 0; color: #ffffff;" id="b2bPriceRange">
+            € 240 – € 290 <span style="font-size: 0.95rem; font-weight: 500; color: #cbd5e1;">/ mese</span>
+          </div>
+          <div style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #a7f3d0; padding: 8px 12px; border-radius: var(--radius-md); font-size: 0.82rem; font-weight: 700; margin-bottom: 16px;" id="b2bSavingBadge">
+            💰 Risparmio Prossimità: ~€ 650/anno (Zero addebiti ZTL/Trasferta)
+          </div>
+          <ul style="text-align: left; font-size: 0.82rem; color: #cbd5e1; margin-bottom: 20px; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px;">
+            <li>✓ Prodotti, macchinari e materiali inclusi</li>
+            <li>✓ Report fotografico fine turno via app</li>
+            <li>✓ Sopralluogo tecnico gratuito in 24h</li>
+          </ul>
+          <a href="richiedi-preventivo.html?category=COMMERCIAL" id="btnLockB2BQuote" class="btn btn-primary btn-block" style="width: 100%; font-weight: 800;">
+            Blocca Stima & Richiedi Sopralluogo ➔
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA VISIVA DEL METODO: REPORT FOTOGRAFICO ANTI-CONTESTAZIONE -->
+  <section class="section" id="prova-report">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; align-items: center;">
+        <div>
+          <span class="section-eyebrow">Il Nostro Vantaggio Esclusivo</span>
+          <h2 class="section-title" style="text-align: left;">Controlla la qualità del lavoro senza dover essere presente</h2>
+          <p class="text-muted" style="margin-bottom: 20px;">
+            Quando le pulizie avvengono alle 06:30 del mattino o alle 20:00 di sera, come fai a sapere se ogni ambiente è stato davvero igienizzato?
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="background: #e0f2fe; color: #0284c7; padding: 8px 10px; border-radius: 8px; font-weight: 800;">1</div>
+              <div>
+                <strong style="color: var(--brand-navy-900);">Check-in & Check-out con Orario Certificato</strong>
+                <p class="text-muted" style="font-size: 0.88rem; margin: 2px 0 0;">Sai sempre a che ora la squadra è entrata, quanto tempo ha operato e chi ha disinserito/reinserito l'allarme.</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="background: #dcfce7; color: #15803d; padding: 8px 10px; border-radius: 8px; font-weight: 800;">2</div>
+              <div>
+                <strong style="color: var(--brand-navy-900);">Checklist su Misura & Foto Prima/Dopo</strong>
+                <p class="text-muted" style="font-size: 0.88rem; margin: 2px 0 0;">Ogni squadra segue le istruzioni specifiche del tuo ufficio o negozio e carica le foto di fine lavoro prima di chiudere il turno.</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="background: #fef3c7; color: #b45309; padding: 8px 10px; border-radius: 8px; font-weight: 800;">3</div>
+              <div>
+                <strong style="color: var(--brand-navy-900);">Fatturazione legata alla Qualità</strong>
+                <p class="text-muted" style="font-size: 0.88rem; margin: 2px 0 0;">Ogni intervento genera un report digitale trasparente che tutela la tua azienda e garantisce standard costanti nel tempo.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESEMPIO REALE DI REPORT -->
+        <div class="report-preview-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 12px; margin-bottom: 14px;">
+            <div>
+              <span style="font-size: 0.72rem; font-weight: 800; color: #0284c7; text-transform: uppercase;">Esempio Report Certificato B2B</span>
+              <h4 style="margin: 2px 0 0; color: var(--brand-navy-900);">Studio Legale Associato Tornabuoni</h4>
+            </div>
+            <span style="background: #dcfce7; color: #15803d; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 99px;">✓ VERIFICATO GPS</span>
+          </div>
+          <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">
+            📍 Via de' Tornabuoni 14 (ZTL) • Turno Serale: <strong>18:28 – 20:15</strong> • <strong>Squadra Alfa</strong>
+          </div>
+          <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 0.82rem; margin-bottom: 14px;">
+            <div style="color: #15803d; font-weight: 700;">☑ Igienizzazione 12 postazioni, monitor e telefoni</div>
+            <div style="color: #15803d; font-weight: 700;">☑ Sanificazione completa 3 bagni e reintegro consumabili</div>
+            <div style="color: #15803d; font-weight: 700;">☑ Trattamento pavimento in cotto antico sala riunioni</div>
+            <div style="color: #15803d; font-weight: 700;">☑ Chiusura infissi e inserimento codice allarme 4821#</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="background: #0f172a; color: white; padding: 16px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.5rem;">✨🏢</div>
+              <div style="font-size: 0.76rem; font-weight: 700; margin-top: 4px;">Foto 1: Sala Riunioni</div>
+              <div style="font-size: 0.68rem; color: #38bdf8;">Certificata ore 19:45</div>
+            </div>
+            <div style="background: #0f172a; color: white; padding: 16px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.5rem;">🧼🚿</div>
+              <div style="font-size: 0.76rem; font-weight: 700; margin-top: 4px;">Foto 2: Servizi Igienici</div>
+              <div style="font-size: 0.68rem; color: #10b981;">Sigillo Sanificazione 20:05</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 FORMULE COMMERCIALI B2B -->
+  <section class="section" style="background: #ffffff; border-top: 1px solid var(--border-light);">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Soluzioni Contrattuali Flessibili</span>
+        <h2 class="section-title">Formule pensate per le imprese fiorentine</h2>
+        <p class="text-muted">Nessuna penale di uscita nei primi 60 giorni di prova operativa.</p>
       </div>
 
       <div class="sectors-grid">
-        <div class="sector-card commercial">
-          <div class="sector-icon-box">💻</div>
-          <h3 class="sector-card-title">Uffici & Studi Professionali</h3>
-          <p class="sector-card-desc">Sanificazione postazioni di lavoro, schermi, tastiere, sale riunioni, servizi igienici e aree relax. Frequenza concordata giornaliera o settimanale.</p>
+        <div class="package-card">
+          <div>
+            <div style="font-size: 1.8rem; margin-bottom: 10px;">💻</div>
+            <h3 class="sector-card-title">Formula Uffici & Studi</h3>
+            <p class="sector-card-desc">Ideale per studi legali, notarili, commercialisti, agenzie e sedi direzionali.</p>
+            <ul class="sector-features-list">
+              <li>Interventi serali o pre-apertura</li>
+              <li>Igienizzazione postazioni PC e sale meeting</li>
+              <li>Fornitura opzionale carta/sapone dispenser</li>
+              <li>Operatori fissi referenziati con custodia chiavi</li>
+            </ul>
+          </div>
+          <a href="richiedi-preventivo.html?category=COMMERCIAL&service=Pulizia+Uffici+%26+Coworking" class="btn btn-secondary" style="width: 100%; margin-top: 16px;">Richiedi Offerta Uffici ➔</a>
         </div>
-        <div class="sector-card commercial">
-          <div class="sector-icon-box">🛍️</div>
-          <h3 class="sector-card-title">Negozi & Showroom</h3>
-          <p class="sector-card-desc">Trattamento pavimentazioni ad alto calpestio, pulizia vetrine senza aloni, igienizzazione banconi e camerini prima dell'apertura al pubblico.</p>
+
+        <div class="package-card featured">
+          <span class="package-badge">Più Richiesto B2B</span>
+          <div>
+            <div style="font-size: 1.8rem; margin-bottom: 10px;">🏥</div>
+            <h3 class="sector-card-title">Formula Cliniche & Studi Medici</h3>
+            <p class="sector-card-desc">Protocollo certificato per studi odontoiatrici, poliambulatori, centri estetici e palestre.</p>
+            <ul class="sector-features-list">
+              <li>Prodotti Presidio Medico Chirurgico (PMC)</li>
+              <li>Sanificazione sale d'attesa e studi operativi</li>
+              <li>Registro e report fotografico di sanificazione</li>
+              <li>Conformità ASL e schede tecniche di sicurezza</li>
+            </ul>
+          </div>
+          <a href="richiedi-preventivo.html?category=COMMERCIAL&service=Studi+Medici+%26+Professionali" class="btn btn-primary" style="width: 100%; margin-top: 16px;">Richiedi Protocollo Sanitario ➔</a>
         </div>
-        <div class="sector-card commercial">
-          <div class="sector-icon-box">🛏️</div>
-          <h3 class="sector-card-title">B&B & Strutture Ricettive</h3>
-          <p class="sector-card-desc">Supporto rapido e puntuale per check-in e check-out nel centro di Firenze: cambio biancheria, pulizia bagni, cucina e sanificazione completa.</p>
+
+        <div class="package-card">
+          <div>
+            <div style="font-size: 1.8rem; margin-bottom: 10px;">🛍️</div>
+            <h3 class="sector-card-title">Formula Retail, Boutique & ZTL</h3>
+            <p class="sector-card-desc">Su misura per negozi, showroom e strutture ricettive nel Centro Storico di Firenze.</p>
+            <ul class="sector-features-list">
+              <li>Lavaggio vetrine periodico incluso</li>
+              <li>Trattamento cotto, parquet e marmi pregiati</li>
+              <li>Squadre con accesso ZTL autorizzato</li>
+              <li>Flessibilità 7 giorni su 7 per eventi o aperture</li>
+            </ul>
+          </div>
+          <a href="richiedi-preventivo.html?category=COMMERCIAL&service=Negozi+%26+Punti+Vendita" class="btn btn-secondary" style="width: 100%; margin-top: 16px;">Richiedi Offerta Negozi ➔</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PUNTI DI FORZA -->
-  <section class="section" style="background:#ffffff; border-top:1px solid var(--border-light); border-bottom:1px solid var(--border-light);">
-    <div class="container container-narrow">
+  <!-- CAPITOLATO TECNICO B2B, NORMATIVE E APPROFONDIMENTO SEO (700+ PAROLE) -->
+  <section class="section" id="capitolato-b2b" style="background: #f8fafc; border-top: 1px solid var(--border-light);">
+    <div class="container">
       <div class="section-head">
-        <span class="section-eyebrow">I Vantaggi della Rete</span>
-        <h2 class="section-title">Perché le aziende scelgono la nostra rete</h2>
+        <span class="section-eyebrow">Capitolato Tecnico B2B & Conformità Normativa</span>
+        <h2 class="section-title">Pulizie Uffici, Studi Medici e Negozi a Firenze: Standard Certificati</h2>
+        <p class="text-muted">Tutto ciò che un Office Manager, Titolare di Studio o Direttore di Boutique a Firenze verifica prima di affidare l'appalto di pulizia e sanificazione.</p>
       </div>
 
-      <div style="display:flex; flex-direction:column; gap:20px;">
-        <div style="background:var(--bg-main); padding:24px; border-radius:12px; border:1px solid var(--border-light);">
-          <strong style="color:var(--brand-navy-900); font-size:1.1rem; display:block; margin-bottom:6px;">⏱️ Interventi Fuori Orario Lavorativo</strong>
-          <p class="text-muted">Le squadre operano la mattina presto o la sera dopo la chiusura, per consegnarti spazi puliti e pronti senza mai disturbare clienti o collaboratori.</p>
-        </div>
-        <div style="background:var(--bg-main); padding:24px; border-radius:12px; border:1px solid var(--border-light);">
-          <strong style="color:var(--brand-navy-900); font-size:1.1rem; display:block; margin-bottom:6px;">🔄 Continuità di Servizio Garantita</strong>
-          <p class="text-muted">In caso di ferie, malattia o urgenze di un operatore, la rete coordina immediatamente una squadra sostitutiva della stessa zona di Firenze.</p>
-        </div>
-        <div style="background:var(--bg-main); padding:24px; border-radius:12px; border:1px solid var(--border-light);">
-          <strong style="color:var(--brand-navy-900); font-size:1.1rem; display:block; margin-bottom:6px;">📄 Controllo Digitale & Unico Referente</strong>
-          <p class="text-muted">Rapportini digitali post-intervento, checklist visibili e un unico punto di coordinamento amministrativo e commerciale.</p>
-        </div>
-      </div>
+      <div class="seo-rich-box">
+        <h3>1. Igienizzazione Uffici, Sedi Direzionali e Studi Professionali a Firenze</h3>
+        <p>
+          La produttività e l'immagine di uno studio legale, notarile, commercialista o di un'azienda IT passano dalla salubrità quotidiana degli spazi di lavoro. Con <strong>Pulizie Fiorentine</strong> ogni contratto B2B a Firenze (da <em>Novoli</em> e <em>Rifredi</em> fino ai palazzi storici di <em>Via Tornabuoni, Piazza della Repubblica, Lungarno e Santa Croce</em>) segue un capitolato analitico suddiviso per aree di rischio:
+        </p>
+        <ul>
+          <li><strong>Postazioni Operative, Scrivanie e Dispositivi Elettronici:</strong> spolveratura antistatica a umido di scrivanie, sedute ergonomiche, monitor, tastiere, mouse, telefoni VoIP e stampanti condivise con panni in microfibra codificati per colore (sistema <em>Color-Coding HACCP/Hospital</em> per azzerare la contaminazione incrociata tra bagni e uffici).</li>
+          <li><strong>Sale Riunioni, Reception e Aree Break:</strong> detersione di tavoli in cristallo, legno o marmo, sanificazione di macchine del caffè, distributori d'acqua, forni a microonde e frigoriferi aziendali, svuotamento cestini e gestione rigorosa della raccolta differenziata secondo il calendario <strong>Alia Servizi Ambientali Firenze</strong>.</li>
+          <li><strong>Servizi Igienici Aziendali e Reintegro Consumabili:</strong> disinfezione profonda di sanitari, rubinetterie, maniglie, pulsantiere e piastrelle con disinfettanti virucidi e battericidi certificati; su richiesta forniamo e gestiamo direttamente lo stock di carta igienica interfogliata, asciugamani in pura cellulosa, sapone igienizzante e copriwater.</li>
+        </ul>
 
-      <div class="text-center" style="margin-top:40px;">
-        <a href="richiedi-preventivo.html?category=COMMERCIAL" class="btn btn-primary btn-lg">Richiedi un Preventivo Commerciale Gratuito</a>
+        <h3>2. Protocollo Sanitario per Studi Medici, Odontoiatrici, Poliambulatori e Cliniche</h3>
+        <p>
+          Per gli ambulatori medici, studi dentistici, centri fisioterapici e laboratori diagnostici di Firenze (<em>Careggi, Campo di Marte, Gavinana, Soffiano</em>), applichiamo protocolli di <strong>disinfezione ospedaliera conformi alle linee guida ASL Toscana Centro</strong>. Utilizziamo esclusivamente prodotti registrati al Ministero della Salute come <strong>Presidio Medico Chirurgico (PMC)</strong> e biocidi a spettro completo (cloro-attivi, sali quaternari d'ammonio e perossido d'idrogeno stabilizzato). Ogni intervento è corredato da:
+        </p>
+        <ul>
+          <li>Consegna preventiva delle <strong>Schede Dati di Sicurezza (SDS)</strong> e delle schede tecniche di tutti i formulati chimici impiegati in struttura;</li>
+          <li>Compilazione del <strong>Registro di Sanificazione</strong> (cartaceo in sede e digitale con marca temporale GPS), indispensabile in caso di ispezioni ASL o NAS;</li>
+          <li>Trattamento di sale d'attesa, studi medici e superfici ad alto contatto (<em>high-touch surfaces</em>) con nebulizzazione o detersione meccanica a pH controllato.</li>
+        </ul>
+
+        <h3>3. Boutique, Showroom e Negozi nel Centro Storico ZTL di Firenze</h3>
+        <p>
+          Operare nel quadrilatero della moda e nelle vie storiche di Firenze (<em>Via de' Tornabuoni, Via della Vigna Nuova, Via Calzaiuoli, Ponte Vecchio, Oltrarno</em>) richiede permessi ZTL attivi, puntualità assoluta nelle fasce orarie pre-apertura (06:00 – 09:30) o post-chiusura e competenze specifiche sui materiali di pregio. Le nostre squadre sono specializzate nella <strong>pulizia di vetrine ad alta visibilità senza aloni</strong>, nella lucidatura di ottoni e metalli, nella cura di <strong>parquet antichi, cotto imprunetino, marmo di Carrara e pietra serena</strong>, evitando qualsiasi prodotto acido o abrasivo che possa opacizzare le superfici.
+        </p>
+
+        <h3>4. Sicurezza sul Lavoro (D.Lgs. 81/08), Custodia Chiavi, Allarmi e Vantaggi Fiscali</h3>
+        <p>
+          Affidare le chiavi e i codici d'allarme della propria azienda richiede la massima tutela legale. Ogni impresa esecutrice del consorzio <strong>Pulizie Fiorentine</strong> consegna prima dell'avvio:
+        </p>
+        <ul>
+          <li><strong>DURC Online in corso di validità</strong> (INPS / INAIL) e Visura Camerale CCIAA Firenze con codice ATECO 81.21.00 / 81.22.02;</li>
+          <li><strong>Documento di Valutazione dei Rischi (DVR)</strong> aggiornato ai sensi del D.Lgs. 81/2008 e supporto per la redazione del <strong>DUVRI</strong> (Documento Unico di Valutazione dei Rischi da Interferenze);</li>
+          <li><strong>Polizza Assicurativa RCT/RCO con massimale di € 2.500.000</strong> che copre anche i danni accidentali a apparecchiature elettroniche, vetrate, arredi e beni in custodia;</li>
+          <li><strong>Verbale di presa in carico chiavi e codici antifurto</strong> con operatori fissi identificati da tesserino di riconoscimento con fotografia. Il canone di pulizia è una <strong>spesa interamente deducibile al 100% ai fini IRES/IRPEF e IRAP</strong> con IVA detraibile e fatturazione elettronica SDI mensile.</li>
+        </ul>
+
+        <div style="margin-top: 24px; padding: 20px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: var(--radius-md); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+          <div>
+            <strong style="color: var(--brand-navy-900); font-size: 1.05rem;">Hai bisogno di un sopralluogo rapido in ufficio o in negozio a Firenze?</strong>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 4px 0 0;">Uscita gratuita entro 24 ore con rilascio immediato di preventivo scritto, copia DURC e Polizza RCT.</p>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="tel:+393473705189" class="btn btn-secondary btn-sm">📞 347-370.51.89</a>
+            <a href="https://wa.me/393473705189?text=Buongiorno%20Pulizie%20Fiorentine%2C%20vorrei%20prenotare%20un%20sopralluogo%20gratuito%20per%20il%20nostro%20ufficio%20%2F%20negozio%20a%20Firenze." target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="background:#25D366; border-color:#25D366;">💬 Scrivici su WhatsApp</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- FOOTER COMPLETO CON DATI LEGALI E CONTATTI UNIFORMATI -->
   <footer class="site-footer">
-    <div class="container text-center">
-      <p style="font-size:0.88rem; color:#94a3b8;">© 2026 FIRENZE PULIZIE — Settore Commerciale & B2B. <a href="index.html" style="color:#ffffff;">Torna alla Home</a></p>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">✨ PULIZIE FIORENTINE</div>
+          <p class="footer-desc">
+            Divisione B2B &amp; Commerciale di <strong>puliziefiorentine.it</strong> per uffici, studi professionali, cliniche e negozi a Firenze e provincia.
+          </p>
+          <div style="margin-top: 14px; font-size: 0.82rem; color: #cbd5e1; line-height: 1.7;">
+            <div>📍 <strong>Sede Operativa:</strong> Firenze (FI) — 50123 / 50127</div>
+            <div>📞 <strong>Telefono Ufficio:</strong> <a href="tel:+393473705189" style="color:#38bdf8; font-weight:700;">347-370.51.89</a></div>
+            <div>💬 <strong>WhatsApp Business:</strong> <a href="https://wa.me/393473705189" target="_blank" rel="noopener" style="color:#4ade80; font-weight:700;">+39 347-370.51.89</a></div>
+            <div>✉️ <strong>Email Ufficiale:</strong> <a href="mailto:info@puliziefiorentine.it" style="color:#ffffff;">info@puliziefiorentine.it</a></div>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Servizi Principali</div>
+          <ul class="footer-links">
+            <li><a href="pulizie-commerciali.html">Pulizie Uffici &amp; Studi</a></li>
+            <li><a href="pulizie-commerciali.html#capitolato-b2b">Sanificazione Studi Medici</a></li>
+            <li><a href="pulizie-condomini.html">Pulizie Condomini Firenze</a></li>
+            <li><a href="pulizie-private.html">Appartamenti &amp; Fine Cantiere</a></li>
+            <li><a href="richiedi-preventivo.html">Richiedi Preventivo Online</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Garanzie &amp; Conformità</div>
+          <ul class="footer-links" style="color:#94a3b8; font-size:0.84rem;">
+            <li>✓ DURC Online Regolare (INPS/INAIL)</li>
+            <li>✓ Polizza RCT/RCO Massimale € 2.500.000</li>
+            <li>✓ Sicurezza D.Lgs. 81/08 &amp; DUVRI</li>
+            <li>✓ Prodotti PMC &amp; Eco-CAM Certificati</li>
+            <li>✓ Imprese Iscritte CCIAA Firenze</li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Accesso Portale</div>
+          <ul class="footer-links">
+            <li><a href="partner.html">Candidatura Nuova Impresa</a></li>
+            <li><a href="login.html">Accedi all'Area Operativa</a></li>
+            <li><a href="privacy.html">Privacy Policy &amp; GDPR</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 PULIZIE FIORENTINE (puliziefiorentine.it) — Rete Imprese Pulizie Firenze · P.IVA / Cod. ATECO 81.21.00 · info@puliziefiorentine.it</span>
+        <span>DURC Regolare · Polizza RCT/RCO € 2.500.000 · <a href="privacy.html" style="color:#94a3b8; text-decoration:underline;">Privacy &amp; Cookie</a></span>
+      </div>
     </div>
   </footer>
 
+  <!-- FLOATING CTA BAR (WHATSAPP + TELEFONO SEMPRE VISIBILI) -->
+  <div class="floating-cta-bar" aria-label="Contatti Rapidi">
+    <a href="https://wa.me/393473705189?text=Buongiorno%20Pulizie%20Fiorentine%2C%20vorrei%20un%20preventivo%20per%20pulizie%20ufficio%20%2F%20commerciali%20a%20Firenze." target="_blank" rel="noopener" class="floating-btn whatsapp" title="Scrivici su WhatsApp Business">
+      <span class="floating-icon">💬</span>
+      <span>WhatsApp B2B</span>
+    </a>
+    <a href="tel:+393473705189" class="floating-btn phone" title="Chiama subito il centralino di Firenze">
+      <span class="floating-icon">📞</span>
+      <span>347-370.51.89</span>
+    </a>
+  </div>
+
+  <script>
+    function updateB2BCalc() {
+      const typeSelect = document.getElementById('b2bType');
+      const multiplier = parseFloat(typeSelect.value) || 1.0;
+      const serviceName = typeSelect.options[typeSelect.selectedIndex].dataset.name || 'Pulizia Uffici & Coworking';
+
+      const sqm = parseInt(document.getElementById('b2bSqm').value, 10) || 180;
+      document.getElementById('b2bSqmLabel').textContent = `${sqm} mq`;
+
+      const freqSelect = document.getElementById('b2bFreq');
+      const timesPerWeek = parseInt(freqSelect.value, 10) || 2;
+      const freqCode = freqSelect.options[freqSelect.selectedIndex].dataset.code || 'BISETTIMANALE';
+
+      // Calcolo stima realistica per Firenze senza costi trasferta
+      const basePerVisit = Math.max(32, Math.round((sqm * 0.19) * multiplier));
+      const visitsPerMonth = timesPerWeek * 4;
+      const monthlyLow = Math.round((basePerVisit * visitsPerMonth) * 0.92 / 10) * 10;
+      const monthlyHigh = Math.round((basePerVisit * visitsPerMonth) * 1.08 / 10) * 10;
+      const yearlySaving = Math.round(visitsPerMonth * 12 * 6.5);
+
+      document.getElementById('b2bPriceRange').innerHTML = `€ ${monthlyLow} – € ${monthlyHigh} <span style="font-size: 0.95rem; font-weight: 500; color: #cbd5e1;">/ mese</span>`;
+      document.getElementById('b2bSavingBadge').textContent = `💰 Risparmio Prossimità: ~€ ${yearlySaving}/anno (Zero addebiti ZTL/Trasferta)`;
+
+      const url = `richiedi-preventivo.html?category=COMMERCIAL&service=${encodeURIComponent(serviceName)}&sqm=${sqm}&freq=${freqCode}&estimate=${encodeURIComponent(`€ ${monthlyLow}-${monthlyHigh}/mese (${timesPerWeek}v/sett)`)}`;
+      document.getElementById('btnLockB2BQuote').href = url;
+    }
+
+    document.addEventListener('DOMContentLoaded', updateB2BCalc);
+  </script>
 </body>
 </html>

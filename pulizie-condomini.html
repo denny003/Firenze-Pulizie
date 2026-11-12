@@ -1,121 +1,568 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pulizie Condominiali a Firenze — FIRENZE PULIZIE per Amministratori</title>
-  <meta name="description" content="Servizio di pulizia condomini a Firenze e provincia. Dedicato ad Amministratori di Condominio: checklist digitale ad ogni passaggio, squadre fisse di zona, trasparenza e continuità.">
+  <title>Pulizie Condominiali Firenze per Amministratori — Report Fotografico & Preventivo Scale</title>
+  <meta name="description"
+    content="Servizio specializzato di pulizia condomini a Firenze e provincia per Amministratori di Condominio. Report fotografico con orario GPS ad ogni passaggio, zero lamentele in assemblea, prova 60 giorni e sconto multi-stabile.">
+  <meta name="keywords"
+    content="pulizie condominiali firenze, costo pulizia scale condominio firenze, impresa pulizie condomini firenze, ditta pulizie per amministratori di condominio firenze, pulizia scale e vetrate firenze">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://puliziefiorentine.it/pulizie-condomini.html">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://puliziefiorentine.it/sitemap.xml">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:title"
+    content="Pulizie Condominiali a Firenze — Report Fotografico per Assemblea & Calcolatore Scala">
+  <meta property="og:description"
+    content="Basta telefonate di lamentela dai condòmini: ogni passaggio è certificato con foto e orario GPS. Scopri la Convenzione Studi di Amministrazione a Firenze.">
+  <meta property="og:url" content="https://puliziefiorentine.it/pulizie-condomini.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Pulizie Condominiali e Manutenzione Parti Comuni",
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Pulizie Fiorentine — Divisione Condomini Firenze",
+      "url": "https://puliziefiorentine.it/pulizie-condomini.html",
+      "areaServed": "Firenze e Provincia"
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "Firenze"
+    },
+    "description": "Pulizia ordinaria e straordinaria di scale, androni, ascensori, vetrate e cortili condominiali a Firenze con verbale fotografico GPS per Amministratori di Condominio."
+  }
+  </script>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/public.css">
+  <style>
+    .condo-trust-bar {
+      background: #0f172a;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px 0;
+      color: #e2e8f0;
+    }
+
+    .condo-trust-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      text-align: center;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .condo-trust-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .calc-box {
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 2px solid var(--brand-emerald-500);
+      box-shadow: var(--shadow-xl);
+      padding: 36px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .calc-result-panel {
+      background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
+      color: white;
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+    }
+
+    .convention-banner {
+      background: linear-gradient(135deg, #0a192f 0%, #1e3a8a 100%);
+      color: white;
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 28px;
+      align-items: center;
+      box-shadow: var(--shadow-xl);
+    }
+
+    @media (max-width: 820px) {
+
+      .calc-box,
+      .convention-banner {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+    }
+  </style>
 </head>
+
 <body>
+
+  <!-- TOP BAR CONTATTI DIRETTI & GARANZIE LEGALI -->
+  <div class="top-contact-bar">
+    <div class="container top-contact-inner">
+      <div>🛡️ <strong>Divisione Condomini Firenze • DURC Regolare • Polizza RCT/RCO € 2.500.000</strong></div>
+      <div class="top-contact-links">
+        <a href="tel:+393473705189">📞 347-370.51.89</a>
+        <a href="https://wa.me/393473705189?text=Salve%20Pulizie%20Fiorentine%2C%20sono%20un%20Amministratore%20di%20Condominio%20a%20Firenze%20e%20vorrei%20richiedere%20un%20capitolato."
+          target="_blank" rel="noopener" style="color: #4ade80;">💬 Linea Diretta Amministratori: 347-370.51.89</a>
+        <a href="mailto:info@puliziefiorentine.it">✉️ info@puliziefiorentine.it</a>
+      </div>
+    </div>
+  </div>
 
   <!-- HEADER -->
   <header class="site-header">
     <div class="container nav-container">
-      <a href="index.html" class="brand-logo">
-        <div class="brand-icon">✨</div>
-        <div>FIRENZE <span class="city-tag">PULIZIE</span></div>
+      <a href="index.html" class="brand-logo" title="Pulizie Fiorentine — Roby&amp;Lia (347-370.51.89)">
+        <img src="assets/img/skyline-firenze.png" alt="Skyline Firenze — Pulizie Fiorentine" class="brand-skyline-img">
+        <img src="assets/img/logo-roby-lia.png"
+          alt="Pulizie Fiorentine — Affidabilità e Qualità a Firenze — Roby&amp;Lia 347-370.51.89"
+          class="brand-text-img">
       </a>
       <nav>
         <ul class="nav-menu">
           <li><a href="pulizie-commerciali.html" class="nav-link">Commerciale & B2B</a></li>
           <li><a href="pulizie-condomini.html" class="nav-link active">Condomini</a></li>
           <li><a href="pulizie-private.html" class="nav-link">Privati</a></li>
-          <li><a href="index.html#territorio" class="nav-link">Zone</a></li>
+          <li><a href="index.html#garanzie-referenze" class="nav-link">Certificazioni & DURC</a></li>
           <li><a href="partner.html" class="nav-link">Imprese Partner</a></li>
         </ul>
       </nav>
       <div class="nav-actions">
-        <a href="richiedi-preventivo.html?category=CONDOMINIUM" class="btn btn-primary btn-sm">Richiedi Sopralluogo Condominio</a>
+        <a href="tel:+393473705189" class="btn btn-secondary btn-sm">📞 347-370.51.89</a>
+        <a href="login.html" class="btn btn-secondary btn-sm">Area Riservata</a>
+        <a href="#simulatore-condominio" class="btn btn-primary btn-sm">Simula Preventivo Stabile</a>
       </div>
     </div>
   </header>
 
   <!-- HERO CONDOMINI -->
-  <section class="hero-section text-center" style="padding: 70px 0 80px;">
+  <section class="hero-section text-center" style="padding: 70px 0 75px;">
     <div class="container">
       <div class="hero-badge-wrap">
-        <span>🏠 Dedicato agli Amministratori di Condominio</span>
+        <span>🏠 Pulizie Fiorentine — Divisione Studi di Amministrazione Condominiale</span>
       </div>
       <h1 class="hero-title">
         Pulizie Condominiali a Firenze.<br>
-        <span class="highlight">Affidabilità, checklist certe</span> e zero lamentele.
+        Ogni passaggio è <span class="highlight">certificato con Foto e GPS</span>.
       </h1>
       <p class="hero-subtitle">
-        Sappiamo quanto sia prezioso il tempo di un amministratore. La nostra rete garantisce squadre fisse di quartiere, passaggi documentati con checklist digitale e prontezza di intervento per qualsiasi imprevisto.
+        Sappiamo cosa significa per un Amministratore ricevere chiamate da condòmini che sostengono <em>"oggi non ha
+          pulito nessuno"</em>. Con Pulizie Fiorentine ricevi un <strong>Report Fotografico con Orario
+          Certificato</strong> ad ogni intervento, DURC regolare trimestrale e Polizza RCT da € 2.500.000.
       </p>
-      <div class="hero-ctas">
-        <a href="richiedi-preventivo.html?category=CONDOMINIUM" class="btn btn-primary btn-lg">Richiedi un Sopralluogo Gratuito</a>
+      <div class="hero-ctas" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
+        <a href="#simulatore-condominio" class="btn btn-primary btn-lg">🧮 Calcola Preventivo per Scala &
+          Appartamento</a>
+        <a href="https://wa.me/393473705189?text=Salve%20Pulizie%20Fiorentine%2C%20vorrei%20richiedere%20un%20sopralluogo%20gratuito%20per%20un%20condominio%20a%20Firenze."
+          target="_blank" rel="noopener" class="btn btn-lg"
+          style="background: #16a34a; color: #ffffff; border: 2px solid #86efac; font-weight: 800;">💬 Sopralluogo
+          Rapido WhatsApp</a>
+        <a href="tel:+393473705189" class="btn btn-outline-white btn-lg">📞 Chiama 347-370.51.89</a>
       </div>
     </div>
   </section>
 
-  <!-- SERVIZI CONDOMINIO -->
-  <section class="section">
+  <!-- TRUST BAR AMMINISTRATORI -->
+  <div class="condo-trust-bar">
+    <div class="container condo-trust-grid">
+      <div class="condo-trust-item"><span>📸</span> <span>Foto Certificata Androne & Scale ad ogni passaggio</span>
+      </div>
+      <div class="condo-trust-item"><span>🧾</span> <span>Riepilogo Pronto per il Rendiconto di Assemblea</span></div>
+      <div class="condo-trust-item"><span>🔓</span> <span>Prova 60 Giorni Senza Vincolo Annuale</span></div>
+      <div class="condo-trust-item"><span>🛡️</span> <span>DURC, Sicurezza D.Lgs 81/08 e RCT € 2M</span></div>
+    </div>
+  </div>
+
+  <!-- SIMULATORE PREVENTIVO CONDOMINIALE (CON QUOTA PER FAMIGLIA PER L'ASSEMBLEA) -->
+  <section class="section" id="simulatore-condominio" style="background: #f8fafc;">
     <div class="container">
       <div class="section-head">
-        <span class="section-eyebrow">Aree di Gestione</span>
-        <h2 class="section-title">Copertura completa di tutte le parti comuni</h2>
-        <p class="text-muted">Dalla pulizia settimanale delle scale alla sanificazione degli ascensori e alla cura degli spazi esterni.</p>
+        <span class="section-eyebrow">Strumento per Assemblee Condominiali</span>
+        <h2 class="section-title">Simula il canone mensile e la quota per singolo condomino</h2>
+        <p class="text-muted">Ottieni subito un prospetto chiaro da portare in assemblea, senza sorprese e senza costi
+          di trasferta.</p>
       </div>
 
-      <div class="sectors-grid">
-        <div class="sector-card condo">
-          <div class="sector-icon-box">🪜</div>
-          <h3 class="sector-card-title">Scale, Pianerottoli & Ingressi</h3>
-          <p class="sector-card-desc">Spazzatura e lavaggio delle rampe, igienizzazione di corrimano, maniglie, battiscopa, portoni d'ingresso e zerbini comuni.</p>
+      <div class="calc-box">
+        <div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">1. Numero di Scale dello Stabile</label>
+              <select id="condoStairs" class="form-select" onchange="updateCondoCalc()">
+                <option value="1">1 Scala Condominiale</option>
+                <option value="2" selected>2 Scale Condominiali</option>
+                <option value="3">3 Scale Condominiali</option>
+                <option value="4">4 o più Scale (Supercondominio)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">2. Piani per ciascuna Scala</label>
+              <select id="condoFloors" class="form-select" onchange="updateCondoCalc()">
+                <option value="3">Fino a 3 piani</option>
+                <option value="5" selected>4 – 5 piani</option>
+                <option value="7">6 – 8 piani</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" style="display: flex; justify-content: space-between;">
+              <span>3. Numero Totale Unità Immobiliari (Appartamenti/Uffici)</span>
+              <strong style="color: var(--brand-emerald-600); font-size: 1.05rem;" id="condoUnitsLabel">20
+                unità</strong>
+            </label>
+            <input type="range" id="condoUnits" min="6" max="80" step="2" value="20"
+              style="width: 100%; accent-color: var(--brand-emerald-500); cursor: pointer;" oninput="updateCondoCalc()">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">4. Frequenza Settimanale</label>
+              <select id="condoFreq" class="form-select" onchange="updateCondoCalc()">
+                <option value="1" data-code="SETTIMANALE">1 volta a settimana</option>
+                <option value="2" data-code="BISETTIMANALE" selected>2 volte a settimana (Standard)</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">5. Servizi Accessori Inclusi</label>
+              <select id="condoExtras" class="form-select" onchange="updateCondoCalc()">
+                <option value="0">Scale, Androne e Ascensori</option>
+                <option value="35" selected>+ Cortile / Corsello Garage</option>
+                <option value="65">+ Garage + Gestione Bidoni Rifiuti</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="sector-card condo">
-          <div class="sector-icon-box">🛗</div>
-          <h3 class="sector-card-title">Ascensori & Grandi Vetrate</h3>
-          <p class="sector-card-desc">Pulizia accurata di specchi, cabine ascensore, pulsantiere, vetrate androne e infissi luminosi delle scale.</p>
-        </div>
-        <div class="sector-card condo">
-          <div class="sector-icon-box">🚗</div>
-          <h3 class="sector-card-title">Garage, Cortili & Aree Rifiuti</h3>
-          <p class="sector-card-desc">Spazzatura corselli garage, rampe di accesso, rastrelliere bici, piazzali esterni e igienizzazione periodica del locale bidoni.</p>
+
+        <div class="calc-result-panel">
+          <div
+            style="font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.06em; color: #6ee7b7; font-weight: 800;">
+            Canone Condominiale Stimato
+          </div>
+          <div style="font-size: 2.2rem; font-weight: 900; margin: 8px 0; color: #ffffff;" id="condoPriceRange">
+            € 210 – € 250 <span style="font-size: 0.9rem; font-weight: 500; color: #cbd5e1;">/ mese</span>
+          </div>
+          <div
+            style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); padding: 10px 14px; border-radius: var(--radius-md); margin-bottom: 16px;">
+            <div style="font-size: 0.78rem; color: #d1fae5;">Incidenza media per appartamento:</div>
+            <strong style="font-size: 1.2rem; color: #34d399;" id="condoPerUnitCost">~ € 11,50 / mese a
+              famiglia</strong>
+          </div>
+          <ul
+            style="text-align: left; font-size: 0.8rem; color: #e2e8f0; margin-bottom: 18px; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 5px;">
+            <li>✓ Include Report Fotografico ad ogni passaggio</li>
+            <li>✓ Squadra fissa del quartiere (Zero spese trasferta)</li>
+            <li>✓ Sconto -12% per Studi con 3+ condomini</li>
+          </ul>
+          <a href="richiedi-preventivo.html?category=CONDOMINIUM" id="btnLockCondoQuote"
+            class="btn btn-primary btn-block"
+            style="width: 100%; background: var(--brand-emerald-500); border-color: var(--brand-emerald-500); font-weight: 800;">
+            Richiedi Preventivo Ufficiale per Assemblea ➔
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- IL VALORE PER L'AMMINISTRATORE -->
-  <section class="section" style="background:#ffffff; border-top:1px solid var(--border-light); border-bottom:1px solid var(--border-light);">
-    <div class="container container-narrow">
-      <div class="section-head">
-        <span class="section-eyebrow">Trasparenza Amministrativa</span>
-        <h2 class="section-title">Come supportiamo il lavoro dell'Amministratore</h2>
-      </div>
+  <!-- COME TUTELIAMO L'AMMINISTRATORE DALLE LAMENTELE -->
+  <section class="section">
+    <div class="container">
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; align-items: center;">
+        <div>
+          <span class="section-eyebrow">Stop alle Contestazioni Infondate</span>
+          <h2 class="section-title" style="text-align: left;">Quando un condomino si lamenta, tu hai già la prova
+            fotografica</h2>
+          <p class="text-muted" style="margin-bottom: 18px;">
+            Ogni volta che la nostra squadra entra nel condominio, registra il check-in, spunta la checklist di scala e
+            scatta le foto di fine lavoro (androne, vetrate, ascensore).
+          </p>
+          <ul class="sector-features-list">
+            <li><strong>Risposta immediata ai condòmini:</strong> puoi inoltrare il report con ora esatta e foto in 10
+              secondi.</li>
+            <li><strong>Rettifica rapida in 24h:</strong> se dovesse esserci una reale dimenticanza, la squadra di
+              quartiere ripassa gratuitamente entro il giorno successivo.</li>
+            <li><strong>Dossier per l'Assemblea Annuale:</strong> storico di tutti i passaggi effettuati nell'anno per
+              giustificare al 100% la spesa a bilancio.</li>
+          </ul>
+        </div>
 
-      <div style="display:flex; flex-direction:column; gap:20px;">
-        <div style="background:var(--bg-main); padding:24px; border-radius:12px; border:1px solid var(--border-light);">
-          <strong style="color:var(--brand-navy-900); font-size:1.1rem; display:block; margin-bottom:6px;">📋 Checklist e Tracciamento Ad Ogni Passaggio</strong>
-          <p class="text-muted">Gli operatori completano una checklist digitale sul proprio smartphone a ogni intervento. Avrai sempre la certezza documentata del lavoro svolto per le assemblee condominiali.</p>
-        </div>
-        <div style="background:var(--bg-main); padding:24px; border-radius:12px; border:1px solid var(--border-light);">
-          <strong style="color:var(--brand-navy-900); font-size:1.1rem; display:block; margin-bottom:6px;">📍 Squadre di Zona & Volti Noti</strong>
-          <p class="text-muted">Assegniamo allo stabile sempre la stessa squadra del quartiere: i condomini riconoscono gli operatori, aumentando la fiducia e la sicurezza nell'edificio.</p>
-        </div>
-        <div style="background:var(--bg-main); padding:24px; border-radius:12px; border:1px solid var(--border-light);">
-          <strong style="color:var(--brand-navy-900); font-size:1.1rem; display:block; margin-bottom:6px;">🏢 Gestione Multi-Stabile con Unico Accordo</strong>
-          <p class="text-muted">Se amministri più condomini in diverse zone di Firenze (es. Centro, Novoli, Campo di Marte), la rete può gestirli tutti garantendo lo stesso alto standard di servizio e fatturazione puntuale.</p>
+        <div
+          style="background: white; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-lg);">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 12px; margin-bottom: 12px;">
+            <div>
+              <span style="font-size: 0.72rem; font-weight: 800; color: #059669; text-transform: uppercase;">Verbale
+                Passaggio Condominio</span>
+              <h4 style="margin: 2px 0 0; color: var(--brand-navy-900);">Condominio Viale Belfiore 28</h4>
+            </div>
+            <span
+              style="background: #dcfce7; color: #15803d; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 99px;">✓
+              CERTIFICATO</span>
+          </div>
+          <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">
+            📍 Porta al Prato, Firenze • Passaggio: <strong>10:26 – 12:10</strong> • <strong>Squadra Beta</strong>
+          </div>
+          <div
+            style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 8px; font-size: 0.82rem; color: #166534; margin-bottom: 12px;">
+            <div>✓ Lavaggio 2 rampe scale (6 piani) e corrimano</div>
+            <div>✓ Detersione vetrata portone e specchio cabina ascensore</div>
+            <div>✓ Svuotamento cestino pubblicità e spazzatura cortile</div>
+            <div style="margin-top: 6px; font-size: 0.78rem; color: #15803d;"><em>Nota per Amministratore: "Segnalata
+                lampadina fulminata al 3° piano Scala A."</em></div>
+          </div>
+          <div
+            style="background: #0f172a; color: white; padding: 14px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <div style="font-size: 0.82rem; font-weight: 700;">📸 2 Foto Allegati (Androne & Vetrate)</div>
+              <div style="font-size: 0.72rem; color: #94a3b8;">Marca temporale GPS: ore 12:05</div>
+            </div>
+            <span style="font-size: 1.4rem;">🏛️✨</span>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="text-center" style="margin-top:40px;">
-        <a href="richiedi-preventivo.html?category=CONDOMINIUM" class="btn btn-primary btn-lg">Concorda un Sopralluogo per i Tuoi Condomini</a>
+  <!-- CONVENZIONE STUDI DI AMMINISTRAZIONE -->
+  <section class="section" id="convenzione-amministratori" style="padding-top: 20px;">
+    <div class="container">
+      <div class="convention-banner">
+        <div>
+          <span
+            style="background: rgba(56, 189, 248, 0.2); color: var(--brand-sky-400); padding: 4px 12px; border-radius: 99px; font-size: 0.78rem; font-weight: 800; text-transform: uppercase;">
+            Partnership per Amministratori di Condominio
+          </span>
+          <h2 style="color: white; font-size: 1.9rem; margin: 14px 0 10px;">Gestisci più stabili a Firenze? Attiva la
+            Convenzione Studio.</h2>
+          <p style="color: #cbd5e1; font-size: 0.96rem; margin-bottom: 18px;">
+            Un unico interlocutore per tutti i tuoi condomini da Rifredi a Gavinana, da Novoli a Scandicci. Standard
+            identici, fatturazione ordinata per singolo codice fiscale condominiale e canale prioritario per urgenze.
+          </p>
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; font-size: 0.85rem;">
+            <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 8px;">
+              <strong style="color: #38bdf8; display: block;">🔓 60 Giorni di Prova</strong>
+              <span>Testaci su 1 condominio critico senza vincolo annuale.</span>
+            </div>
+            <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 8px;">
+              <strong style="color: #34d399; display: block;">📉 Tariffa Studio -12%</strong>
+              <span>Agevolazione riservata dal 3° condominio affidato.</span>
+            </div>
+          </div>
+        </div>
+        <div
+          style="background: white; color: var(--text-main); padding: 26px; border-radius: var(--radius-lg); text-align: center;">
+          <h3 style="color: var(--brand-navy-900); font-size: 1.2rem; margin-bottom: 6px;">Richiedi il Listino Riservato
+            agli Amministratori</h3>
+          <p class="text-muted" style="font-size: 0.84rem; margin-bottom: 16px;">Sopralluogo e capitolato pronto per
+            l'assemblea in 24 ore lavorative.</p>
+          <a href="richiedi-preventivo.html?category=CONDOMINIUM&service=Scale%2C+Pianerottoli+%26+Ingressi&estimate=Richiesta+Convenzione+Studio+Amministratore"
+            class="btn btn-primary btn-block" style="width: 100%; font-weight: 800;">
+            Richiedi Capitolato & Convenzione ➔
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROFONDIMENTO SEO E CAPITOLATO TECNICO CONDOMINIALE A FIRENZE (OLTRE 600 PAROLE) -->
+  <section class="section" style="background: #f8fafc; border-top: 1px solid var(--border-light);">
+    <div class="container">
+      <div class="seo-rich-box">
+        <span class="section-eyebrow">Capitolato Tecnico &amp; Tutela Legale dell'Amministratore</span>
+        <h2 style="margin-top: 6px; font-size: 1.75rem;">Servizio di Pulizia Condomini a Firenze: Capitolato Analitico,
+          Costi Medi e Garanzie di Legge</h2>
+        <p>
+          La gestione dell'appalto di <strong>pulizia scale e parti comuni condominiali a Firenze</strong> rappresenta
+          una delle voci più delicate del bilancio preventivo e consuntivo presentato in assemblea. Affidarsi a
+          <strong>Pulizie Fiorentine</strong> significa scegliere un'organizzazione strutturata sul territorio
+          metropolitano fiorentino che abbina la <strong>prossimità delle squadre di quartiere</strong> alla completa
+          tracciabilità digitale di ogni turno operativo.
+        </p>
+
+        <h3>1. Trattamento Specifico dei Materiali Tipici dei Condomini Fiorentini</h3>
+        <p>
+          Il patrimonio edilizio di Firenze presenta caratteristiche architettoniche uniche che richiedono prodotti
+          chimici a pH controllato e attrezzature professionali specifiche:
+        </p>
+        <ul style="margin: 12px 0 18px 20px; line-height: 1.8;">
+          <li><strong>Palazzi storici del Centro Storico (ZTL Duomo, Santa Croce, Oltrarno, San Niccolò, Santo Spirito,
+              Santa Maria Novella):</strong> lavaggio delicato di <em>scale in pietra serena</em>, pavimentazioni in
+            cotto antico imprunetino, soglie in marmo di Carrara e portoni lignei monumentali con detergenti neutri
+            certificati CAM che non alterano la porosità naturale della pietra.</li>
+          <li><strong>Stabili residenziali anni '50–'80 (Campo di Marte, Coverciano, Le Cure, Gavinana, Bellariva, Viali
+              di Circonvallazione):</strong> lucidatura e deceratura periodica di <em>androni in graniglia, marmittoni e
+              palladiana</em>, igienizzazione profonda di cabine ascensore storiche in legno e cristallo, pulizia
+            d'ottone di pulsantiere e citofoni.</li>
+          <li><strong>Complessi condominiali moderni e Supercondomini (Novoli, San Donato, Rifredi, Careggi, Isolotto,
+              Soffiano, Scandicci, Sesto Fiorentino):</strong> spazzamento meccanizzato con motospazzatrici aspiranti di
+            <em>corselli box auto interrati, rampe garage, piazzali condominiali</em>, manutenzione aree verdi comuni e
+            rotazione bidoni per la raccolta differenziata secondo il calendario Alia Servizi Ambientali.
+          </li>
+        </ul>
+
+        <h3>2. Capitolato Ordinario e Periodico Incluso nel Canone Mensile</h3>
+        <p>
+          Ogni offerta elaborata da Pulizie Fiorentine per l'assemblea condominiale dettaglio in modo trasparente le
+          mansioni ad ogni passaggio settimanale o bisettimanale:
+        </p>
+        <ul style="margin: 12px 0 18px 20px; line-height: 1.8;">
+          <li><strong>Interventi ad ogni passaggio (1 o 2 volte a settimana):</strong> spazzatura a umido e lavaggio con
+            frangia in microfibra pre-impregnata di tutte le rampe scale, pianerottoli e androne d'ingresso;
+            disinfezione corrimano, ringhiere, pulsantiere ascensore e maniglie portone; detersione specchio e pareti
+            cabina ascensore; svuotamento cestino carta pubblicitaria; spazzatura marciapiede esterno antistante il
+            civico.</li>
+          <li><strong>Interventi quindicinali e mensili programmati:</strong> lavaggio completo di vetrate portone,
+            finestre vano scale e lucernari; deragnatura soffitti e corpi illuminanti; lavaggio binari ascensore e
+            griglie di aerazione; pulizia locale contatori (acqua/luce/gas) e corsia cantine; sanificazione locale
+            raccolta rifiuti e contenitori condominiali.</li>
+        </ul>
+
+        <h3>3. Tutela Legale dell'Amministratore: DURC, Responsabilità Solidale e Polizza RCT € 2.500.000</h3>
+        <p>
+          Ai sensi dell'art. 29 del D.Lgs. 276/2003 e del D.Lgs. 81/2008, il condominio committente risponde in solido
+          con l'appaltatore per i contributi previdenziali e assicurativi dei lavoratori impiegati nello stabile. Per
+          sollevare l'<strong>Amministratore di Condominio a Firenze</strong> da qualsiasi rischio legale o
+          contestazione in sede di revisione contabile, Pulizie Fiorentine allega sistematicamente:
+        </p>
+        <ul style="margin: 12px 0 18px 20px; line-height: 1.8;">
+          <li><strong>DURC Online (INPS e INAIL)</strong> in corso di validità alla sottoscrizione del contratto e ad
+            ogni emissione di fattura;</li>
+          <li><strong>Polizza Assicurativa RCT/RCO con massimale di € 2.500.000</strong> stipulata con primaria
+            compagnia nazionale, comprensiva della garanzia danni da acqua, caduta accidentale su pavimenti bagnati
+            (sempre segnalati con appositi cavalieri a norma) e smarrimento mazzi chiavi;</li>
+          <li><strong>Elenco nominativo degli operatori assegnati allo stabile</strong> (assunti con regolare CCNL
+            Imprese di Pulizia / Multiservizi), muniti di cartellino identificativo con fototessera e formazione
+            obbligatoria sulla sicurezza;</li>
+          <li><strong>Schede di Dati di Sicurezza (SDS)</strong> dei prodotti detergenti e disinfettanti impiegati,
+            conformi ai Criteri Ambientali Minimi (CAM).</li>
+        </ul>
+
+        <div
+          style="margin-top: 24px; padding: 20px; background: #f0fdf4; border: 1px solid #86efac; border-radius: var(--radius-lg); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <strong style="color: #065f46; font-size: 1.05rem; display: block;">Hai un'assemblea condominiale imminente
+              a Firenze?</strong>
+            <span style="font-size: 0.88rem; color: #166534;">Ti inviamo entro 24 ore il capitolato comparativo su carta
+              intestata, pronto da allegare alla convocazione d'assemblea.</span>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="tel:+393473705189" class="btn btn-secondary btn-sm">📞 Chiama 347-370.51.89</a>
+            <a href="https://wa.me/393473705189?text=Salve%20Pulizie%20Fiorentine%2C%20mi%20servirebbe%20un%20preventivo%20da%20portare%20in%20assemblea%20condominiale%20a%20Firenze."
+              target="_blank" rel="noopener" class="btn btn-primary btn-sm"
+              style="background: #16a34a; border-color: #16a34a;">💬 Richiedi su WhatsApp</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="container text-center">
-      <p style="font-size:0.88rem; color:#94a3b8;">© 2026 FIRENZE PULIZIE — Settore Condomini & Amministratori. <a href="index.html" style="color:#ffffff;">Torna alla Home</a></p>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand-logo" style="color:#ffffff; margin-bottom:14px;">
+            <div class="brand-icon">✨</div>
+            <div>PULIZIE <span class="city-tag">FIORENTINE</span></div>
+          </div>
+          <p style="font-size:0.86rem; line-height:1.6;">
+            Divisione Condomini &amp; Studi di Amministrazione a Firenze e provincia. Verbale fotografico GPS, DURC
+            regolare e polizza RCT € 2.500.000.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Servizi</h4>
+          <ul class="footer-links">
+            <li><a href="pulizie-commerciali.html">Pulizie Uffici &amp; B2B</a></li>
+            <li><a href="pulizie-condomini.html">Pulizie Condomini</a></li>
+            <li><a href="pulizie-private.html">Pulizie Appartamenti</a></li>
+            <li><a href="richiedi-preventivo.html">Richiedi Preventivo</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Garanzie &amp; Rete</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#garanzie-referenze">DURC, Polizza RCT &amp; Recensioni</a></li>
+            <li><a href="partner.html">Diventa Impresa Partner</a></li>
+            <li><a href="login.html">Area Riservata</a></li>
+            <li><a href="privacy.html">Privacy &amp; GDPR</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contatti Diretti Amministratori</h4>
+          <p style="font-size:0.88rem; margin-bottom:6px;"><a href="tel:+393473705189"
+              style="color:#38bdf8; font-weight:700;">📞 Tel: 347-370.51.89</a></p>
+          <p style="font-size:0.88rem; margin-bottom:6px;"><a href="https://wa.me/393473705189" target="_blank"
+              rel="noopener" style="color:#4ade80; font-weight:700;">💬 WhatsApp: 347-370.51.89</a></p>
+          <p style="font-size:0.88rem; margin-bottom:6px;"><a href="mailto:info@puliziefiorentine.it"
+              style="color:#ffffff;">✉️ info@puliziefiorentine.it</a></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 PULIZIE FIORENTINE (puliziefiorentine.it) — Tutti i diritti riservati.</div>
+        <div>Iscr. CCIAA Firenze • ATECO 81.21.00 • Polizza RCT/RCO € 2.500.000</div>
+      </div>
     </div>
   </footer>
 
+  <!-- BARRA FLOTTANTE CONTATTO IMMEDIATO -->
+  <div class="floating-cta-bar" aria-label="Contatto rapido telefonico e WhatsApp">
+    <a href="https://wa.me/393473705189?text=Salve%20Pulizie%20Fiorentine%2C%20vorrei%20un%20preventivo%20condominiale%20a%20Firenze."
+      target="_blank" rel="noopener" class="floating-btn whatsapp">
+      <span>💬</span> <span>WhatsApp Amministratori</span>
+    </a>
+    <a href="tel:+393473705189" class="floating-btn phone">
+      <span>📞</span> <span>347-370.51.89</span>
+    </a>
+  </div>
+
+  <script>
+    function updateCondoCalc() {
+      const stairs = parseInt(document.getElementById('condoStairs').value, 10) || 2;
+      const floors = parseInt(document.getElementById('condoFloors').value, 10) || 5;
+      const units = parseInt(document.getElementById('condoUnits').value, 10) || 20;
+      document.getElementById('condoUnitsLabel').textContent = `${units} unità`;
+
+      const freqSelect = document.getElementById('condoFreq');
+      const timesWeek = parseInt(freqSelect.value, 10) || 2;
+      const freqCode = freqSelect.options[freqSelect.selectedIndex].dataset.code || 'BISETTIMANALE';
+      const extras = parseInt(document.getElementById('condoExtras').value, 10) || 0;
+
+      const baseScaleCost = stairs * (45 + floors * 7) * (timesWeek === 2 ? 1.55 : 1.0);
+      const totalMid = Math.round((baseScaleCost + extras) / 5) * 5;
+      const low = Math.round(totalMid * 0.92 / 5) * 5;
+      const high = Math.round(totalMid * 1.08 / 5) * 5;
+      const perUnit = (totalMid / units).toFixed(2).replace('.', ',');
+
+      document.getElementById('condoPriceRange').innerHTML = `€ ${low} – € ${high} <span style="font-size: 0.9rem; font-weight: 500; color: #cbd5e1;">/ mese</span>`;
+      document.getElementById('condoPerUnitCost').textContent = `~ € ${perUnit} / mese a famiglia`;
+
+      const estimateStr = `Condominio ${stairs} scale (${units} unità): € ${low}-${high}/mese`;
+      const url = `richiedi-preventivo.html?category=CONDOMINIUM&service=${encodeURIComponent('Scale, Pianerottoli & Ingressi')}&freq=${freqCode}&estimate=${encodeURIComponent(estimateStr)}`;
+      document.getElementById('btnLockCondoQuote').href = url;
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCondoCalc);
+  </script>
 </body>
+
 </html>
